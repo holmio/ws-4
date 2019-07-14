@@ -1,0 +1,56 @@
+
+ion-header {
+
+    ion-toolbar {
+        --border-width: 0;
+      }
+}
+ion-content{
+    --background:#eaeaea;
+  }
+
+.ionSegementSection{
+    background: #a81b1b;
+}
+
+.segment-button-indicator{
+    align-self: center;
+    background-color: var(--indicator-color-checked,var(--color-checked));
+    background: #fff;
+    height: 5px;
+    width: 65px;
+}
+.ion-segment-button{
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.userSection{
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+
+    .userName{
+        font-size: 18px;
+    }
+    
+    .userDetail{
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+    .editSection{
+        position: absolute;
+        right: 10px;
+    }
+}
+
+
+
+
+
+.iconSize{
+    font-size: 22px;
+}

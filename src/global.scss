@@ -9,3 +9,102 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+:root[mode=ios] .muli,
+:root[mode=md] .muli{
+  --ion-font-family:  'Muli'!important;
+  font-family:  'Muli' !important;
+}
+
+@font-face {
+  font-family: 'Qranklestein';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./assets/fonts/Qranklestein.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./assets/fonts/Muli.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: normal;
+  src: url('./assets/fonts/Muli-Italic.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: 400;
+  src: url('./assets/fonts/Muli-Light-Italic.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/Muli-Light.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./assets/fonts/Muli-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: 500;
+  src: url('./assets/fonts/Muli-Semi-BoldItalic.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: bold;
+  src: url('./assets/fonts/Muli-Bold.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: bold;
+  src: url('./assets/fonts/Muli-BoldItalic.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: italic;
+  font-weight: 100;
+  src: url('./assets/fonts/Muli-ExtraLightItalic.ttf');
+}
+@font-face {
+  font-family: 'Muli';
+  font-style: normal;
+  font-weight: 100;
+  src: url('./assets/fonts/Muli-ExtraLight.ttf');
+}
+
+.searchbar-input{
+    border-radius: 25px !important;
+    height: 30px !important; 
+
+}
+.searchbar-search-icon.sc-ion-searchbar-md {
+       left: 90% !important;
+           top: 6px;
+  }
+  .searchbar-clear-button.sc-ion-searchbar-md {
+    left: 13px !important;
+    right: 0 !important;
+  }
+  .searchbar-search-icon.sc-ion-searchbar-ios {
+    color: white !important;
+     height: 87% !important;
+}
+    ion-item{
+  --highlight-color-valid: #ffffff00;
+    --inner-border-width: 0px 0px 0px 0px;
+     --border-width: 0 0 0px 0;
+}
+.sc-ion-searchbar-ios-h{
+  padding-bottom: 0 !important;
+}

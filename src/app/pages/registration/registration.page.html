@@ -1,0 +1,36 @@
+<ion-content text-center center>
+    <div class="content">
+      <div class="top">
+        <div class="logo">
+          <img src="../../../../assets/beach.png" />
+        </div>
+        <ion-text class="title" color="light">Canvas</ion-text>
+      </div>
+      <div class="bottom" padding-horizontal>
+        <div class="content-list">
+          <form [formGroup]="registerForm" (submit)="onSubmit()">
+            <ion-card class="input-card" margin-vertical>
+              <ion-item lines="none">
+                <ion-icon name="person" item-start></ion-icon>
+                <ion-input type="text" placeholder="Full Name" formControlName="fullName" padding-start></ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon name="mail" item-start></ion-icon>
+                <ion-input type="email" placeholder="Email" formControlName="email" padding-start></ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon name="call" item-start></ion-icon>
+                <ion-input type="password" placeholder="Password" formControlName="password" padding-start></ion-input>
+              </ion-item>
+            </ion-card>
+            <ion-button [disabled]="!registerForm.valid" type="submit" expand="full" no-padding>Register</ion-button>
+          </form>
+        </div>
+        <div class="loginBtn" margin-vertical>
+          <ion-text class="font-small">Already have an account?<span ion-text class="link">
+              Click here</span>
+          </ion-text>
+        </div>
+      </div>
+    </div>
+  </ion-content>
