@@ -2,7 +2,7 @@
 ion-header {
 
     ion-toolbar {
-        --border-width: 0;
+        margin-bottom: -1px !important;
       }
 }
 ion-content{
@@ -40,10 +40,8 @@ ion-content{
         margin-top: 10px;
         display: flex;
         flex-direction: column;
-    }
-    .editSection{
-        position: absolute;
-        right: 10px;
+        margin-bottom: 10px;
+        text-align: center;
     }
 }
 

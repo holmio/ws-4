@@ -10,10 +10,10 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-:root[mode=ios] .muli,
-:root[mode=md] .muli{
-  --ion-font-family:  'Muli'!important;
-  font-family:  'Muli' !important;
+:root[mode=ios],
+:root[mode=md] {
+  --ion-font-family:  'Mada'!important;
+  font-family:  'Mada' !important;
 }
 
 @font-face {

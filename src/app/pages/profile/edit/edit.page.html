@@ -1,9 +1,36 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>edit</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title-ios" text-capitalize>Editar Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <form *ngIf="user$ | async" [formGroup]="myGroup" (ngSubmit)="update()">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div text-center>
+            <h3>Actualiza tus datos</h3>
+          </div>
+          <div padding>
+            <ion-item>
+              <ion-input formControlName="fullName" type="text" placeholder="Nombre Completo" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input formControlName="phone" type="phone" placeholder="Móvil" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input formControlName="localization" type="text" placeholder="Lugar donde se vive" required></ion-input>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">Guardar</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

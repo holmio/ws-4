@@ -1,8 +1,9 @@
 import { State, StateContext, Action, Selector } from '@ngxs/store';
 import { UserDetail, UserStateModel } from '../user/user.interface';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { GetUserAction, GetUserSuccessAction, GetUserFailedAction, SetUserAction, SetUserSuccessAction, SetUserFailedAction } from './user.actions';
+import { GetUserAction, GetUserSuccessAction, GetUserFailedAction, SetUserAction, SetUserSuccessAction, SetUserFailedAction, UpdateUserAction, UpdateUserSuccessAction, UpdateUserFailedAction, UpdateAvatarUserAction, UpdateAvatarUserSuccessAction, UpdateAvatarUserFailedAction } from './user.actions';
 import { LogoutSuccessAction, LoginSuccessAction } from '../auth';
+import { UserService } from './user.service';
 
 @State<UserStateModel>({
     name: 'user',
@@ -13,12 +14,10 @@ import { LogoutSuccessAction, LoginSuccessAction } from '../auth';
 })
 export class UserState {
 
-    private userCollectionRef: AngularFirestoreCollection<any>;
     
     constructor(
-        private afStore: AngularFirestore,
+        private userService: UserService,
     ) {
-        this.userCollectionRef = this.afStore.collection<UserDetail>('users');
     }
 
     /**
@@ -31,7 +30,12 @@ export class UserState {
 
     @Action(GetUserAction)
     getUserData(sc: StateContext<UserStateModel>, action: GetUserAction) {
-        this.userCollectionRef.doc(action.uid).valueChanges().subscribe((user: UserDetail) => {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: false,
+        });
+        this.userService.getUser(action.uid).subscribe((user: UserDetail) => {
             sc.dispatch(new GetUserSuccessAction(user));
         }, error => {
             sc.dispatch(new GetUserFailedAction(error));
@@ -46,17 +50,61 @@ export class UserState {
             loaded: true,
         });
     }
-    @Action([GetUserFailedAction])
-    getUserFailure(sc: StateContext<UserStateModel>) {
+
+    @Action(UpdateAvatarUserAction)
+    updateAvatarUserData(sc: StateContext<UserStateModel>, action: UpdateAvatarUserAction) {
+        const state = sc.getState();
         sc.setState({
-            user: null,
-            loaded: true
+            ...state,
+            loaded: false,
         });
+        this.userService.updateAvatar(action.avatar).subscribe((downloadUrl) => {
+            sc.dispatch(new UpdateAvatarUserSuccessAction());
+        }, error => {
+            sc.dispatch(new UpdateAvatarUserFailedAction(error));
+        });
+    }
+    @Action(UpdateAvatarUserSuccessAction)
+    updateAvatarUserSuccess(sc: StateContext<UserStateModel>, action: UpdateAvatarUserSuccessAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: true,
+        });
+        console.log('BIEEEEN FOTOOOOOO', state.user);
+    }
+
+    @Action(UpdateUserAction)
+    updateUserData(sc: StateContext<UserStateModel>, action: UpdateUserAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: false,
+        });
+        this.userService.updateUser(state.user.uid, action.user).then(() => {
+            sc.dispatch(new UpdateUserSuccessAction());
+        }, error => {
+            sc.dispatch(new UpdateUserFailedAction(error));
+        });
+    }
+    @Action(UpdateUserSuccessAction)
+    updateUserSuccess(sc: StateContext<UserStateModel>, action: UpdateUserSuccessAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: true,
+        });
+        console.log('BIEEEEEEEEEEEEN', state.user);
     }
 
     @Action(SetUserAction)
     setUserData(sc: StateContext<UserStateModel>, action: SetUserAction) {
         const uid = action.user.uid;
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: false,
+        });
         console.log(action.user);
         this.userCollectionRef.doc(uid).set(action.user).then((data) => {
             console.log(data);
@@ -80,7 +128,7 @@ export class UserState {
     setUserFailure(sc: StateContext<UserStateModel>) {
         sc.setState({
             user: null,
-            loaded: false
+            loaded: true
         });
     }
 }

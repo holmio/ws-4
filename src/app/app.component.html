@@ -5,7 +5,7 @@
         <div class="content">
           <div *ngIf="(user$ | async)" class="profile-block" (click)="goToPage('profile/detail')">
             <div class="profile-image">
-              <img [src]="(user$ | async).pictureURL?.pathOfImage" />
+              <img [src]="(user$ | async).avatar?.downloadUrl" />
             </div>
             <ion-text color="light">{{(user$ | async)?.fullName}}</ion-text>
           </div>

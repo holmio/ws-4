@@ -10,7 +10,7 @@ export const ROUTE = {
     },
     profile: {
         detail: 'porfile/detail',
-        chatList: 'profile/chat-list',
+        chatList: 'profile/mensajes',
         edit: 'profile/edit/:id'
     }
 }

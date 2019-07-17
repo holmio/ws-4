@@ -117,12 +117,12 @@ export class AuthState implements NgxsOnInit {
                     uid: data.user.uid,
                     fullName: data.user.displayName,
                     lastSignInTime: null,
-                    pictureURL: {
-                        pathOfImage: data.user.photoURL,
-                        pathOfBucket: '',
+                    avatar: {
+                        downloadUrl: data.user.photoURL,
+                        path: null,
                     },
                     email: data.user.email,
-                    listOfItems: [],
+                    products: [],
                 }
                 sc.dispatch(new SetUserAction(userInformation));
             } else {
@@ -144,12 +144,12 @@ export class AuthState implements NgxsOnInit {
                 uid: data.user.uid,
                 fullName: action.fullName,
                 lastSignInTime: null,
-                pictureURL: {
-                    pathOfImage: null,
-                    pathOfBucket: '',
+                avatar: {
+                    downloadUrl: null,
+                    path: null,
                 },
                 email: data.user.email,
-                listOfItems: [],
+                products: [],
             }
             sc.dispatch(new RegisterSuccessAction(userInformation));
         }, error => {

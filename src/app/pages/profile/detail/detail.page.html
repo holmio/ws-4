@@ -1,19 +1,19 @@
-<ion-header lines="none">
-  <ion-toolbar color="tertiary">
+<ion-header no-border>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
     <ion-title class="title-ios" text-capitalize>My Account</ion-title>
-    <ion-buttons slot="end">
-        Edit Profile
+    <ion-buttons routerLink="/profile/edit" routerDirection="forward" slot="end" padding-end>
+      Edit
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
       <ion-avatar>
-        <img [src]="(user$ | async)?.pictureURL?.pathOfImage">
+        <img [src]="(user$ | async)?.avatar?.downloadUrl">
       </ion-avatar>
-      <div padding-start class="userDetail">
+      <div class="userDetail">
         <ion-label class="userName">
           {{(user$ | async)?.fullName}}
         </ion-label>
@@ -21,22 +21,22 @@
       </div>
     </div>
   </ion-toolbar>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar color="primary">
     <ion-segment [(ngModel)]="selectSegment">
-      <ion-segment-button value="profile" class="segmentButton" color="light">
-        <ion-label>Profile</ion-label>
+      <ion-segment-button value="products" class="segmentButton" color="light">
+        <ion-label>Productos</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="mycard" color="light">
-        <ion-label>My Card</ion-label>
+      <ion-segment-button value="favorits" color="light">
+        <ion-label>Favoritos</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="MyAddress" color="light">
-        <ion-label>My Address</ion-label>
+      <ion-segment-button value="messages" color="light">
+        <ion-label>Mensajes</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
+<ion-content fullscreen padding>
 
   <!-- <my-profile *ngIf="selectSegment == 'profile'"></my-profile>
   <payment-cards *ngIf="selectSegment == 'mycard'"></payment-cards>

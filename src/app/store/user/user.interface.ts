@@ -8,34 +8,38 @@ export interface UserStateModel {
 export interface UserDetail {
     fullName: string;
     uid: string;
-    pictureURL?: RoutePicture;
+    avatar?: Avatar;
     email: string;
     lastSignInTime?: string;
-    listOfItems?: Array<ItemOfUser>;
+    phone?: number;
+    localization?: string;
+    products?: Array<ProductsUser>;
+    favorits?: Array<ProductsUser>;
   }
-  
   
   export interface UserUpdate {
-    firsName: string;
-    lastName: string;
-    uuid: string;
-    pictureURL: RoutePictureToUpdate;
-    email: string;
+    fullName?: string;
+    products?: Array<ProductsUser>;
+    avatar?: AvatarUpdate;
+    favorits?: Array<ProductsUser>;
+    phone?: number;
+    localization?: string;
   }
-  export interface RoutePicture {
-    pathOfBucket: string;
-    pathOfImage: string;
+
+  export interface Avatar {
+    path: string;
+    downloadUrl: string;
   }
-  export interface RoutePictureToUpdate {
-    pathOfBucketOld: string;
-    base64Image: string;
+  export interface AvatarUpdate {
+    path: string;
+    base64image: string;
   }
   
-  export interface ItemOfUser {
-    uuid: string,
+  export interface ProductsUser {
+    uid: string,
     isSold: boolean,
     price: number,
-    profileItem: string,
+    avatar: string,
     currency: string,
   }
 
