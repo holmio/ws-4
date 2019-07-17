@@ -28,6 +28,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AuthModule } from './store/auth';
 import { UserModule } from './store/user';
+import { ProductsModule } from './store/product';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { UserModule } from './store/user';
       }),
       AuthModule,
       UserModule,
+      ProductsModule,
       AppRoutingModule,
   ],
   providers: [
