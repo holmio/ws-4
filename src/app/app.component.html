@@ -1,8 +1,8 @@
 <ion-app>
   <ion-split-pane>
-    <ion-menu class="sidemenu-2" side="end" type="overlay">
-      <ion-content>
-        <div class="content">
+    <ion-menu class="sidemenu" side="end" type="overlay">
+      <ion-content class="content">
+        <div>
           <div *ngIf="(user$ | async)" class="profile-block" (click)="goToPage('profile/detail')">
             <div class="profile-image">
               <img [src]="(user$ | async).avatar?.downloadUrl" />
@@ -15,9 +15,9 @@
                 <div class="icon">
                   <ion-icon slot="start" name="log-in"></ion-icon>
                 </div>
-                <div class="text">
+                <!-- <div class="text">
                   Login
-                </div>
+                </div> -->
               </ion-button>
             </div>
             <div class="menu-item">
@@ -25,19 +25,19 @@
                 <div class="icon">
                   <ion-icon slot="start" name="home"></ion-icon>
                 </div>
-                <div class="text">
+                <!-- <div class="text">
                   Home
-                </div>
+                </div> -->
               </ion-button>
             </div>
             <div class="menu-item">
-              <ion-button (click)="goToPage('profile/chat-list')" Fill="clear" class="block">
+              <ion-button (click)="goToPage('profile/messages')" Fill="clear" class="block">
                 <div class="icon">
                   <ion-icon slot="start" name="chatbubbles"></ion-icon>
                 </div>
-                <div class="text">
+                <!-- <div class="text">
                   Mensajes
-                </div>
+                </div> -->
               </ion-button>
             </div>
             <div class="menu-item" *ngIf="(user$ | async)">
@@ -45,9 +45,9 @@
                 <div class="icon">
                   <ion-icon slot="start" name="log-out"></ion-icon>
                 </div>
-                <div class="text">
+                <!-- <div class="text">
                   Logout
-                </div>
+                </div> -->
               </ion-button>
             </div>
           </div>

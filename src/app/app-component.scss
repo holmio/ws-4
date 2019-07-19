@@ -1,21 +1,29 @@
 
 // SMALL GRID -- Sidemenu Layout 2 styling START
 
-.sidemenu-2 {
-    --width: 120px;
-    --max-width: 120px;
+.sidemenu {
+    --width: 100px;
+    --max-width: 100px;
     .content {
+      --background: var(--ion-color-secondary-tint);
       display: flex;
       flex-direction: column;
       align-items: center;
       .profile-block {
-        background: #538090;
+        background: var(--ion-color-secondary);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 150px;
         width: 100%;
+        ion-text {
+          display: inline-block;
+          width: 86px;
+          white-space: nowrap;
+          overflow: hidden !important;
+          text-overflow: ellipsis;
+        }
         .profile-image {
           img {
             max-width: 90px;
@@ -26,7 +34,7 @@
         }
       }
       .menu {
-        background: linear-gradient(rgb(109, 165, 180), rgb(74, 106, 124));
+        background: var(--ion-color-secondary-tint);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -37,14 +45,14 @@
           width: 90px;
           margin-bottom: 25px;
           .block {
-            background: rgb(85, 122, 144);
+            // background: rgb(85, 122, 144);
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: inset 2px rgba(0, 0, 0, 0.1);
+            // border: inset 2px rgba(0, 0, 0, 0.1);
             &.active {
               background: rgb(162, 212, 224);
               box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -52,7 +60,7 @@
             }
             .icon {
               ion-icon {
-                color: #eee;
+                color: var(--ion-color-secondary-contrast);
                 font-size: 42px;
                 &.active {
                   color: rgb(85, 122, 144);
