@@ -1,0 +1,10 @@
+<ion-header no-border>
+  <ion-toolbar color="primary">
+    <ion-buttons *ngIf="showBackButton" slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+    <ng-content select="[header-right-action]"></ng-content>
+  </ion-toolbar>
+  <ng-content></ng-content>
+</ion-header>

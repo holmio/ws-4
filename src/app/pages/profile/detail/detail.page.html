@@ -1,21 +1,21 @@
-<ion-header no-border>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-    <ion-title class="title-ios" text-capitalize>My Account</ion-title>
-    <ion-buttons routerLink="/profile/edit" routerDirection="forward" slot="end" padding-end>
-      Edit
-    </ion-buttons>
-  </ion-toolbar>
+<app-header title="Perfil">
+  <ion-buttons
+    header-right-action
+    routerLink="/profile/edit"
+    routerDirection="forward"
+    slot="end"
+    padding-end
+  >
+    Edit
+  </ion-buttons>
   <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
       <ion-avatar>
-        <img [src]="(user$ | async)?.avatar?.downloadUrl">
+        <img [src]="(user$ | async)?.avatar?.downloadUrl" />
       </ion-avatar>
       <div class="userDetail">
         <ion-label class="userName">
-          {{(user$ | async)?.fullName}}
+          {{ (user$ | async)?.fullName }}
         </ion-label>
         <ion-text>987-123-0000</ion-text>
       </div>
@@ -34,14 +34,12 @@
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-</ion-header>
+</app-header>
 
 <ion-content fullscreen padding>
-
   <!-- <my-profile *ngIf="selectSegment == 'profile'"></my-profile>
   <payment-cards *ngIf="selectSegment == 'mycard'"></payment-cards>
   <my-address *ngIf="selectSegment == 'MyAddress'"></my-address> -->
 
   TEXT
-
 </ion-content>

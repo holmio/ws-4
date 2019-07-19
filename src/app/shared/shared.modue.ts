@@ -1,38 +1,34 @@
-import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { IonicModule } from '@ionic/angular';
+import { CommonModule } from "@angular/common";
+import { NgModule, ModuleWithProviders } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
+import { IonicModule } from "@ionic/angular";
+import { HeaderModule } from '../components/header/header.module';
 
-// The translate loader needs to know where to load i18n files
-// in Ionic's static asset pipeline.
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
- imports: [
+  imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     TranslateModule,
     ReactiveFormsModule,
+    HeaderModule
   ],
- declarations: [  ],
- exports:      [ 
-    CommonModule, 
+  declarations: [],
+  exports: [
+    CommonModule,
     FormsModule,
     IonicModule,
     TranslateModule,
-    ReactiveFormsModule
-]
+    ReactiveFormsModule,
+    HeaderModule
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
-        ngModule: SharedModule,
+      ngModule: SharedModule
     };
   }
 }
