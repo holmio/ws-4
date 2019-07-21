@@ -103,6 +103,12 @@ export class AuthState implements NgxsOnInit {
             // this.router.navigate([ROUTE.home]);
         });
     }
+    @Action(LogoutSuccessAction)
+    onLogoutSuccessAction(sc: StateContext<AuthStateModel>) {
+        this.zone.run(() => {
+            this.router.navigate([ROUTE.home]);
+        });
+    }
 
     /**********************************
      * FACEBOOK LOGIN
@@ -159,7 +165,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(RegisterSuccessAction)
     registerSuccess(sc: StateContext<AuthStateModel>, action: RegisterSuccessAction) {
-        console.log('onLoginSuccess, navigating to /dashboard ', action.user.uid);
+        console.log('registerSuccess, navigating to /dashboard ', action.user.uid);
         const state = sc.getState();
         sc.setState({
             ...state,
@@ -169,13 +175,13 @@ export class AuthState implements NgxsOnInit {
         sc.dispatch(new SetUserAction(action.user));
         sc.dispatch(new LoginRedirectAction());
     }
-
     @Action([LoginFailedAction, LogoutSuccessAction, RegisternFailedAction])
-    setUserStateOnFailure(sc: StateContext<AuthStateModel>) {
+    resetAuthState(sc: StateContext<AuthStateModel>) {
         sc.setState({
             uid: null,
-            loaded: false
+            loaded: true
         });
     }
+
 
 }

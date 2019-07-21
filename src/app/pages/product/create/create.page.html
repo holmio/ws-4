@@ -1,7 +1,8 @@
-<app-header title="Edit Product"></app-header>
+<app-header title="Create Product"></app-header>
 
-<ion-content *ngIf="(loading$ | async)">
-    <form [formGroup]="myGroup" (ngSubmit)="update()">
+
+<ion-content>
+    <form [formGroup]="myGroup" (ngSubmit)="create()">
         <ion-grid>
             <ion-row color="primary" justify-content-center>
                 <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
@@ -20,29 +21,21 @@
                         </ion-item>
                         <ion-item>
                             <ion-label position="floating">Moneda</ion-label>
-                            <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar">
+                            <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar" required>
                                 <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                     {{currency.nameEs}}</ion-select-option>
                             </ion-select>
                         </ion-item>
                         <ion-item>
                             <ion-label position="floating">Categoria</ion-label>
-                            <ion-select multiple="true" okText="Okay" cancelText="Ocultar">
+                            <ion-select multiple="true" okText="Okay" cancelText="Ocultar" required>
                                 <ion-select-option *ngFor="let category of categories" [value]="category.value"
                                     [selected]="category.selected">{{category.nameEs}}</ion-select-option>
                             </ion-select>
                         </ion-item>
-                        <ion-item>
-                            <ion-label>Activado</ion-label>
-                            <ion-toggle formControlName="isEnabled"></ion-toggle>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>Vendido</ion-label>
-                            <ion-toggle formControlName="isSold"></ion-toggle>
-                        </ion-item>
                     </div>
                     <div padding>
-                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">Guardar
+                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">Crear
                         </ion-button>
                     </div>
                 </ion-col>

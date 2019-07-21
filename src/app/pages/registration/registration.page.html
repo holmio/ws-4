@@ -10,21 +10,21 @@
       <div class="bottom" padding-horizontal>
         <div class="content-list">
           <form [formGroup]="registerForm" (submit)="onSubmit()">
-            <ion-card class="input-card" margin-vertical>
+            <ion-card no-margin padding>
               <ion-item lines="none">
-                <ion-icon name="person" item-start></ion-icon>
-                <ion-input type="text" placeholder="Full Name" formControlName="fullName" padding-start></ion-input>
+                <ion-label position="floating">Full Name</ion-label>
+                <ion-input type="text" formControlName="fullName" padding-start></ion-input>
               </ion-item>
               <ion-item lines="none">
-                <ion-icon name="mail" item-start></ion-icon>
-                <ion-input type="email" placeholder="Email" formControlName="email" padding-start></ion-input>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input type="email" formControlName="email" padding-start></ion-input>
               </ion-item>
               <ion-item lines="none">
-                <ion-icon name="call" item-start></ion-icon>
-                <ion-input type="password" placeholder="Password" formControlName="password" padding-start></ion-input>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input type="password" formControlName="password" padding-start></ion-input>
               </ion-item>
+              <ion-button [disabled]="!registerForm.valid" type="submit" expand="block">Register</ion-button>
             </ion-card>
-            <ion-button [disabled]="!registerForm.valid" type="submit" expand="full" no-padding>Register</ion-button>
           </form>
         </div>
         <div class="loginBtn" margin-vertical>

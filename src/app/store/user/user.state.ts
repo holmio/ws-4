@@ -106,7 +106,7 @@ export class UserState {
             loaded: false,
         });
         console.log(action.user);
-        this.userCollectionRef.doc(uid).set(action.user).then((data) => {
+        this.userService.setUser(uid, action.user).then((data) => {
             console.log(data);
             sc.dispatch(new SetUserSuccessAction(action.user));
         }, error => {
@@ -125,7 +125,7 @@ export class UserState {
         sc.dispatch(new LoginSuccessAction(action.user.uid));
     }
     @Action([GetUserFailedAction, LogoutSuccessAction])
-    setUserFailure(sc: StateContext<UserStateModel>) {
+    resetUserState(sc: StateContext<UserStateModel>) {
         sc.setState({
             user: null,
             loaded: true

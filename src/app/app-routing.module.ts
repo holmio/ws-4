@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'profile/messages', loadChildren: './pages/profile/messages/messages.module#MessagesPageModule', canActivate: [AuthGuard] },
   // PRODUCT
   { path: 'product/edit/:id', loadChildren: './pages/product/edit/edit.module#EditPageModule', canActivate: [AuthGuard] },
+  { path: 'product/create', loadChildren: './pages/product/create/create.module#CreatePageModule', canActivate: [AuthGuard] },
   { path: 'product/detail/:id', loadChildren: './pages/product/detail/detail.module#DetailPageModule' },
   
   { path: 'chat', loadChildren: './pages/chat/chat.module#ChatPageModule', canActivate: [AuthGuard]},

@@ -13,7 +13,7 @@ import { HeaderModule } from '../components/header/header.module';
     IonicModule,
     TranslateModule,
     ReactiveFormsModule,
-    HeaderModule
+    HeaderModule,
   ],
   declarations: [],
   exports: [

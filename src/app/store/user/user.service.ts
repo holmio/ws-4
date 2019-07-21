@@ -25,6 +25,10 @@ export class UserService {
     return this.userCollectionRef.doc(uid).valueChanges()
   }
 
+  setUser(uid: string, userInformation: UserDetail): Promise<any>{
+    return this.userCollectionRef.doc(uid).set(userInformation);
+  }
+
   updateUser(uid: string, user: UserUpdate): Promise<any> {
     return this.userCollectionRef.doc(uid).update(user);
   }

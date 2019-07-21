@@ -1,5 +1,69 @@
-<app-header title="Product"></app-header>
+<app-header>
+    <ion-buttons header-right-action slot="end">
+        <ng-container *ngIf="!(isUserProduct$ | async) && (loading$ | async)">
+            <ion-button (click)="favorite()">
+                <ion-icon slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
+            </ion-button>
+            <ion-button routerLink="/chat" routerDirection="forward">
+                <ion-icon size="large" name="chatbubbles"></ion-icon>
+            </ion-button>
+        </ng-container>
+        <ng-container *ngIf="(isUserProduct$ | async) && (loading$ | async)">
+            <ion-button [routerLink]="'/product/edit/' + id" routerDirection="forward">
+                <ion-icon size="large" name="create"></ion-icon>
+            </ion-button>
+            <ion-button (click)="remove()">
+                <ion-icon size="large" name="trash"></ion-icon>
+            </ion-button>
+        </ng-container>
+    </ion-buttons>
+</app-header>
 
-<ion-content>
-
+<ion-content *ngIf="(loading$ | async)">
+    <ion-slides mode="md" pager="md" scrollbar="md">
+        <ion-slide *ngFor="let image of (product$ | async)?.gallery">
+            <img [src]="image.downloadUrl"
+                alt="">
+        </ion-slide>
+    </ion-slides>
+    <small class="ion-padding-horizontal">Actualizado: {{(product$ | async)?.timestamp | date }}</small>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <h1>{{(product$ | async)?.name}}</h1>
+                </div>
+            </ion-col>
+            <ion-col class="ion-text-end">
+                <div>
+                    <h1>{{(product$ | async)?.price}} <small>{{(product$ | async)?.currency}}</small></h1>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <p>{{(product$ | async)?.description}}</p>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <h3>
+                        <ion-icon name="pin"></ion-icon> {{(product$ | async)?.localization}}
+                    </h3>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <h3>
+                        Ultima Vez Editado: <small>12/03/2008</small>
+                    </h3>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

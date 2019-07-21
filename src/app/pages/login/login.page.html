@@ -1,47 +1,44 @@
 <app-header title="Login"></app-header>
 
 <ion-content no-padding>
-  <div class="main">
-    <div class="logo red">
-      LOGIN
-    </div>
-    <div class="sub-text-1">
-      Login instantly with
-    </div>
-    <div class="social">
-      <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
-        <ion-icon name="logo-facebook"></ion-icon>
-      </ion-button>
-    </div>
-    <div class="sub-text-2">
-      OR
-    </div>
-    <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
-      <div class="email">
-        <ion-label>Email</ion-label>
-        <ion-input clearInput type="text" placeholder="Email" formControlName="email">
-        </ion-input>
+  <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
+    <div class="main">
+      <div class="sub-text-1">
+        Login instantly with
       </div>
-      <div class="password">
-        <ion-label>Password</ion-label>
-        <ion-input clearInput type="password" placeholder="Password" formControlName="password">
-        </ion-input>
-      </div>
-      <div class="sub-text-3">
-        <div class="check">
-          <ion-checkbox></ion-checkbox> Remember me
-        </div>
-        <div class="forgot">Forgot Password ?</div>
-      </div>
-      <div class="button">
-        <ion-button type="submit" [disabled]="!loginForm.valid" expand="block" class="login-button">Login</ion-button>
-      </div>
-      <div class="sub-text-4">
-        <ion-text>Don't have an account?</ion-text>
-        <ion-button class="link" Fill="clear" routerLink="/registration" routerDirection="forward">
-          Signup here
+      <div class="social">
+        <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
+          <ion-icon color="tertiary" size="large" name="logo-facebook"></ion-icon>
         </ion-button>
       </div>
-    </form>
-  </div>
+      <div class="sub-text-2">
+        OR
+      </div>
+      <ion-card no-margin padding>
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input clearInput type="text" formControlName="email">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input clearInput type="password" formControlName="password">
+          </ion-input>
+        </ion-item>
+        <div class="sub-text-3">
+          <div class="check">
+            <ion-checkbox></ion-checkbox> Remember me
+          </div>
+          <div class="forgot">Forgot Password ?</div>
+        </div>
+        <div class="button">
+          <ion-button type="submit" [disabled]="!loginForm.valid" expand="block" class="login-button">Login</ion-button>
+        </div>
+        <div class="sub-text-4">
+          <ion-text>Don't have an account? - </ion-text>
+          <a routerLink="/registration" routerDirection="forward">Signup here</a>
+        </div>
+      </ion-card>
+    </div>
+  </form>
 </ion-content>

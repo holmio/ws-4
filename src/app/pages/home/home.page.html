@@ -1,5 +1,11 @@
 <app-header [showBackButton]="false" title="Home 1"></app-header>
 
 <ion-content>
-
+    <ion-grid>
+        <ion-row>
+            <ion-col size="6" *ngFor="let product of products$ | async">
+                <app-product-card [product]="product"></app-product-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
