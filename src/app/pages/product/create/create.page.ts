@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 import { SetProductAction } from 'src/app/store/product';
+import { IonSelect } from '@ionic/angular';
+import { parseCategoryList } from 'src/app/util/common';
 
 @Component({
   selector: 'app-create',
@@ -14,10 +16,10 @@ export class CreatePage implements OnInit {
   myGroup: FormGroup;
   categories = CATEGORIES;
   currencies = CURRENCIES;
-
+  private catSelected: string[];
   constructor(
     private formBuilder: FormBuilder,
-    private store: Store, 
+    private store: Store,
   ) { }
 
   ngOnInit() {
@@ -26,10 +28,16 @@ export class CreatePage implements OnInit {
       price: ['', Validators.required],
       description: ['', Validators.required],
       currency: ['DZD', Validators.required],
+      category: ['', Validators.required],
     });
   }
 
+  categorySelected(event: { detail: { value: any; }; }) {
+    this.catSelected = [...event.detail.value];
+  }
+
   create() {
+    this.myGroup.value.category = Object.assign(parseCategoryList(this.catSelected));
     this.store.dispatch(new SetProductAction(this.myGroup.value));
   }
 }

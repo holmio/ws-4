@@ -26,15 +26,7 @@ export class ProductService {
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges().pipe(
-      switchMap(product => {
-        let res = null;
-        return this.productCollectionRef.doc(uid).collection('gallery').valueChanges().pipe(
-          map(gallery => res = Object.assign(product, { gallery }))
-        )
-        return combineLatest(...res);
-      })
-    );
+    return this.productCollectionRef.doc(uid).valueChanges()
   }
 
   getProductShort(): Observable<ShortProduct[]> {

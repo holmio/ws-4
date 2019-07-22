@@ -16,7 +16,7 @@ export interface Product {
   isSold?: boolean;
   timestamp: number;
   thumbnail?: string;
-  uid: string;
+  uid?: string;
 }
 
 export interface ShortProduct {

@@ -55,9 +55,6 @@ export class EditPage implements OnInit {
         isEnabled: [product.isEnabled || false, Validators.required],
         isSold: [product.isSold || false, Validators.required],
       });
-      this.myGroup.valueChanges.subscribe((data) => {
-        console.log(data);
-      });
     });
   }
 
