@@ -16,7 +16,7 @@ export class CreatePage implements OnInit {
   myGroup: FormGroup;
   categories = CATEGORIES;
   currencies = CURRENCIES;
-  private catSelected: string[];
+  private catSelected: string[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
@@ -27,8 +27,9 @@ export class CreatePage implements OnInit {
       name: ['', Validators.required],
       price: ['', Validators.required],
       description: ['', Validators.required],
+      localization: ['', Validators.required],
       currency: ['DZD', Validators.required],
-      category: ['', Validators.required],
+      category: ['ropa', Validators.required],
     });
   }
 
@@ -38,6 +39,10 @@ export class CreatePage implements OnInit {
 
   create() {
     this.myGroup.value.category = Object.assign(parseCategoryList(this.catSelected));
-    this.store.dispatch(new SetProductAction(this.myGroup.value));
+    if(this.catSelected.length > 0) {
+      this.store.dispatch(new SetProductAction(this.myGroup.value));
+      return
+    }
+    console.log('Tienes que seleccionar categoria');
   }
 }

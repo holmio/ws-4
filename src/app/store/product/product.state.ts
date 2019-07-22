@@ -131,8 +131,8 @@ export class ProductState implements NgxsOnInit {
         action.product.isEnabled = true;
         action.product.uidUser = this.uidUser;
         action.product.thumbnail = 'https://picsum.photos/400/400?random=1';
-        await this.productService.setProduct(action.product).then(() => {
-            sc.dispatch(new SetProductSuccessAction(action.product));
+        await this.productService.setProduct(action.product).then((uid) => {
+            sc.dispatch(new SetProductSuccessAction(uid));
         }, error => {
             sc.dispatch(new SetProductFailedAction(error));
         });
@@ -143,10 +143,9 @@ export class ProductState implements NgxsOnInit {
         const state = sc.getState();
         sc.setState({
             ...state,
-            product: state.product,
             loaded: true,
         });
-        this.navController.navigateRoot('product/detail/' + state.product.uid);
+        this.navController.navigateRoot('product/detail/' + action.uid);
     }
 
     @Action([GetProductFailedAction])

@@ -22,8 +22,7 @@
 <ion-content *ngIf="(loading$ | async)">
     <ion-slides mode="md" pager="md" scrollbar="md">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery">
-            <img [src]="image.downloadUrl"
-                alt="">
+            <img [src]="image.downloadUrl" alt="">
         </ion-slide>
     </ion-slides>
     <small class="ion-padding-horizontal">Actualizado: {{(product$ | async)?.timestamp | date }}</small>
@@ -67,3 +66,8 @@
         </ion-row>
     </ion-grid>
 </ion-content>
+<ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button routerLink="/product/create" routerDirection="forward">
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+</ion-fab>

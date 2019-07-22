@@ -21,7 +21,7 @@ export class SetProductAction {
 }
 export class SetProductSuccessAction {
   static type = '[Product] SetProductSuccess';
-  constructor(public product: Product) { }
+  constructor(public uid: string) { }
 }
 export class SetProductFailedAction {
   static type = '[Product] SetProductFailed';

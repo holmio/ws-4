@@ -57,28 +57,30 @@ export class ProductService {
   }
 
   setProduct(product: Product): Promise<any> {
-    return this.productCollectionRef.add(product).then( data => {
-      // Add gallery to the product
-      // galleryList.forEach((image) => {
-      //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
-      //   this.uploadFileString(filePath, image.base64).then((downloadUrl) => {
-      //     this.productCollectionRef.doc(data.uid).collection('gallery').add({
-      //       path: filePath,
-      //       downloadUrl: downloadUrl
-      //     });
-      //   });
-      // })
-      this.productUserCollectionRef.doc(product.uidUser + '_' + data.id).set({
-        name: product.name,
-        price: product.price,
-        currency: product.currency,
-        thumbnail: '',
-        isSold: product.isSold,
-        isEnabled: product.isEnabled,
-        uidUser: product.uidUser,
-        uid: data.id,
-      })
-    });
+    return new Promise((resolve) => {
+      this.productCollectionRef.add(product).then( data => {
+        // Add gallery to the product
+        // galleryList.forEach((image) => {
+        //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
+        //   this.uploadFileString(filePath, image.base64).then((downloadUrl) => {
+        //     this.productCollectionRef.doc(data.uid).collection('gallery').add({
+        //       path: filePath,
+        //       downloadUrl: downloadUrl
+        //     });
+        //   });
+        // })
+        this.productUserCollectionRef.doc(product.uidUser + '_' + data.id).set({
+          name: product.name,
+          price: product.price,
+          currency: product.currency,
+          thumbnail: '',
+          isSold: product.isSold,
+          isEnabled: product.isEnabled,
+          uidUser: product.uidUser,
+          uid: data.id,
+        }).finally(() => resolve(data.id))
+      });
+    }) 
   }
 
 
