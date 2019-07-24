@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { parseCategoryList } from 'src/app/util/common';
 
 @Component({
   selector: 'app-edit',
@@ -29,6 +30,7 @@ export class EditPage implements OnInit {
     { value: 'DZD', nameAr: 'دينار', nameEs: 'Dinar', selected: false },
     { value: 'EUR', nameAr: 'اليورو', nameEs: 'Euro', selected: false },
   ]
+  private catSelected: string[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
@@ -60,10 +62,18 @@ export class EditPage implements OnInit {
 
   update() {
     const finalProduct: Product = <any>this.getDirtyValues(this.myGroup);
+    finalProduct.category = Object.assign(parseCategoryList(this.catSelected));
+    if (this.catSelected.length === 0) {
+      return
+    }
     this.store.dispatch(new UpdateProductAction(finalProduct));
   }
 
-  getDirtyValues(form: any) {
+  categorySelected(event: { detail: { value: any; }; }) {
+    this.catSelected = [...event.detail.value];
+  }
+
+  private getDirtyValues(form: any) {
     let dirtyValues = {};
 
     Object.keys(form.controls)

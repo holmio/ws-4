@@ -7,7 +7,7 @@ export interface ProductStateModel {
 export interface Product {
   name: string;
   price: number;
-  uidUser: string;
+  uidUser?: string;
   description: string;
   category: any;
   currency: 'DZD' | 'EUR';

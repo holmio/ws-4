@@ -26,7 +26,7 @@ export class ProductService {
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges()
+    return this.productCollectionRef.doc(uid).valueChanges();
   }
 
   getProductShort(): Observable<ShortProduct[]> {
@@ -34,31 +34,18 @@ export class ProductService {
   }
 
   updateProduct(product: Product): Promise<any> {
-    const batch = this.afStore.firestore.batch(); 
+    const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc('products/' + product.uid);
+    const productShortColl = this.afStore.firestore.doc('productsUsers/' + product.uidUser + '_' + product.uid);
     batch.update(productColl, product);
-    // Update short information of product
-    if (this.getShortProductToUpdate(product)) {
-      const productShortColl = this.afStore.firestore.doc('productsUsers/' + product.uidUser + '_' + product.uid);
-      batch.update(productShortColl, this.getShortProductToUpdate(product));
-    }
+    batch.update(productShortColl, product);
     return batch.commit();
   }
 
-  private getShortProductToUpdate(product: Product): ShortProduct {
-    const producShortKeys = ['currency', 'isEnabled', 'isSold', 'name', 'price', 'thumbnail'];
-    let productShort: ShortProduct;
-    producShortKeys.forEach(key => {
-      if (product.hasOwnProperty(key)) {
-        productShort = <any>Object.assign({ [key]: product[key] }, {});
-      }
-    })
-    return productShort;
-  }
-
   setProduct(product: Product): Promise<any> {
+    product.uid = this.uuidv4();
     return new Promise((resolve) => {
-      this.productCollectionRef.add(product).then( data => {
+      this.productCollectionRef.doc(product.uid).set(product).then( () => {
         // Add gallery to the product
         // galleryList.forEach((image) => {
         //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
@@ -69,7 +56,7 @@ export class ProductService {
         //     });
         //   });
         // })
-        this.productUserCollectionRef.doc(product.uidUser + '_' + data.id).set({
+        this.productUserCollectionRef.doc(product.uidUser + '_' + product.uid).set({
           name: product.name,
           price: product.price,
           currency: product.currency,
@@ -77,8 +64,8 @@ export class ProductService {
           isSold: product.isSold,
           isEnabled: product.isEnabled,
           uidUser: product.uidUser,
-          uid: data.id,
-        }).finally(() => resolve(data.id))
+          uid: product.uid,
+        }).finally(() => resolve(product.uid))
       });
     }) 
   }
@@ -97,5 +84,12 @@ export class ProductService {
     task.snapshotChanges().pipe(
       finalize(async () => await fileRef.getDownloadURL())
     );
+  }
+
+  private uuidv4() {
+    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 }

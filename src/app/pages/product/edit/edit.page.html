@@ -27,7 +27,7 @@
                         </ion-item>
                         <ion-item>
                             <ion-label position="floating">Categoria</ion-label>
-                            <ion-select multiple="true" okText="Okay" cancelText="Ocultar">
+                            <ion-select multiple="true" okText="Okay" cancelText="Ocultar" (ionChange)="categorySelected($event)">
                                 <ion-select-option *ngFor="let category of categories" [value]="category.value"
                                     [selected]="category.selected">{{category.nameEs}}</ion-select-option>
                             </ion-select>

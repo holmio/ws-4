@@ -98,8 +98,9 @@ export class ProductState implements NgxsOnInit {
             loaded: false,
         });
         action.product.timestamp = this.timestamp;
-        action.product.uid = state.product.uid;
+        // Necessary to get permission to edit table products
         action.product.uidUser = state.product.uidUser;
+        action.product.uid = state.product.uid;
         await this.productService.updateProduct(action.product).then(() => {
             sc.dispatch(new UpdateProductSuccessAction());
         }, error => {
