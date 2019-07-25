@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { ProductState, Product, UpdateProductAction } from 'src/app/store/product';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { parseCategoryList } from 'src/app/util/common';
+import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 
 @Component({
   selector: 'app-edit',
@@ -17,19 +17,9 @@ export class EditPage implements OnInit {
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getProduct) product$: Observable<Product>;
   myGroup: FormGroup;
-  categories: any = [
-    { value: 'ropa', nameEs: 'Ropa', selected: false },
-    { value: 'mujer', nameEs: 'Mujer', selected: false },
-    { value: 'play', nameEs: 'Play', selected: false },
-    { value: 'cabra', nameEs: 'Cabra', selected: false },
-    { value: 'melfa', nameEs: 'Melfa', selected: false },
-    { value: 'coche', nameEs: 'coche', selected: false },
-    { value: 'otro', nameEs: 'Otro', selected: false },
-  ]
-  currencies: any = [
-    { value: 'DZD', nameAr: 'دينار', nameEs: 'Dinar', selected: false },
-    { value: 'EUR', nameAr: 'اليورو', nameEs: 'Euro', selected: false },
-  ]
+  categories = CATEGORIES;
+  currencies = CURRENCIES;
+
   private catSelected: string[] = [];
   constructor(
     private formBuilder: FormBuilder,
@@ -61,10 +51,10 @@ export class EditPage implements OnInit {
   }
 
   update() {
-    const finalProduct: Product = <any>this.getDirtyValues(this.myGroup);
+    const finalProduct: Product = this.getDirtyValues(this.myGroup) as any;
     finalProduct.category = Object.assign(parseCategoryList(this.catSelected));
     if (this.catSelected.length === 0) {
-      return
+      return;
     }
     this.store.dispatch(new UpdateProductAction(finalProduct));
   }
@@ -74,17 +64,18 @@ export class EditPage implements OnInit {
   }
 
   private getDirtyValues(form: any) {
-    let dirtyValues = {};
+    const dirtyValues = {};
 
     Object.keys(form.controls)
       .forEach(key => {
-        let currentControl = form.controls[key];
+        const currentControl = form.controls[key];
 
         if (currentControl.dirty) {
-          if (currentControl.controls)
+          if (currentControl.controls) {
             dirtyValues[key] = this.getDirtyValues(currentControl);
-          else
+          } else {
             dirtyValues[key] = currentControl.value;
+          }
         }
       });
 

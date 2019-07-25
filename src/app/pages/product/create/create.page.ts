@@ -39,8 +39,8 @@ export class CreatePage implements OnInit {
 
   create() {
     this.myGroup.value.category = Object.assign(parseCategoryList(this.catSelected));
-    if(this.catSelected.length === 0) {
-      return
+    if (this.catSelected.length === 0) {
+      return;
     }
     this.store.dispatch(new SetProductAction(this.myGroup.value));
     console.log('Tienes que seleccionar categoria');

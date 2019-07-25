@@ -15,18 +15,31 @@ export class ProductService {
 
   private productCollectionRef: AngularFirestoreCollection<any>;
   private productUserCollectionRef: AngularFirestoreCollection<any>;
+  private PRODUCTS = 'products';
+  private PRODUCTS_BY_USER = 'productsByUser';
 
   constructor(
     private afAuth: AngularFireAuth,
     private storage: AngularFireStorage,
     private afStore: AngularFirestore,
   ) {
-    this.productCollectionRef = this.afStore.collection<Product>('products');
-    this.productUserCollectionRef = this.afStore.collection<Product>('productsUsers');
+    this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
+    this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges();
+    const userProducts = this.productCollectionRef.doc(uid).valueChanges();
+    const userProductsByUser = this.productCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges();
+
+    userProducts.pipe(
+      switchMap((response: Product) => {
+        const res = response.map(product => {
+          return userProductsByUser.pipe(
+            map(subProduct => Object.assign(product.productsByUser, {subProduct}))
+          );
+        });
+        return combineLatest(...res);
+    );
   }
 
   getProductShort(): Observable<ShortProduct[]> {
@@ -35,8 +48,8 @@ export class ProductService {
 
   updateProduct(product: Product): Promise<any> {
     const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc('products/' + product.uid);
-    const productShortColl = this.afStore.firestore.doc('productsUsers/' + product.uidUser + '_' + product.uid);
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uidUser}_${product.uid}`);
     batch.update(productColl, product);
     batch.update(productShortColl, product);
     return batch.commit();
@@ -46,6 +59,16 @@ export class ProductService {
     product.uid = this.uuidv4();
     return new Promise((resolve) => {
       this.productCollectionRef.doc(product.uid).set(product).then( () => {
+        const productsByUser = {
+          name: product.name,
+          price: product.price,
+          currency: product.currency,
+          thumbnail: '',
+          isSold: product.isSold,
+          isEnabled: product.isEnabled,
+          uidUser: product.uidUser,
+          uid: product.uid,
+        };
         // Add gallery to the product
         // galleryList.forEach((image) => {
         //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
@@ -56,18 +79,11 @@ export class ProductService {
         //     });
         //   });
         // })
-        this.productUserCollectionRef.doc(product.uidUser + '_' + product.uid).set({
-          name: product.name,
-          price: product.price,
-          currency: product.currency,
-          thumbnail: '',
-          isSold: product.isSold,
-          isEnabled: product.isEnabled,
-          uidUser: product.uidUser,
-          uid: product.uid,
-        }).finally(() => resolve(product.uid))
+        this.productCollectionRef.doc(product.uid)
+        .collection(this.PRODUCTS_BY_USER).doc(product.uidUser + '_' + product.uid).set(productsByUser);
+        this.productUserCollectionRef.doc(product.uidUser + '_' + product.uid).set(productsByUser).finally(() => resolve(product.uid));
       });
-    }) 
+    });
   }
 
 
