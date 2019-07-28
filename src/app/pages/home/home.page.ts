@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProductState, ShortProduct } from 'src/app/store/product';
 import { ProductService } from 'src/app/store/product/product.service';
+import { AuthState } from 'src/app/store/auth';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +15,9 @@ import { ProductService } from 'src/app/store/product/product.service';
 export class HomePage implements OnInit, AfterContentInit {
 
   products$: Observable<ShortProduct[]>;
+  @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
+  uidUser: string;
+
 
   constructor(
     private productService: ProductService,
@@ -20,6 +25,10 @@ export class HomePage implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
+    this.uidUser$.pipe(
+      filter((uid) => !!uid),
+      take(1)
+    ).subscribe(uid => this.uidUser = uid);
     this.products$ = this.productService.getProducts();
   }
 
