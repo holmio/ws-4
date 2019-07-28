@@ -27,7 +27,7 @@ export class EditPage implements OnInit {
       take(1)
     ).subscribe(user => {
       this.myGroup = this.formBuilder.group({
-        fullName: [user.fullName || '', Validators.required],
+        name: [user.name || '', Validators.required],
         phone: [user.phone || '', Validators.required],
         localization: [user.localization || '', Validators.required]
       });

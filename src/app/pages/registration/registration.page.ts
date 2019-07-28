@@ -19,7 +19,7 @@ export class RegistrationPage implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      fullName: ['', Validators.required],
+      name: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -29,7 +29,7 @@ export class RegistrationPage implements OnInit {
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    this.store.dispatch(new RegisterWithEmailAndPasswordAction(this.f.fullName.value, this.f.email.value, this.f.password.value));
+    this.store.dispatch(new RegisterWithEmailAndPasswordAction(this.f.name.value, this.f.email.value, this.f.password.value));
   }
 
 }

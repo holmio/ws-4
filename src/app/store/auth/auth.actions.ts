@@ -38,7 +38,7 @@ export class LoginFailedAction {
 
 export class RegisterWithEmailAndPasswordAction {
   static type = '[Auth] RegisterWithEmailAndPassword';
-  constructor(public fullName: string, public email: string, public password: string) {}
+  constructor(public name: string, public email: string, public password: string) {}
 }
 export class RegisterSuccessAction {
   static type = '[Auth] RegisterSuccess';

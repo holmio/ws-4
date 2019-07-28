@@ -121,7 +121,7 @@ export class AuthState implements NgxsOnInit {
             if (data.additionalUserInfo.isNewUser) {
                 const userInformation: UserDetail = {
                     uid: data.user.uid,
-                    fullName: data.user.displayName,
+                    name: data.user.displayName,
                     lastSignInTime: null,
                     avatar: {
                         downloadUrl: data.user.photoURL,
@@ -147,7 +147,7 @@ export class AuthState implements NgxsOnInit {
             console.log(data);
             const userInformation: UserDetail = {
                 uid: data.user.uid,
-                fullName: action.fullName,
+                name: action.name,
                 lastSignInTime: null,
                 avatar: {
                     downloadUrl: null,

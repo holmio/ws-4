@@ -1,3 +1,4 @@
+import { Avatar, UserShortInfo } from '../user/user.interface';
 
 export interface ProductStateModel {
   isUserProduct: boolean;
@@ -7,7 +8,6 @@ export interface ProductStateModel {
 export interface Product {
   name: string;
   price: number;
-  uidUser?: string;
   description: string;
   category: any;
   currency: 'DZD' | 'EUR';
@@ -16,6 +16,7 @@ export interface Product {
   isSold?: boolean;
   timestamp: number;
   thumbnail?: string;
+  user?: UserShortInfo;
   uid?: string;
 }
 

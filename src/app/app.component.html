@@ -7,7 +7,7 @@
             <div class="profile-image">
               <img [src]="(user$ | async).avatar?.downloadUrl" />
             </div>
-            <ion-text color="light">{{(user$ | async)?.fullName}}</ion-text>
+            <ion-text color="light">{{(user$ | async)?.name}}</ion-text>
           </div>
           <div class="menu">
             <div class="menu-item" *ngIf="!(user$ | async)">

@@ -6,8 +6,8 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 
 import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize, switchMap, map } from 'rxjs/operators';
-import { UserDetail } from '../user/user.interface';
+import { finalize, switchMap, map, mergeMap } from 'rxjs/operators';
+import { UserDetail, UserShortInfo } from '../user/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,11 @@ export class ProductService {
   private productCollectionRef: AngularFirestoreCollection<any>;
   private productUserCollectionRef: AngularFirestoreCollection<any>;
   private userCollectionRef: AngularFirestoreCollection<any>;
+  private userShortInfoCollectionRef: AngularFirestoreCollection<any>;
   private PRODUCTS = 'products';
   private PRODUCTS_BY_USER = 'productsByUser';
+  private USERS = 'users';
+  private USERS_SHORT_INFO = 'userShortInfo';
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -27,12 +30,23 @@ export class ProductService {
   ) {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
-    this.userCollectionRef = this.afStore.collection<UserDetail>('users');
+    this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(this.USERS_SHORT_INFO);
 
+    this.userCollectionRef = this.afStore.collection<UserDetail>(this.USERS);
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges()
+    return this.productCollectionRef.doc(uid).valueChanges().pipe(
+      mergeMap((product: Product) =>
+        this.userShortInfoCollectionRef.doc(product.user.uid).valueChanges()
+          .pipe(
+            map(
+              (user) => Object.assign({}, { ...product, user: user }
+            )
+          )
+        )
+      )
+    )
   }
 
   getProducts(): Observable<any> {
@@ -47,8 +61,10 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    const productShortSubColl = this.afStore.firestore.doc(`${this.USERS}/${product.user.uid}/${this.PRODUCTS_BY_USER}/${product.uid}`);
     batch.update(productColl, product);
     batch.update(productShortColl, product);
+    batch.update(productShortSubColl, product);
     return batch.commit();
   }
 
@@ -63,7 +79,7 @@ export class ProductService {
           thumbnail: '',
           isSold: product.isSold,
           isEnabled: product.isEnabled,
-          uidUser: product.uidUser,
+          user: product.user,
           uid: product.uid,
         };
         // Add gallery to the product
@@ -78,7 +94,7 @@ export class ProductService {
         // })
 
         // Add product detail to user collection
-        this.userCollectionRef.doc(product.uidUser).collection(this.PRODUCTS_BY_USER).doc(product.uid).set(productsByUser).then(() => {
+        this.userCollectionRef.doc(product.user.uid).collection(this.PRODUCTS_BY_USER).doc(product.uid).set(productsByUser).then(() => {
           this.productUserCollectionRef.doc(product.uid).set(productsByUser).finally(() => resolve(product.uid));
         });
       });

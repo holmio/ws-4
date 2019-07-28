@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 import { NavController } from '@ionic/angular';
-import { Action, Select, Selector, State, StateContext, NgxsOnInit } from '@ngxs/store';
+import { Action, Select, Selector, State, StateContext, NgxsOnInit, Store } from '@ngxs/store';
 
 import { AuthState, AuthStateModel } from '../auth';
 import {
@@ -12,6 +12,7 @@ import {
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
+import { UserState } from '../user';
 
 @State<ProductStateModel>({
     name: 'product',
@@ -21,22 +22,15 @@ import { ProductService } from './product.service';
         loaded: false,
     },
 })
-export class ProductState implements NgxsOnInit {
+export class ProductState {
 
     @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
-    private uidUser: string;
     constructor(
         private productService: ProductService,
         private navController: NavController,
+        private store: Store,
     ) {
         
-    }
-
-    ngxsOnInit(sc: StateContext<AuthStateModel>) {
-        this.uidUser$.pipe(
-            filter((uid) => !!uid),
-            take(1)
-        ).subscribe(uid => this.uidUser = uid);
     }
 
     /// Firebase Server Timestamp
@@ -54,7 +48,7 @@ export class ProductState implements NgxsOnInit {
 
     @Selector([AuthState])
     static getIsUserProduct(productState: ProductStateModel, authState: AuthStateModel) {
-        return productState.product.uidUser === authState.uid;
+        return productState.product.user.uid === authState.uid;
     }
 
     @Selector()
@@ -99,7 +93,9 @@ export class ProductState implements NgxsOnInit {
         });
         action.product.timestamp = this.timestamp;
         // Necessary to get permission to edit table products
-        action.product.uidUser = state.product.uidUser;
+        action.product.user = {
+            uid: state.product.user.uid,
+        }
         action.product.uid = state.product.uid;
         await this.productService.updateProduct(action.product).then(() => {
             sc.dispatch(new UpdateProductSuccessAction());
@@ -127,11 +123,15 @@ export class ProductState implements NgxsOnInit {
             ...state,
             loaded: false,
         });
+        // select the snapshot state from users
+        const user = this.store.selectSnapshot(UserState.geUser);
         action.product.timestamp = this.timestamp;
         action.product.isSold = false;
         action.product.isEnabled = true;
-        action.product.uidUser = this.uidUser;
-        action.product.thumbnail = 'https://picsum.photos/400/400?random=1';
+        action.product.user = {
+            uid: user.uid,
+        };
+        action.product.thumbnail = 'https://picsum.photos/id/612/400/400';
         await this.productService.setProduct(action.product).then((uid) => {
             sc.dispatch(new SetProductSuccessAction(uid));
         }, error => {

@@ -10,9 +10,11 @@ export class RemoveCurrentUserPipe implements PipeTransform {
       return items;
     }
     // Remove the items assigned to current user
-    return _.remove(items, (n) => {
-      return n.uidUser == uidUser;
+    _.remove(items, (n) => {
+      return n.user.uid === uidUser;
     });
+
+    return items;
   }
 
 }

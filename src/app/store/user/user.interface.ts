@@ -7,7 +7,7 @@ export interface UserStateModel {
 }
 
 export interface UserDetail {
-    fullName: string;
+    name: string;
     uid: string;
     avatar?: Avatar;
     email: string;
@@ -19,7 +19,7 @@ export interface UserDetail {
   }
   
   export interface UserUpdate {
-    fullName?: string;
+    name?: string;
     products?: Array<ProductsUser>;
     avatar?: AvatarUpdate;
     favorits?: Array<ProductsUser>;
@@ -53,4 +53,10 @@ export interface UserDetail {
 
   export interface AuthStateModel {
     user?: UserInfo;
+  }
+
+  export interface UserShortInfo {
+    name?: string;
+    avatar?: Avatar;
+    uid: string;
   }
