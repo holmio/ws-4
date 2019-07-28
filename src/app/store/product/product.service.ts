@@ -7,6 +7,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, switchMap, map } from 'rxjs/operators';
+import { UserDetail } from '../user/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class ProductService {
 
   private productCollectionRef: AngularFirestoreCollection<any>;
   private productUserCollectionRef: AngularFirestoreCollection<any>;
+  private userCollectionRef: AngularFirestoreCollection<any>;
   private PRODUCTS = 'products';
   private PRODUCTS_BY_USER = 'productsByUser';
 
@@ -25,31 +27,26 @@ export class ProductService {
   ) {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
+    this.userCollectionRef = this.afStore.collection<UserDetail>('users');
+
   }
 
   getProduct(uid: string): Observable<any> {
-    const userProducts = this.productCollectionRef.doc(uid).valueChanges();
-    const userProductsByUser = this.productCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges();
-
-    userProducts.pipe(
-      switchMap((response: Product) => {
-        const res = response.map(product => {
-          return userProductsByUser.pipe(
-            map(subProduct => Object.assign(product.productsByUser, {subProduct}))
-          );
-        });
-        return combineLatest(...res);
-    );
+    return this.productCollectionRef.doc(uid).valueChanges()
   }
 
-  getProductShort(): Observable<ShortProduct[]> {
-    return this.productUserCollectionRef.valueChanges();
+  getProducts(): Observable<any> {
+    return this.productUserCollectionRef.valueChanges()
+  }
+
+  getProductsByUser(uid: string): Observable<any[]> {
+    return this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges();
   }
 
   updateProduct(product: Product): Promise<any> {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uidUser}_${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
     batch.update(productColl, product);
     batch.update(productShortColl, product);
     return batch.commit();
@@ -58,7 +55,7 @@ export class ProductService {
   setProduct(product: Product): Promise<any> {
     product.uid = this.uuidv4();
     return new Promise((resolve) => {
-      this.productCollectionRef.doc(product.uid).set(product).then( () => {
+      this.productCollectionRef.doc(product.uid).set(product).then(() => {
         const productsByUser = {
           name: product.name,
           price: product.price,
@@ -79,9 +76,11 @@ export class ProductService {
         //     });
         //   });
         // })
-        this.productCollectionRef.doc(product.uid)
-        .collection(this.PRODUCTS_BY_USER).doc(product.uidUser + '_' + product.uid).set(productsByUser);
-        this.productUserCollectionRef.doc(product.uidUser + '_' + product.uid).set(productsByUser).finally(() => resolve(product.uid));
+
+        // Add product detail to user collection
+        this.userCollectionRef.doc(product.uidUser).collection(this.PRODUCTS_BY_USER).doc(product.uid).set(productsByUser).then(() => {
+          this.productUserCollectionRef.doc(product.uid).set(productsByUser).finally(() => resolve(product.uid));
+        });
       });
     });
   }
@@ -103,7 +102,7 @@ export class ProductService {
   }
 
   private uuidv4() {
-    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });

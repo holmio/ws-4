@@ -2,7 +2,6 @@ ion-toolbar {
   margin-bottom: -1px !important;
 }
 
-
 ion-content {
   --background: #eaeaea;
 }
@@ -41,11 +40,20 @@ ion-content {
   }
 
   .userDetail {
+    width: 100%;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
     text-align: center;
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 400;
+    }
   }
 }
 

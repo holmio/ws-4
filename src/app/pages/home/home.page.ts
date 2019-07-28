@@ -13,7 +13,6 @@ import { ProductService } from 'src/app/store/product/product.service';
 export class HomePage implements OnInit, AfterContentInit {
 
   products$: Observable<ShortProduct[]>;
-  @Select(ProductState.getProduct) product$: Observable<string | undefined>;
 
   constructor(
     private productService: ProductService,
@@ -21,9 +20,7 @@ export class HomePage implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.products$ = this.productService.getProductShort();
+    this.products$ = this.productService.getProducts();
   }
 
   ngAfterContentInit(): void {

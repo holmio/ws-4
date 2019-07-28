@@ -128,7 +128,6 @@ export class AuthState implements NgxsOnInit {
                         path: null,
                     },
                     email: data.user.email,
-                    products: [],
                 }
                 sc.dispatch(new SetUserAction(userInformation));
             } else {
@@ -155,7 +154,6 @@ export class AuthState implements NgxsOnInit {
                     path: null,
                 },
                 email: data.user.email,
-                products: [],
             }
             sc.dispatch(new RegisterSuccessAction(userInformation));
         }, error => {

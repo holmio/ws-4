@@ -1,4 +1,5 @@
 import { UserInfo } from 'firebase';
+import { ShortProduct } from '../product';
 
 export interface UserStateModel {
   user: UserDetail;
@@ -13,8 +14,8 @@ export interface UserDetail {
     lastSignInTime?: string;
     phone?: number;
     localization?: string;
-    products?: Array<ProductsUser>;
-    favorits?: Array<ProductsUser>;
+    myProducts?: Array<ShortProduct>;
+    favorits?: Array<ShortProduct>;
   }
   
   export interface UserUpdate {

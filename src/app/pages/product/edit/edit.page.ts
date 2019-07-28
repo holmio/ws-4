@@ -53,9 +53,6 @@ export class EditPage implements OnInit {
   update() {
     const finalProduct: Product = this.getDirtyValues(this.myGroup) as any;
     finalProduct.category = Object.assign(parseCategoryList(this.catSelected));
-    if (this.catSelected.length === 0) {
-      return;
-    }
     this.store.dispatch(new UpdateProductAction(finalProduct));
   }
 

@@ -4,7 +4,8 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { UserDetail, UserUpdate, AvatarUpdate } from './user.interface';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize } from 'rxjs/operators';
+import { finalize, mergeMap, map } from 'rxjs/operators';
+import { ShortProduct } from '../product';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ import { finalize } from 'rxjs/operators';
 export class UserService {
 
   private userCollectionRef: AngularFirestoreCollection<any>;
+  private PRODUCTS_BY_USER = 'productsByUser';
 
   constructor(
-    private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
     private storage: AngularFireStorage
   ) {
@@ -22,10 +23,20 @@ export class UserService {
   }
 
   getUser(uid: string): Observable<any> {
-    return this.userCollectionRef.doc(uid).valueChanges()
+    return this.userCollectionRef.doc(uid).valueChanges().pipe(
+      mergeMap((user: UserDetail) =>
+        this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges()
+          .pipe(
+            map(
+              (products) => Object.assign({}, { ...user, myProducts: [...products] }
+            )
+          )
+        )
+      )
+    )
   }
 
-  setUser(uid: string, userInformation: UserDetail): Promise<any>{
+  setUser(uid: string, userInformation: UserDetail): Promise<any> {
     return this.userCollectionRef.doc(uid).set(userInformation);
   }
 
@@ -37,7 +48,7 @@ export class UserService {
     const fileRef = this.storage.ref(avatar.path);
     let downloadUrl: Promise<any>;
     return this.storage.upload(avatar.path, avatar.base64image).snapshotChanges().pipe(
-      finalize( async() => {
+      finalize(async () => {
         downloadUrl = await fileRef.getDownloadURL().toPromise();
       })
     );
