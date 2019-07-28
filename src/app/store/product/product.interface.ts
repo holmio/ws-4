@@ -2,6 +2,7 @@ import { Avatar, UserShortInfo } from '../user/user.interface';
 
 export interface ProductStateModel {
   isUserProduct: boolean;
+  isFavorite: boolean;
   product: Product;
   loaded: boolean;
 }

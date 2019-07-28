@@ -8,16 +8,22 @@ import { AuthState, AuthStateModel } from '../auth';
 import {
     GetProductAction, GetProductFailedAction, GetProductSuccessAction, SetProductAction,
     SetProductFailedAction, SetProductSuccessAction, UpdateProductAction, UpdateProductFailedAction,
-    UpdateProductSuccessAction
+    UpdateProductSuccessAction,
+    AddFavoriteAction,
+    AddFavoriteSuccessAction,
+    AddFavoriteFailedAction
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
 import { UserState } from '../user';
+import * as _ from 'lodash';
+import { UserStateModel } from '../user/user.interface';
 
 @State<ProductStateModel>({
     name: 'product',
     defaults: {
         isUserProduct: false,
+        isFavorite: false,
         product: null,
         loaded: false,
     },
@@ -44,6 +50,11 @@ export class ProductState {
     @Selector()
     static getProduct(state: ProductStateModel) {
         return state.product || null;
+    }
+
+    @Selector()
+    static getIsFavorite(productState: ProductStateModel, userState: UserStateModel) {
+        return _.indexOf(userState.user.favorits, productState.product.uid) !== -1 || null;
     }
 
     @Selector([AuthState])
@@ -114,6 +125,31 @@ export class ProductState {
         this.navController.back();
     }
 
+    // ADD FAVORITE
+
+    @Action(AddFavoriteAction)
+    async addFavorite(sc: StateContext<ProductStateModel>, action: AddFavoriteAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: false,
+        });
+        await this.productService.addFavorite(state.product.user.uid, action.uid).then(() => {
+            sc.setState({
+                ...state,
+                isFavorite: true,
+                loaded: true,
+            });
+            sc.dispatch(new AddFavoriteSuccessAction());
+        }, error => {
+            sc.setState({
+                ...state,
+                loaded: true,
+            });
+            sc.dispatch(new AddFavoriteFailedAction(error));
+        })
+    }
+
     // SET PRODUCT
 
     @Action(SetProductAction)
@@ -153,6 +189,7 @@ export class ProductState {
     resetProductState(sc: StateContext<ProductStateModel>) {
         sc.setState({
             isUserProduct: false,
+            isFavorite: false,
             product: null,
             loaded: false
         });

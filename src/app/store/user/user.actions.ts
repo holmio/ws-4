@@ -53,3 +53,4 @@ export class UpdateAvatarUserFailedAction {
   static type = '[User] UpdateAvatarUserFailed';
   constructor(public error: any) {}
 }
+

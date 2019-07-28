@@ -15,7 +15,7 @@ export interface UserDetail {
     phone?: number;
     localization?: string;
     myProducts?: Array<ShortProduct>;
-    favorits?: Array<ShortProduct>;
+    favorits?: Array<string>;
   }
   
   export interface UserUpdate {

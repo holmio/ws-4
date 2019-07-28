@@ -31,7 +31,6 @@ export class ProductService {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
     this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(this.USERS_SHORT_INFO);
-
     this.userCollectionRef = this.afStore.collection<UserDetail>(this.USERS);
   }
 
@@ -99,6 +98,10 @@ export class ProductService {
         });
       });
     });
+  }
+
+  addFavorite(uidUser: string, uidProduct: string): Promise<any> {
+    return this.userCollectionRef.doc(uidUser).set({favorites: uidProduct}, { merge: true });
   }
 
 

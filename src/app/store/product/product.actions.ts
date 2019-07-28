@@ -51,3 +51,17 @@ export class DeleteProductFailedAction {
   static type = '[Product] DeleteProductFailed';
   constructor(public error: any) { }
 }
+
+// ADD FAVORITE
+export class AddFavoriteAction {
+  static type = '[Product] AddFavorite';
+  constructor(public uid: string) { }
+}
+export class AddFavoriteSuccessAction {
+  static type = '[Product] AddFavoriteSuccess';
+}
+export class AddFavoriteFailedAction {
+  static type = '[Product] AddFavoriteFailed';
+  constructor(public error: any) { }
+}
+

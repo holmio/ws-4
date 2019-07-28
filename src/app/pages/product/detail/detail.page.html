@@ -1,7 +1,7 @@
 <app-header>
     <ion-buttons header-right-action slot="end">
         <ng-container *ngIf="!(isUserProduct$ | async) && (loading$ | async)">
-            <ion-button (click)="favorite()">
+            <ion-button *ngIf="(isFavorite$ | async)" (click)="addFavorite()">
                 <ion-icon slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
             </ion-button>
             <ion-button routerLink="/chat" routerDirection="forward">
