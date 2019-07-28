@@ -55,13 +55,14 @@
                 </div>
             </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="!(isUserProduct$ | async)">
             <ion-col>
-                <div>
-                    <h3>
-                        Ultima Vez Editado: <small>12/03/2008</small>
-                    </h3>
-                </div>
+                <ion-item lines="none">
+                    <ion-avatar slot="start">
+                        <img [src]="(product$ | async)?.user.avatar.downloadUrl" />
+                    </ion-avatar>
+                    <ion-label>{{(product$ | async)?.user.name}}</ion-label>
+                </ion-item>
             </ion-col>
         </ion-row>
     </ion-grid>

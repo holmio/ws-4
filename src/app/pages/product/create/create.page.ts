@@ -5,6 +5,7 @@ import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 import { SetProductAction } from 'src/app/store/product';
 import { IonSelect } from '@ionic/angular';
 import { parseCategoryList } from 'src/app/util/common';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-create',
@@ -14,8 +15,8 @@ import { parseCategoryList } from 'src/app/util/common';
 export class CreatePage implements OnInit {
 
   myGroup: FormGroup;
-  categories = CATEGORIES;
-  currencies = CURRENCIES;
+  categories = _.cloneDeep(CATEGORIES);
+  currencies = _.cloneDeep(CURRENCIES);
   private catSelected: string[] = [];
   constructor(
     private formBuilder: FormBuilder,

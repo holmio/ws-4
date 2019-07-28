@@ -11,6 +11,7 @@
         <ion-label class="userName">
           {{ (user$ | async)?.name }}
         </ion-label>
+        <small>Telf: {{ (user$ | async)?.phone }}</small>
         <div class="info">
           <ion-text>Vendido: 2</ion-text>
           <ion-text>Publicado: 6</ion-text>

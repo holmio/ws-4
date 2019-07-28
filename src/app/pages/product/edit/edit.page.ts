@@ -6,6 +6,7 @@ import { filter, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { parseCategoryList } from 'src/app/util/common';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-edit',
@@ -17,8 +18,8 @@ export class EditPage implements OnInit {
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getProduct) product$: Observable<Product>;
   myGroup: FormGroup;
-  categories = CATEGORIES;
-  currencies = CURRENCIES;
+  categories = _.cloneDeep(CATEGORIES);
+  currencies = _.cloneDeep(CURRENCIES);
 
   private catSelected: string[] = [];
   constructor(
