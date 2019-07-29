@@ -88,7 +88,7 @@ export class ProductService {
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    return this.userCollectionRef.doc(uidUser).update({ favorites: [uidProduct] });
+    return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayUnion(uidProduct) });
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
     return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayRemove(uidProduct) });

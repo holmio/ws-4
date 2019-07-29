@@ -140,6 +140,7 @@ export class ProductState {
         await this.productService.addFavorite(user.uid, action.uid).then(() => {
             sc.setState({
                 ...state,
+                isFavorite: true,
             });
             sc.dispatch(new AddFavoriteSuccessAction());
         }, error => {
@@ -156,6 +157,7 @@ export class ProductState {
         await this.productService.removeFavorite(user.uid, action.uid).then(() => {
             sc.setState({
                 ...state,
+                isFavorite: false,
             });
             sc.dispatch(new RemoveFavoriteSuccessAction());
         }, error => {
