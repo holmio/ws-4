@@ -1,7 +1,35 @@
 ion-content {
-    ion-grid {
-        ion-row {
-            border-bottom: 0.5px solid var(--ion-color-medium);
-        }
+  ion-grid {
+    ion-row {
+      border-bottom: 0.5px solid var(--ion-color-medium);
     }
+  }
+}
+
+.show-favorite {
+  position: relative;
+}
+
+.icon-heart-empty {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.icon-heart {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+
+.show-favorite .icon-heart {
+  transform: scale(1);
+}
+
+.show-favorite .icon-heart-empty {
+  transform: scale(0);
 }

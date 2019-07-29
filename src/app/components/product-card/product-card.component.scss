@@ -2,6 +2,12 @@
   box-shadow: unset;
   border-radius: 9px;
   background-color: white !important;
+  img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    object-position: center center;
+  }
 }
 .price {
   font-size: 18px;
