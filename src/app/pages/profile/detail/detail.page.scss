@@ -3,7 +3,7 @@ ion-toolbar {
 }
 
 ion-content {
-  --background: #eaeaea;
+  --background: var(--ion-color-light);
 }
 
 .ionSegementSection {

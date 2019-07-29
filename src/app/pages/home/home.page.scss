@@ -3,7 +3,7 @@
   overflow: hidden;
 }
 ion-content {
-  --background: #f4f5f8;
+  --background: var(--ion-color-light);
   .row-flex {
     display: flex;
     flex-direction: row;

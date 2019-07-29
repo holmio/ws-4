@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { Product } from './product.interface';
+import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, map, mergeMap } from 'rxjs/operators';
 import { UserDetail, UserShortInfo } from '../user/user.interface';
@@ -92,6 +92,16 @@ export class ProductService {
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
     return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayRemove(uidProduct) });
+  }
+
+  getFavoritesProducts(favorites: string[]) {
+    const products: ShortProduct[] = [];
+    favorites.forEach( async product => {
+      await this.productUserCollectionRef.doc(product).valueChanges().subscribe(async (data: ShortProduct) => {
+        products.push(data);
+      })
+    })
+    return products;
   }
 
 
