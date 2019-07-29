@@ -64,4 +64,16 @@ export class AddFavoriteFailedAction {
   static type = '[Product] AddFavoriteFailed';
   constructor(public error: any) { }
 }
+// Remove FAVORITE
+export class RemoveFavoriteAction {
+  static type = '[Product] RemoveFavorite';
+  constructor(public uid: string) { }
+}
+export class RemoveFavoriteSuccessAction {
+  static type = '[Product] RemoveFavoriteSuccess';
+}
+export class RemoveFavoriteFailedAction {
+  static type = '[Product] RemoveFavoriteFailed';
+  constructor(public error: any) { }
+}
 

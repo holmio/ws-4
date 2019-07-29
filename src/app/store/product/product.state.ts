@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
 
 import { NavController } from '@ionic/angular';
 import { Action, Select, Selector, State, StateContext, NgxsOnInit, Store } from '@ngxs/store';
@@ -11,13 +10,15 @@ import {
     UpdateProductSuccessAction,
     AddFavoriteAction,
     AddFavoriteSuccessAction,
-    AddFavoriteFailedAction
+    AddFavoriteFailedAction,
+    RemoveFavoriteAction,
+    RemoveFavoriteSuccessAction,
+    RemoveFavoriteFailedAction
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
-import { UserState } from '../user';
+import { UserState, UserStateModel } from '../user';
 import * as _ from 'lodash';
-import { UserStateModel } from '../user/user.interface';
 
 @State<ProductStateModel>({
     name: 'product',
@@ -52,9 +53,9 @@ export class ProductState {
         return state.product || null;
     }
 
-    @Selector()
+    @Selector([UserState])
     static getIsFavorite(productState: ProductStateModel, userState: UserStateModel) {
-        return _.indexOf(userState.user.favorits, productState.product.uid) !== -1 || null;
+        return _.indexOf(userState.user.favorites, productState.product.uid) || null;
     }
 
     @Selector([AuthState])
@@ -130,15 +131,11 @@ export class ProductState {
     @Action(AddFavoriteAction)
     async addFavorite(sc: StateContext<ProductStateModel>, action: AddFavoriteAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
-        await this.productService.addFavorite(state.product.user.uid, action.uid).then(() => {
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.productService.addFavorite(user.uid, action.uid).then(() => {
             sc.setState({
                 ...state,
                 isFavorite: true,
-                loaded: true,
             });
             sc.dispatch(new AddFavoriteSuccessAction());
         }, error => {
@@ -147,6 +144,27 @@ export class ProductState {
                 loaded: true,
             });
             sc.dispatch(new AddFavoriteFailedAction(error));
+        })
+    }
+
+    // REMOVE FAVORITE
+
+    @Action(RemoveFavoriteAction)
+    async removeFavorite(sc: StateContext<ProductStateModel>, action: RemoveFavoriteAction) {
+        const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.productService.removeFavorite(user.uid, action.uid).then(() => {
+            sc.setState({
+                ...state,
+                isFavorite: true,
+            });
+            sc.dispatch(new RemoveFavoriteSuccessAction());
+        }, error => {
+            sc.setState({
+                ...state,
+                loaded: true,
+            });
+            sc.dispatch(new RemoveFavoriteFailedAction(error));
         })
     }
 

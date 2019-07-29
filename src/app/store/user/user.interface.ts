@@ -14,8 +14,8 @@ export interface UserDetail {
     lastSignInTime?: string;
     phone?: number;
     localization?: string;
-    myProducts?: Array<ShortProduct>;
-    favorits?: Array<string>;
+    myProducts?: Array<string>;
+    favorites?: Array<string>;
   }
   
   export interface UserUpdate {

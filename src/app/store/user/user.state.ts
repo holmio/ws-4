@@ -1,10 +1,28 @@
-import { State, StateContext, Action, Selector } from '@ngxs/store';
-import { UserDetail, UserStateModel } from '../user/user.interface';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { GetUserAction, GetUserSuccessAction, GetUserFailedAction, SetUserAction, SetUserSuccessAction, SetUserFailedAction, UpdateUserAction, UpdateUserSuccessAction, UpdateUserFailedAction, UpdateAvatarUserAction, UpdateAvatarUserSuccessAction, UpdateAvatarUserFailedAction } from './user.actions';
-import { LogoutSuccessAction, LoginSuccessAction } from '../auth';
-import { UserService } from './user.service';
+import {
+    Action,
+    Selector,
+    State,
+    StateContext
+    } from '@ngxs/store';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import {
+    GetUserAction,
+    GetUserFailedAction,
+    GetUserSuccessAction,
+    SetUserAction,
+    SetUserFailedAction,
+    SetUserSuccessAction,
+    UpdateAvatarUserAction,
+    UpdateAvatarUserFailedAction,
+    UpdateAvatarUserSuccessAction,
+    UpdateUserAction,
+    UpdateUserFailedAction,
+    UpdateUserSuccessAction
+    } from './user.actions';
+import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import { NavController } from '@ionic/angular';
+import { UserDetail, UserStateModel } from '../user/user.interface';
+import { UserService } from './user.service';
 
 @State<UserStateModel>({
     name: 'user',

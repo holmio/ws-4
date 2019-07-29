@@ -4,6 +4,9 @@
             <ion-button *ngIf="(isFavorite$ | async)" (click)="addFavorite()">
                 <ion-icon slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
             </ion-button>
+            <ion-button *ngIf="!(isFavorite$ | async)" (click)="removeFavorite()">
+                <ion-icon slot="end" size="large" slot="start" name="heart"></ion-icon>
+            </ion-button>
             <ion-button routerLink="/chat" routerDirection="forward">
                 <ion-icon size="large" name="chatbubbles"></ion-icon>
             </ion-button>

@@ -1,13 +1,31 @@
-import { AuthService } from './auth.service';
-import { State, StateContext, Action, NgxsOnInit, Selector } from '@ngxs/store';
-import { LoginWithEmailAndPasswordAction, CheckSessionAction, LoginSuccessAction, LogoutAction, LogoutSuccessAction, LoginFailedAction, LoginRedirectAction, RegisterWithEmailAndPasswordAction, RegisterSuccessAction, RegisternFailedAction, LoginWithFacebookAction } from './auth.actions';
+import {
+    Action,
+    NgxsOnInit,
+    Selector,
+    State,
+    StateContext
+    } from '@ngxs/store';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from './auth.service';
+import {
+    CheckSessionAction,
+    LoginFailedAction,
+    LoginRedirectAction,
+    LoginSuccessAction,
+    LoginWithEmailAndPasswordAction,
+    LoginWithFacebookAction,
+    LogoutAction,
+    LogoutSuccessAction,
+    RegisternFailedAction,
+    RegisterSuccessAction,
+    RegisterWithEmailAndPasswordAction
+    } from './auth.actions';
+import { GetUserAction, SetUserAction } from '../user/user.actions';
+import { NgZone } from '@angular/core';
+import { ROUTE } from 'src/app/util/app.routes.const';
+import { Router } from '@angular/router';
 import { take, tap } from 'rxjs/operators';
 import { User, UserDetail } from '../user/user.interface';
-import { Router } from '@angular/router';
-import { NgZone } from '@angular/core';
-import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { ROUTE } from 'src/app/util/app.routes.const';
 export interface AuthStateModel {
     uid: string;
     loaded: boolean;
@@ -128,7 +146,8 @@ export class AuthState implements NgxsOnInit {
                         path: null,
                     },
                     email: data.user.email,
-                }
+                    favorites: [],
+                };
                 sc.dispatch(new SetUserAction(userInformation));
             } else {
                 sc.dispatch(new LoginSuccessAction(data.user.uid));

@@ -1,12 +1,12 @@
-import { Observable, combineLatest } from 'rxjs';
-
+import { Observable } from 'rxjs';
+import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { Product, ShortProduct } from './product.interface';
+import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize, switchMap, map, mergeMap } from 'rxjs/operators';
+import { finalize, map, mergeMap } from 'rxjs/operators';
 import { UserDetail, UserShortInfo } from '../user/user.interface';
 
 @Injectable({
@@ -41,9 +41,9 @@ export class ProductService {
           .pipe(
             map(
               (user) => Object.assign({}, { ...product, user: user }
+              )
             )
           )
-        )
       )
     )
   }
@@ -60,50 +60,39 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
-    const productShortSubColl = this.afStore.firestore.doc(`${this.USERS}/${product.user.uid}/${this.PRODUCTS_BY_USER}/${product.uid}`);
     batch.update(productColl, product);
     batch.update(productShortColl, product);
-    batch.update(productShortSubColl, product);
     return batch.commit();
   }
 
   setProduct(product: Product): Promise<any> {
     product.uid = this.uuidv4();
-    return new Promise((resolve) => {
-      this.productCollectionRef.doc(product.uid).set(product).then(() => {
-        const productsByUser = {
-          name: product.name,
-          price: product.price,
-          currency: product.currency,
-          thumbnail: '',
-          isSold: product.isSold,
-          isEnabled: product.isEnabled,
-          user: product.user,
-          uid: product.uid,
-        };
-        // Add gallery to the product
-        // galleryList.forEach((image) => {
-        //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
-        //   this.uploadFileString(filePath, image.base64).then((downloadUrl) => {
-        //     this.productCollectionRef.doc(data.uid).collection('gallery').add({
-        //       path: filePath,
-        //       downloadUrl: downloadUrl
-        //     });
-        //   });
-        // })
-
-        // Add product detail to user collection
-        this.userCollectionRef.doc(product.user.uid).collection(this.PRODUCTS_BY_USER).doc(product.uid).set(productsByUser).then(() => {
-          this.productUserCollectionRef.doc(product.uid).set(productsByUser).finally(() => resolve(product.uid));
-        });
-      });
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    batch.set(productColl, product);
+    batch.set(productShortColl, product);
+    // Add gallery to the product
+    // galleryList.forEach((image) => {
+    //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
+    //   this.uploadFileString(filePath, image.base64).then((downloadUrl) => {
+    //     this.productCollectionRef.doc(data.uid).collection('gallery').add({
+    //       path: filePath,
+    //       downloadUrl: downloadUrl
+    //     });
+    //   });
+    // })
+    return new Promise((resolve, reject) => {
+      batch.commit().then(() => resolve(product.uid), error => reject(error));
     });
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    return this.userCollectionRef.doc(uidUser).set({favorites: uidProduct}, { merge: true });
+    return this.userCollectionRef.doc(uidUser).update({ favorites: [uidProduct] });
   }
-
+  removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
+    return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayRemove(uidProduct) });
+  }
 
 
 

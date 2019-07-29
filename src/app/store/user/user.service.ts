@@ -29,13 +29,12 @@ export class UserService {
   getUser(uid: string): Observable<any> {
     return this.userCollectionRef.doc(uid).valueChanges().pipe(
       mergeMap((user: UserDetail) =>
-        this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges()
+        this.afStore.collection<UserShortInfo>(this.PRODUCTS_BY_USER, ref => ref.where('user.uid', '==', uid)).valueChanges()
           .pipe(
             map(
-              (products) => Object.assign({}, { ...user, myProducts: [...products] }
+              (products) => Object.assign({}, { ...user, myProducts: [...products] })
             )
           )
-        )
       )
     )
   }
@@ -49,7 +48,7 @@ export class UserService {
       avatar: userInformation.avatar,
       name: userInformation.name,
       uid: userInformation.uid,
-    }
+    };
     batch.set(usertShortColl, userShortInfo);
     return batch.commit();
   }
