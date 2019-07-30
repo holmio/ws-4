@@ -4,7 +4,7 @@
   </ion-buttons>
   <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
-      <ion-avatar>
+      <ion-avatar (click)="presentSheet()">
         <img [src]="(user$ | async)?.avatar?.downloadUrl" />
       </ion-avatar>
       <div class="userDetail">

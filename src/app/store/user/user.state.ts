@@ -78,7 +78,7 @@ export class UserState {
             ...state,
             loaded: false,
         });
-        this.userService.updateAvatar(action.avatar).subscribe((downloadUrl) => {
+        this.userService.updateAvatar(action.avatar, state.user.uid).then(() => {
             sc.dispatch(new UpdateAvatarUserSuccessAction());
         }, error => {
             sc.dispatch(new UpdateAvatarUserFailedAction(error));

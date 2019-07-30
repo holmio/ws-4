@@ -67,14 +67,13 @@ export class UserService {
     return batch.commit();
   }
 
-  updateAvatar(avatar: AvatarUpdate): Observable<any> {
-    const fileRef = this.storage.ref(avatar.path);
-    let downloadUrl: Promise<any>;
-    return this.storage.upload(avatar.path, avatar.base64image).snapshotChanges().pipe(
-      finalize(async () => {
-        downloadUrl = await fileRef.getDownloadURL().toPromise();
-      })
-    );
+  async updateAvatar(avatar: AvatarUpdate, uid: string): Promise<any> {
+    const filePath: string = `${avatar.path}/${new Date().getTime()}.jpg`;
+    const fileRef = this.storage.ref(filePath);
+    const usersColl = this.afStore.firestore.doc(`${this.USERS}/${uid}`);
+    return fileRef.putString(avatar.base64image, 'data_url', {contentType: 'image/jpeg'}).then(async (data) => {
+      fileRef.getDownloadURL().pipe(mergeMap(async (downloadUrl) => await usersColl.update({avatar: {path: filePath, downloadUrl: downloadUrl}})))
+    })
   }
 
 }
