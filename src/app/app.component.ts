@@ -40,10 +40,9 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.statusBar.backgroundColorByHexString('#DB3A34');
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.items = this.db.collection('users').valueChanges();
-      this.items.subscribe(user => console.log(user));
     });
   }
 

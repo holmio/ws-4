@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductState, Product, GetProductAction, ProductService, AddFavoriteAction, RemoveFavoriteAction } from 'src/app/store/product';
+import { ProductState, Product, GetProductAction, ProductService, AddFavoriteAction, RemoveFavoriteAction, DeleteProductAction } from 'src/app/store/product';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 
@@ -34,6 +34,10 @@ export class DetailPage implements OnInit {
 
   removeFavorite() {
     this.store.dispatch(new RemoveFavoriteAction(this.id));
+  }
+
+  delete() {
+    this.store.dispatch(new DeleteProductAction(this.id));
   }
 
 }

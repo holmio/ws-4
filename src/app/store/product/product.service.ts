@@ -103,6 +103,15 @@ export class ProductService {
     return batch.commit();
   }
 
+  deleteProduct(uid: string) {
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uid}`);
+    batch.delete(productColl);
+    batch.delete(productShortColl);
+    return batch.commit();
+  }
+
   /**
    * Upload the files one by one
    * @param path path of the file

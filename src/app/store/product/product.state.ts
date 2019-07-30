@@ -13,7 +13,10 @@ import {
     AddFavoriteFailedAction,
     RemoveFavoriteAction,
     RemoveFavoriteSuccessAction,
-    RemoveFavoriteFailedAction
+    RemoveFavoriteFailedAction,
+    DeleteProductAction,
+    DeleteProductSuccessAction,
+    DeleteProductFailedAction
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
@@ -37,7 +40,7 @@ export class ProductState {
         private navController: NavController,
         private store: Store,
     ) {
-        
+
     }
 
     /// Firebase Server Timestamp
@@ -81,7 +84,7 @@ export class ProductState {
             const user = this.store.selectSnapshot(UserState.geUser);
             sc.setState({
                 ...state,
-                isFavorite: _.includes(data.followers, user.uid),
+                isFavorite: _.includes(data.followers, user.uid) || false,
             });
             sc.dispatch(new GetProductSuccessAction(data));
         }, error => {
@@ -121,8 +124,28 @@ export class ProductState {
         });
     }
 
-    @Action(UpdateProductSuccessAction)
-    updateProductSuccess(sc: StateContext<ProductStateModel>, action: UpdateProductSuccessAction) {
+    // DELETE PRODUCT
+
+    @Action(DeleteProductAction)
+    async deleteProduct(sc: StateContext<ProductStateModel>, action: DeleteProductAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            loaded: false,
+        });
+        await this.productService.deleteProduct(action.uid).then(() => {
+            sc.dispatch(new DeleteProductSuccessAction());
+        }, error => {
+            sc.setState({
+                ...state,
+                loaded: true,
+            });
+            sc.dispatch(new DeleteProductFailedAction(error));
+        });
+    }
+
+    @Action([UpdateProductSuccessAction, DeleteProductSuccessAction])
+    resetProductSuccess(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
         sc.setState({
             ...state,
