@@ -29,8 +29,10 @@ export class UserService {
   getUser(uid: string): Observable<any> {
     return this.userCollectionRef.doc(uid).valueChanges().pipe(
       mergeMap((user) =>
+        // Get my products
         this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('user.uid', '==', uid)).valueChanges().pipe(
           mergeMap((products) =>
+          // Get my favorite products
             this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('followers', 'array-contains', uid)).valueChanges().pipe(
               map(
                 (favorites) => Object.assign({}, { ...user, myProducts: [...products], favorites: [...favorites] })
