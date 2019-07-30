@@ -5,7 +5,7 @@ import { UserState } from 'src/app/store/user';
 import { Observable } from 'rxjs';
 import { ProductService, ProductState, ShortProduct } from 'src/app/store/product';
 import { AuthState } from 'src/app/store/auth';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-detail',
@@ -23,11 +23,7 @@ export class DetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user$.pipe(
-      filter(data => !!data),
-    ).subscribe(data => {
-      this.favorites = [...this.productService.getFavoritesProducts(data.favorites)];
-    })
+
   }
 
 }

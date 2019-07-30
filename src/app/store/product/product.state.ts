@@ -81,7 +81,7 @@ export class ProductState {
             const user = this.store.selectSnapshot(UserState.geUser);
             sc.setState({
                 ...state,
-                isFavorite: _.indexOf(user.favorites, data.uid) >= 0,
+                isFavorite: _.includes(data.followers, user.uid),
             });
             sc.dispatch(new GetProductSuccessAction(data));
         }, error => {
@@ -182,6 +182,7 @@ export class ProductState {
         action.product.user = {
             uid: user.uid,
         };
+        action.product.followers = [];
         action.product.thumbnail = 'https://picsum.photos/id/612/400/400';
         await this.productService.setProduct(action.product).then((uid) => {
             sc.dispatch(new SetProductSuccessAction(uid));

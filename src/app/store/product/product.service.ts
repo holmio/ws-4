@@ -24,7 +24,6 @@ export class ProductService {
   private USERS_SHORT_INFO = 'userShortInfo';
 
   constructor(
-    private afAuth: AngularFireAuth,
     private storage: AngularFireStorage,
     private afStore: AngularFirestore,
   ) {
@@ -49,7 +48,7 @@ export class ProductService {
   }
 
   getProducts(): Observable<any> {
-    return this.productUserCollectionRef.valueChanges()
+    return this.productUserCollectionRef.valueChanges();
   }
 
   getProductsByUser(uid: string): Observable<any[]> {
@@ -88,23 +87,21 @@ export class ProductService {
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayUnion(uidProduct) });
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uidProduct}`);
+    batch.update(productColl, { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
+    batch.update(productShortColl, { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
+    return batch.commit();
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    return this.userCollectionRef.doc(uidUser).update({ favorites: firebase.firestore.FieldValue.arrayRemove(uidProduct) });
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uidProduct}`);
+    batch.update(productColl, { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
+    batch.update(productShortColl, { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
+    return batch.commit();
   }
-
-  getFavoritesProducts(favorites: string[]) {
-    const products: ShortProduct[] = [];
-    favorites.forEach( async product => {
-      await this.productUserCollectionRef.doc(product).valueChanges().subscribe(async (data: ShortProduct) => {
-        products.push(data);
-      })
-    })
-    return products;
-  }
-
-
 
   /**
    * Upload the files one by one

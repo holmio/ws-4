@@ -5,7 +5,7 @@ import { UserDetail, UserUpdate, AvatarUpdate, UserShortInfo } from './user.inte
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, mergeMap, map } from 'rxjs/operators';
-import { ShortProduct } from '../product';
+import { ShortProduct, Product } from '../product';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +28,18 @@ export class UserService {
 
   getUser(uid: string): Observable<any> {
     return this.userCollectionRef.doc(uid).valueChanges().pipe(
-      mergeMap((user: UserDetail) =>
-        this.afStore.collection<UserShortInfo>(this.PRODUCTS_BY_USER, ref => ref.where('user.uid', '==', uid)).valueChanges()
-          .pipe(
-            map(
-              (products) => Object.assign({}, { ...user, myProducts: [...products] })
+      mergeMap((user) =>
+        this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('user.uid', '==', uid)).valueChanges().pipe(
+          mergeMap((products) =>
+            this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('followers', 'array-contains', uid)).valueChanges().pipe(
+              map(
+                (favorites) => Object.assign({}, { ...user, myProducts: [...products], favorites: [...favorites] })
+              )
             )
           )
+          )
       )
-    )
+    );
   }
 
   setUser(uid: string, userInformation: UserDetail): Promise<any> {

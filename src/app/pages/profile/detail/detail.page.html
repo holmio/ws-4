@@ -45,12 +45,9 @@
   </ion-grid>
   <ion-grid *ngIf="selectSegment == 'favorites'">
     <ion-row>
-      <ion-col size="6" *ngFor="let product of favorites">
+      <ion-col size="6" *ngFor="let product of (user$ | async)?.favorites">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <!-- <my-profile *ngIf="selectSegment == 'profile'"></my-profile>
-  <payment-cards *ngIf="selectSegment == 'mycard'"></payment-cards>
-  <my-address *ngIf="selectSegment == 'MyAddress'"></my-address> -->
 </ion-content>

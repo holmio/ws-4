@@ -13,6 +13,7 @@ export interface Product {
   category: any;
   currency: 'DZD' | 'EUR';
   gallery?: Gallery[] | CreateGallery[];
+  followers?: Array<string>;
   isEnabled: boolean;
   isSold?: boolean;
   timestamp: number;
@@ -27,6 +28,7 @@ export interface ShortProduct {
   price: number;
   currency: 'DZD' | 'EUR';
   isEnabled: boolean;
+  followers?: Array<string>;
   isSold?: boolean;
   thumbnail: string;
 }
