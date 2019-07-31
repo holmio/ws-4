@@ -1,4 +1,4 @@
-import { Avatar, UserShortInfo } from '../user/user.interface';
+import { UserShortInfo } from '../user/user.interface';
 
 export interface ProductStateModel {
   isUserProduct: boolean;

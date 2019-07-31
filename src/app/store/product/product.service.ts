@@ -112,6 +112,12 @@ export class ProductService {
     return batch.commit();
   }
 
+  async uploadGallery(gallery: string[]): Promise<any> {
+    await gallery.map((value) => {
+      console.log(value);
+    })
+  }
+
   
 
   private uuidv4() {
