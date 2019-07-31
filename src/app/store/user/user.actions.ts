@@ -1,4 +1,4 @@
-import { UserDetail, UserUpdate, AvatarUpdate } from './user.interface';
+import { User } from './user.interface';
 
 // GET
 export class GetUserAction {
@@ -7,7 +7,7 @@ export class GetUserAction {
 }
 export class GetUserSuccessAction {
   static type = '[User] GetUserSuccess';
-  constructor(public user: UserDetail) {}
+  constructor(public user: User) {}
 }
 export class GetUserFailedAction {
   static type = '[User] GetUserFailed';
@@ -17,11 +17,11 @@ export class GetUserFailedAction {
 // CREATE
 export class SetUserAction {
   static type = '[User] SetUserData';
-  constructor(public user: UserDetail) {}
+  constructor(public user: User) {}
 }
 export class SetUserSuccessAction {
   static type = '[User] SetUserSuccess';
-  constructor(public user: UserDetail) {}
+  constructor(public user: User) {}
 }
 export class SetUserFailedAction {
   static type = '[User] SetUserFailed';
@@ -31,7 +31,7 @@ export class SetUserFailedAction {
 // UPDATE
 export class UpdateUserAction {
   static type = '[User] UpdateUserData';
-  constructor(public user: UserUpdate) {}
+  constructor(public user: User) {}
 }
 export class UpdateUserSuccessAction {
   static type = '[User] UpdateUserSuccess';
@@ -44,7 +44,7 @@ export class UpdateUserFailedAction {
 // UPDATE AVATAR
 export class UpdateAvatarUserAction {
   static type = '[User] UpdateAvatarUserData';
-  constructor(public avatar: AvatarUpdate) {}
+  constructor(public file: string) {}
 }
 export class UpdateAvatarUserSuccessAction {
   static type = '[User] UpdateAvatarUserSuccess';

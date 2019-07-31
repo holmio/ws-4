@@ -1,4 +1,4 @@
-import { UserDetail } from '../user/user.interface';
+import { User } from '../user/user.interface';
 
 
 // LOGIN
@@ -42,7 +42,7 @@ export class RegisterWithEmailAndPasswordAction {
 }
 export class RegisterSuccessAction {
   static type = '[Auth] RegisterSuccess';
-  constructor(public user: UserDetail) {}
+  constructor(public user: User) {}
 }
 export class RegisternFailedAction {
   static type = '[Auth] RegisterFailed';

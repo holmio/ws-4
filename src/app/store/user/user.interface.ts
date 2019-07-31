@@ -2,38 +2,20 @@ import { UserInfo } from 'firebase';
 import { ShortProduct } from '../product';
 
 export interface UserStateModel {
-  user: UserDetail;
+  user: User;
   loaded: boolean;
 }
 
-export interface UserDetail {
+export interface User {
     name: string;
     uid: string;
-    avatar?: Avatar;
+    avatar?: string;
     email: string;
     lastSignInTime?: string;
     phone?: number;
     localization?: string;
     myProducts?: Array<string>;
     favorites?: Array<string>;
-  }
-  
-  export interface UserUpdate {
-    name?: string;
-    products?: Array<ProductsUser>;
-    avatar?: AvatarUpdate;
-    favorits?: Array<ProductsUser>;
-    phone?: number;
-    localization?: string;
-  }
-
-  export interface Avatar {
-    path: string;
-    downloadUrl: string;
-  }
-  export interface AvatarUpdate {
-    path: string;
-    base64image: string;
   }
   
   export interface ProductsUser {
@@ -49,14 +31,12 @@ export interface UserDetail {
     password: string;
   }
 
-  export type User = UserInfo;
-
   export interface AuthStateModel {
     user?: UserInfo;
   }
 
   export interface UserShortInfo {
     name?: string;
-    avatar?: Avatar;
+    avatar?: string;
     uid: string;
   }

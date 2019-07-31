@@ -25,7 +25,9 @@ import { NgZone } from '@angular/core';
 import { ROUTE } from 'src/app/util/app.routes.const';
 import { Router } from '@angular/router';
 import { take, tap } from 'rxjs/operators';
-import { User, UserDetail } from '../user/user.interface';
+import { User } from '../user/user.interface';
+import { UserInfo } from 'firebase';
+
 export interface AuthStateModel {
     uid: string;
     loaded: boolean;
@@ -67,7 +69,7 @@ export class AuthState implements NgxsOnInit {
     checkSession(sc: StateContext<AuthStateModel>) {
         return this.afAuth.authState.pipe(
             take(1),
-            tap((user: User) => {
+            tap((user: UserInfo) => {
                 if (user) {
                     console.log(`CheckSession: ${user.displayName} is logged in`);
                     sc.dispatch(new LoginSuccessAction(user.uid));
@@ -137,14 +139,11 @@ export class AuthState implements NgxsOnInit {
             console.log(data);
             // If the user is new, we create a new account
             if (data.additionalUserInfo.isNewUser) {
-                const userInformation: UserDetail = {
+                const userInformation: User = {
                     uid: data.user.uid,
                     name: data.user.displayName,
                     lastSignInTime: null,
-                    avatar: {
-                        downloadUrl: data.user.photoURL,
-                        path: null,
-                    },
+                    avatar: data.user.photoUR,
                     email: data.user.email,
                     favorites: [],
                 };
@@ -164,14 +163,11 @@ export class AuthState implements NgxsOnInit {
     async registerWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: RegisterWithEmailAndPasswordAction) {
         await this.auth.createUserWithEmailAndPassword(action.email, action.password).then(data => {
             console.log(data);
-            const userInformation: UserDetail = {
+            const userInformation: User = {
                 uid: data.user.uid,
                 name: action.name,
                 lastSignInTime: null,
-                avatar: {
-                    downloadUrl: null,
-                    path: null,
-                },
+                avatar: '../../assets/images/default-avatar.png',
                 email: data.user.email,
             }
             sc.dispatch(new RegisterSuccessAction(userInformation));

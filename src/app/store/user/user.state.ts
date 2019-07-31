@@ -21,7 +21,7 @@ import {
     } from './user.actions';
 import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import { NavController } from '@ionic/angular';
-import { UserDetail, UserStateModel } from '../user/user.interface';
+import { User, UserStateModel } from '../user/user.interface';
 import { UserService } from './user.service';
 
 @State<UserStateModel>({
@@ -55,7 +55,7 @@ export class UserState {
             ...state,
             loaded: false,
         });
-        this.userService.getUser(action.uid).subscribe((user: UserDetail) => {
+        this.userService.getUser(action.uid).subscribe((user: User) => {
             sc.dispatch(new GetUserSuccessAction(user));
         }, error => {
             sc.dispatch(new GetUserFailedAction(error));
@@ -78,7 +78,7 @@ export class UserState {
             ...state,
             loaded: false,
         });
-        this.userService.updateAvatar(action.avatar, state.user.uid).then(() => {
+        this.userService.updateAvatar(action.file, state.user.uid).then(() => {
             sc.dispatch(new UpdateAvatarUserSuccessAction());
         }, error => {
             sc.dispatch(new UpdateAvatarUserFailedAction(error));

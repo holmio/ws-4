@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { UserDetail } from 'src/app/store/user/user.interface';
+import { User } from 'src/app/store/user/user.interface';
 import { UserState, UpdateUserAction } from 'src/app/store/user';
 import { take, filter } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ import { take, filter } from 'rxjs/operators';
 })
 export class EditPage implements OnInit {
 
-  @Select(UserState.geUser) user$: Observable<UserDetail | undefined>;
+  @Select(UserState.geUser) user$: Observable<User | undefined>;
   myGroup: FormGroup;
 
   constructor(

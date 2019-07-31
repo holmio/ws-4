@@ -4,12 +4,12 @@
   --width: 100px;
   --max-width: 100px;
   .content {
-    --background: var(--ion-color-secondary-tint);
+    --background: var(--ion-color-primary);
     display: flex;
     flex-direction: column;
     align-items: center;
     .profile-block {
-      background: var(--ion-color-secondary);
+      background: var(--ion-color-primary-shade);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -36,7 +36,7 @@
       }
     }
     .menu {
-      background: var(--ion-color-secondary-tint);
+      background: var(--ion-color-primary);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -62,7 +62,7 @@
           }
           .icon {
             ion-icon {
-              color: var(--ion-color-secondary-contrast);
+              color: var(--ion-color-primary-contrast);
               font-size: 42px;
               &.active {
                 color: rgb(85, 122, 144);
@@ -71,7 +71,7 @@
             }
           }
           .text {
-            color: white;
+            color: var(--ion-color-primary-contrast);;
             font-size: 14px;
             padding-bottom: 5px;
             &.active {

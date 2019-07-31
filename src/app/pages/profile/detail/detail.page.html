@@ -1,17 +1,16 @@
-<app-header title="Perfil">
+<app-header [title]="(user$ | async)?.name">
   <ion-buttons header-right-action routerLink="/profile/edit" routerDirection="forward" slot="end" padding-end>
     Edit
   </ion-buttons>
   <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
       <ion-avatar (click)="presentSheet()">
-        <img [src]="(user$ | async)?.avatar?.downloadUrl" />
+        <img [src]="(user$ | async)?.avatar" />
       </ion-avatar>
       <div class="userDetail">
-        <ion-label class="userName">
-          {{ (user$ | async)?.name }}
+        <ion-label class="phone">
+          {{ (user$ | async)?.phone }}
         </ion-label>
-        <small>Telf: {{ (user$ | async)?.phone }}</small>
         <div class="info">
           <ion-text>Vendido: 2</ion-text>
           <ion-text>Publicado: 6</ion-text>

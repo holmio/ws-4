@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserDetail } from 'src/app/store/user/user.interface';
+import { User } from 'src/app/store/user/user.interface';
 import { Select, Store } from '@ngxs/store';
 import { UserState, UpdateAvatarUserAction } from 'src/app/store/user';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ import { ToastService } from 'src/app/services/toast/toast.services';
 })
 export class DetailPage implements OnInit {
 
-  @Select(UserState.geUser) user$: Observable<UserDetail | undefined>;
+  @Select(UserState.geUser) user$: Observable<User | undefined>;
   selectSegment = 'products';
   favorites: ShortProduct[] = [];
   private sourceType: any;
@@ -41,15 +41,16 @@ export class DetailPage implements OnInit {
         targetWidth: 400,
         targetHeight: 400,
         quality: 70,
+        allowEdit: true,
+        cameraDirection: 1,
+        correctOrientation: true,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         sourceType: this.sourceType,
       }
       this.camera.getPicture(configCamera).then((data) => {
         const base64Image = 'data:image/jpeg;base64,' + data;
-        UpdateAvatarUserAction
-        this.store.dispatch(new UpdateAvatarUserAction({ path: 'avatar', base64image: base64Image }));
-        console.log(base64Image)
+        this.store.dispatch(new UpdateAvatarUserAction(base64Image));
       }, (error) => {
         this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'error');
       });

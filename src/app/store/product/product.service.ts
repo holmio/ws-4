@@ -7,7 +7,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, map, mergeMap } from 'rxjs/operators';
-import { UserDetail, UserShortInfo } from '../user/user.interface';
+import { User, UserShortInfo } from '../user/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class ProductService {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
     this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(this.USERS_SHORT_INFO);
-    this.userCollectionRef = this.afStore.collection<UserDetail>(this.USERS);
+    this.userCollectionRef = this.afStore.collection<User>(this.USERS);
   }
 
   getProduct(uid: string): Observable<any> {
@@ -112,18 +112,7 @@ export class ProductService {
     return batch.commit();
   }
 
-  /**
-   * Upload the files one by one
-   * @param path path of the file
-   * @param file base64 of file
-   */
-  private async uploadFileString(path: string, file: string) {
-    const fileRef = this.storage.ref(path);
-    const task = fileRef.putString(file);
-    task.snapshotChanges().pipe(
-      finalize(async () => await fileRef.getDownloadURL())
-    );
-  }
+  
 
   private uuidv4() {
     return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

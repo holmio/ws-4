@@ -5,7 +5,7 @@ import AuthProvider = firebase.auth.AuthProvider;
 
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { UserDetail } from '../user/user.interface';
+import { User } from '../user/user.interface';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
   ) {
-    this.userCollectionRef = this.afStore.collection<UserDetail>('users');
+    this.userCollectionRef = this.afStore.collection<User>('users');
   }
 
 	signInWithEmail(email: string, password: string): Promise<any> {
