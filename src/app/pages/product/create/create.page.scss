@@ -5,15 +5,13 @@ ion-content {
       .container-product-image {
         display: flex;
         .product-image {
-          margin-right: 10px;
+          margin-right: 16px;
           width: 70px;
           height: 70px;
           background-size: cover;
           background-position: center center;
           background-repeat: no-repeat;
           border-radius: 10%;
-          margin: 1px;
-
           &:last-child {
             margin-right: 0px;
           }
@@ -21,7 +19,7 @@ ion-content {
       }
       .product-image-placeholder {
         float: left;
-        margin-right: 10px;
+        margin-right: 16px;
         display: flex;
         align-items: center;
         justify-content: center;

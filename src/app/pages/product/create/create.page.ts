@@ -2,14 +2,15 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
-import { SetProductAction } from 'src/app/store/product';
-import { IonSelect, Platform, ActionSheetController } from '@ionic/angular';
+import { SetProductAction, Product } from 'src/app/store/product';
+import { Platform, ActionSheetController } from '@ionic/angular';
 import { parseCategoryList } from 'src/app/util/common';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { ActionSheetOptions } from '@ionic/core';
 
 @Component({
   selector: 'app-create',
@@ -21,6 +22,11 @@ export class CreatePage implements OnInit {
   myGroup: FormGroup;
   categories = _.cloneDeep(CATEGORIES);
   currencies = _.cloneDeep(CURRENCIES);
+  customActionSheetOptions: any = {
+    header: 'Colors',
+    subHeader: 'Select your favorite color',
+    cssClass: 'category-sheet'
+  };
   private catSelected: string[] = [];
   private imagesSelected: string[] = [];
   private sourceType: any;
@@ -43,7 +49,6 @@ export class CreatePage implements OnInit {
       description: ['', Validators.required],
       localization: ['', Validators.required],
       currency: ['DZD', Validators.required],
-      category: ['ropa', Validators.required],
     });
   }
 
@@ -52,12 +57,19 @@ export class CreatePage implements OnInit {
   }
 
   create() {
-    this.myGroup.value.category = Object.assign(parseCategoryList(this.catSelected));
     if (this.catSelected.length === 0) {
       return;
     }
-    this.store.dispatch(new SetProductAction(this.myGroup.value));
-    console.log('Tienes que seleccionar categoria');
+    if (this.imagesSelected.length === 0) {
+      return;
+    }
+    let productInfo: Product = {
+      category: _.cloneDeep(parseCategoryList(this.catSelected)),
+      gallery: [...this.imagesSelected],
+      ...this.myGroup.value
+    };
+    console.log(productInfo);
+    // this.store.dispatch(new SetProductAction(this.myGroup.value));
   }
 
   /**
@@ -66,11 +78,9 @@ export class CreatePage implements OnInit {
    */
   deletePicture(index: number) {
     // If the picture deleted is the thumbnail then we generate a new thumbnail of the second picture of the gallery
+    this.cdRef.detectChanges();
     this.imagesSelected.splice(index, 1);
     this.cdRef.detectChanges();
-  }
-  trackItem(index: number, picture: any) {
-    return `${index}-${picture}`;
   }
 
   /**

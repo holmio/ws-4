@@ -8,11 +8,18 @@
                 <ion-icon name="camera"></ion-icon>
             </div>
             <div class="container-product-image">
-                <div *ngFor="let picture of imagesSelected; let i = index;" (click)="deletePicture(i)" 
-                class="product-image" [style.background-image]="'url(' + picture + ')'"></div>
+                <div *ngFor="let picture of imagesSelected; let i = index;" (click)="deletePicture(i)"
+                    class="product-image" [style.background-image]="'url(' + picture + ')'"></div>
             </div>
         </div>
     </div>
+    <ion-item class="ion-padding-vertical">
+        <ion-label position="floating">Categoria</ion-label>
+        <ion-select [interfaceOptions]="customActionSheetOptions" interface="action-sheet" (ionChange)="categorySelected($event)">
+            <ion-select-option *ngFor="let category of categories" [value]="category.value"
+                [selected]="category.selected"> <ion-icon slot="start" name="add"></ion-icon> {{category.nameEs}}</ion-select-option>
+        </ion-select>
+    </ion-item>
     <form [formGroup]="myGroup" (ngSubmit)="create()">
         <ion-grid class="ion-no-padding">
             <ion-row color="primary" justify-content-center>
@@ -22,10 +29,23 @@
                             <ion-label position="floating">Nombre Product</ion-label>
                             <ion-input formControlName="name" type="text" required></ion-input>
                         </ion-item>
-                        <ion-item>
-                            <ion-label position="floating">Precio</ion-label>
-                            <ion-input formControlName="price" type="text" required></ion-input>
-                        </ion-item>
+                        <ion-row color="primary" justify-content-center>
+                            <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
+                                <ion-item>
+                                    <ion-label position="floating">Precio</ion-label>
+                                    <ion-input formControlName="price" type="number" required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
+                                <ion-item>
+                                    <ion-label position="floating">Moneda</ion-label>
+                                    <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar" required>
+                                        <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
+                                            {{currency.nameEs}}</ion-select-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
                         <ion-item>
                             <ion-label position="floating">Localizacion</ion-label>
                             <ion-input formControlName="localization" type="text" required></ion-input>
@@ -33,21 +53,6 @@
                         <ion-item>
                             <ion-label position="floating">Descripción</ion-label>
                             <ion-textarea formControlName="description" required></ion-textarea>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating">Moneda</ion-label>
-                            <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar" required>
-                                <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
-                                    {{currency.nameEs}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating">Categoria</ion-label>
-                            <ion-select multiple="true" okText="Okay" cancelText="Ocultar"
-                                (ionChange)="categorySelected($event)" required>
-                                <ion-select-option *ngFor="let category of categories" [value]="category.value"
-                                    [selected]="category.selected">{{category.nameEs}}</ion-select-option>
-                            </ion-select>
                         </ion-item>
                     </div>
                     <div padding>

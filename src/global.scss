@@ -35,6 +35,16 @@
      height: 87% !important;
 }
 
+.category-sheet {
+  .action-sheet-title {
+    margin-bottom: 60px;
+    font-size: 32px;
+    .action-sheet-sub-title {
+      font-size: 18px;
+    }
+  }
+}
+
 .sc-ion-searchbar-ios-h{
   padding-bottom: 0 !important;
 }
