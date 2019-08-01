@@ -36,10 +36,6 @@ export class CreatePage implements OnInit {
     private imagePicker: ImagePicker,
   ) { }
 
-  get getSelected() {
-    return this.imagesSelected;
-  }
-
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
       name: ['', Validators.required],
@@ -71,6 +67,7 @@ export class CreatePage implements OnInit {
   deletePicture(index: number) {
     // If the picture deleted is the thumbnail then we generate a new thumbnail of the second picture of the gallery
     this.imagesSelected.splice(index, 1);
+    this.cdRef.detectChanges();
   }
   trackItem(index: number, picture: any) {
     return `${index}-${picture}`;

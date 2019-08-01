@@ -1,9 +1,9 @@
 <app-header title="Editar Perfil"></app-header>
 <ion-content>
   <form *ngIf="user$ | async" [formGroup]="myGroup" (ngSubmit)="update()">
-    <ion-grid>
+    <ion-grid class="ion-no-padding">
       <ion-row color="primary" justify-content-center>
-        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+        <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="12">
           <div text-center>
             <h3>Actualiza tus datos</h3>
           </div>

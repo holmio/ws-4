@@ -2,35 +2,21 @@
 
 
 <ion-content>
+    <div class="gallery-images ion-padding-top ion-padding-horizontal">
+        <div class="product-image-wrapper">
+            <div *ngIf="imagesSelected.length != 4" class="product-image-placeholder" (click)="presentSheet()">
+                <ion-icon name="camera"></ion-icon>
+            </div>
+            <div class="container-product-image">
+                <div *ngFor="let picture of imagesSelected; let i = index;" (click)="deletePicture(i)" 
+                class="product-image" [style.background-image]="'url(' + picture + ')'"></div>
+            </div>
+        </div>
+    </div>
     <form [formGroup]="myGroup" (ngSubmit)="create()">
-        <ion-grid>
-            <ion-row>
-                <ion-col size="12">
-                    <div class="gallery-images">
-                        <div class="product-image-wrapper">
-                            <ng-container *ngFor="let picture of getSelected; let i = index; trackBy: trackItem">
-                                <div (click)="deletePicture(i)">
-                                    <div class="product-image" [style.background-image]="'url(' + picture + ')'"></div>
-                                </div>
-                            </ng-container>
-                            <div class="product-image-placeholder" (click)="presentSheet()">
-                                <ion-icon name="camera"></ion-icon>
-                            </div>
-                            <div class="product-image-placeholder" (click)="presentSheet()">
-                                <ion-icon name="camera"></ion-icon>
-                            </div>
-                            <div class="product-image-placeholder" (click)="presentSheet()">
-                                <ion-icon name="camera"></ion-icon>
-                            </div>
-                            <div class="product-image-placeholder" (click)="presentSheet()">
-                                <ion-icon name="camera"></ion-icon>
-                            </div>
-                        </div>
-                    </div>
-                </ion-col>
-            </ion-row>
+        <ion-grid class="ion-no-padding">
             <ion-row color="primary" justify-content-center>
-                <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+                <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="12">
                     <div padding>
                         <ion-item>
                             <ion-label position="floating">Nombre Product</ion-label>
