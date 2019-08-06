@@ -23,8 +23,8 @@ export class CreatePage implements OnInit {
   categories = _.cloneDeep(CATEGORIES);
   currencies = _.cloneDeep(CURRENCIES);
   customActionSheetOptions: any = {
-    header: 'Colors',
-    subHeader: 'Select your favorite color',
+    header: 'Categorias',
+    subHeader: 'Selecciona la categoria de tu producto',
     cssClass: 'category-sheet'
   };
   private catSelected: string[] = [];
@@ -64,12 +64,11 @@ export class CreatePage implements OnInit {
       return;
     }
     let productInfo: Product = {
-      category: _.cloneDeep(parseCategoryList(this.catSelected)),
+      category: this.catSelected,
       gallery: [...this.imagesSelected],
       ...this.myGroup.value
     };
-    console.log(productInfo);
-    // this.store.dispatch(new SetProductAction(this.myGroup.value));
+    this.store.dispatch(new SetProductAction(productInfo));
   }
 
   /**

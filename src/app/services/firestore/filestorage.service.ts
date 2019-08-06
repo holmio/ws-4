@@ -15,7 +15,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class StorageService {
     constructor(private storage: AngularFireStorage) {
     }
-    public uploadContent(file: any,fileName: any, fileRef: any): Promise<any> {
+    public uploadContent(file: any, fileName: any, fileRef: any): Promise<any> {
         return new Promise((resolve, reject) => {
             try {
               if (file) {

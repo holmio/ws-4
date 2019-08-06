@@ -6,8 +6,9 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 
 import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize, map, mergeMap } from 'rxjs/operators';
+import { finalize, map, mergeMap, take } from 'rxjs/operators';
 import { User, UserShortInfo } from '../user/user.interface';
+import { StorageService } from 'src/app/services/firestore/filestorage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class ProductService {
   constructor(
     private storage: AngularFireStorage,
     private afStore: AngularFirestore,
+    private storageService: StorageService,
   ) {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
@@ -48,7 +50,7 @@ export class ProductService {
   }
 
   getProducts(): Observable<any> {
-    return this.productUserCollectionRef.valueChanges();
+    return this.productUserCollectionRef.valueChanges().pipe(take(1));
   }
 
   getProductsByUser(uid: string): Observable<any[]> {
@@ -64,23 +66,16 @@ export class ProductService {
     return batch.commit();
   }
 
-  setProduct(product: Product): Promise<any> {
+  async setProduct(product: Product): Promise<any> {
     product.uid = this.uuidv4();
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    // Add gallery to the product
+    product.gallery = await this.uploadGallery(product.gallery, product.uid);
+    product.thumbnail = product.gallery[0];
     batch.set(productColl, product);
     batch.set(productShortColl, product);
-    // Add gallery to the product
-    // galleryList.forEach((image) => {
-    //   const filePath = `${image.path}/gallery-${new Date().getTime()}.jpg`;
-    //   this.uploadFileString(filePath, image.base64).then((downloadUrl) => {
-    //     this.productCollectionRef.doc(data.uid).collection('gallery').add({
-    //       path: filePath,
-    //       downloadUrl: downloadUrl
-    //     });
-    //   });
-    // })
     return new Promise((resolve, reject) => {
       batch.commit().then(() => resolve(product.uid), error => reject(error));
     });
@@ -103,22 +98,37 @@ export class ProductService {
     return batch.commit();
   }
 
-  deleteProduct(uid: string) {
+  async deleteProduct(product: Product) {
     const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uid}`);
+    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
     batch.delete(productColl);
     batch.delete(productShortColl);
+    await this.deleteGallery(product.gallery)
     return batch.commit();
   }
 
-  async uploadGallery(gallery: string[]): Promise<any> {
-    await gallery.map((value) => {
-      console.log(value);
-    })
+  async uploadGallery(gallery: string[], productUid: string): Promise<any> {
+    let galleryUploaded: string[] = [];
+    let count = 0;
+    for (const value of gallery) {
+      const filePath: string = `gallery/${productUid}_${count}.jpg`;
+      const fileRef = this.storage.ref(filePath);
+      const file = await this.storageService.uploadContent(value, filePath, fileRef)
+      galleryUploaded.push(file);
+      count++;
+    }
+    return galleryUploaded;
   }
 
-  
+  async deleteGallery(gallery: string[]): Promise<any> {
+    for (const url of gallery) {
+      const fileRef = await this.storage.storage.refFromURL(url);
+      await fileRef.delete();
+    }
+  }
+
+
 
   private uuidv4() {
     return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

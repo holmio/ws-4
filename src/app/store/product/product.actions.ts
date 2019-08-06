@@ -42,7 +42,6 @@ export class UpdateProductFailedAction {
 // DELETE
 export class DeleteProductAction {
   static type = '[Product] DeleteProduct';
-  constructor(public uid: string) { }
 }
 export class DeleteProductSuccessAction {
   static type = '[Product] DeleteProductSuccess';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductState, Product, GetProductAction, ProductService, AddFavoriteAction, RemoveFavoriteAction, DeleteProductAction } from 'src/app/store/product';
+import { ProductState, Product, GetProductAction, AddFavoriteAction, RemoveFavoriteAction, DeleteProductAction } from 'src/app/store/product';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 
@@ -18,7 +18,6 @@ export class DetailPage implements OnInit {
   id: string;
   constructor(
     private route: ActivatedRoute,
-    private productsService: ProductService,
     private store: Store,
   ) {
     this.id = this.route.snapshot.params.id;
@@ -37,7 +36,7 @@ export class DetailPage implements OnInit {
   }
 
   delete() {
-    this.store.dispatch(new DeleteProductAction(this.id));
+    this.store.dispatch(new DeleteProductAction());
   }
 
 }

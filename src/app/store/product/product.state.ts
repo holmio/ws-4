@@ -127,13 +127,13 @@ export class ProductState {
     // DELETE PRODUCT
 
     @Action(DeleteProductAction)
-    async deleteProduct(sc: StateContext<ProductStateModel>, action: DeleteProductAction) {
+    async deleteProduct(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
         sc.setState({
             ...state,
             loaded: false,
         });
-        await this.productService.deleteProduct(action.uid).then(() => {
+        await this.productService.deleteProduct(state.product).then(() => {
             sc.dispatch(new DeleteProductSuccessAction());
         }, error => {
             sc.setState({

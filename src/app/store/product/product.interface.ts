@@ -12,7 +12,7 @@ export interface Product {
   description: string;
   category: any;
   currency: 'DZD' | 'EUR';
-  gallery?: Gallery[] | string[];
+  gallery?: string[];
   followers?: Array<string>;
   isEnabled: boolean;
   isSold?: boolean;
