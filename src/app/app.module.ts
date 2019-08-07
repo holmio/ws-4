@@ -31,7 +31,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AuthModule } from './store/auth';
 import { UserModule } from './store/user';
 import { ProductsModule } from './store/product';
-
+import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-image';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +39,9 @@ import { ProductsModule } from './store/product';
   imports: [
     BrowserModule,
     HttpClientModule,
+    LazyLoadImageModule.forRoot({
+      preset: intersectionObserverPreset // <-- tell LazyLoadImage that you want to use IntersectionObserver
+    }),
     IonicModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features

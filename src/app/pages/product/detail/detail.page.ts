@@ -18,6 +18,8 @@ export class DetailPage implements OnInit {
   id: string;
   slidesOpts = {
     centeredSlides: true,
+    preloadImages: false,
+    lazy: true,
   };
   constructor(
     private route: ActivatedRoute,

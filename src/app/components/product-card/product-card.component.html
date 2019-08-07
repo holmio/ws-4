@@ -1,6 +1,6 @@
 <ion-card class="card" [routerLink]="'/product/detail/' + product.uid" routerDirection="forward" no-margin>
   <ion-badge class="badge">{{product.name}}</ion-badge>
-  <img [src]="product.thumbnail" [alt]="product.name">
+  <img [lazyLoad]="product.thumbnail" [alt]="product.name">
   <ion-card-content>
     <ion-card-title>
       <ion-row>

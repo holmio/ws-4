@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
 import { IonicModule } from "@ionic/angular";
 import { HeaderModule } from '../components/header/header.module';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -14,6 +16,8 @@ import { HeaderModule } from '../components/header/header.module';
     TranslateModule,
     ReactiveFormsModule,
     HeaderModule,
+    LazyLoadImageModule,
+    RouterModule,
   ],
   declarations: [],
   exports: [
@@ -22,7 +26,9 @@ import { HeaderModule } from '../components/header/header.module';
     IonicModule,
     TranslateModule,
     ReactiveFormsModule,
-    HeaderModule
+    HeaderModule,
+    LazyLoadImageModule,
+    RouterModule,
   ]
 })
 export class SharedModule {

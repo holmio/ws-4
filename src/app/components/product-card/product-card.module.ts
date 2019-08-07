@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductCardComponent } from './product-card.component';
-import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.modue';
 
 @NgModule({
   imports: [
-    IonicModule,
-    RouterModule,
-    CommonModule,
+    SharedModule,
     TranslateModule.forChild(),
   ],
   declarations: [ ProductCardComponent ],
