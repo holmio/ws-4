@@ -54,7 +54,6 @@ export class DeleteProductFailedAction {
 // ADD FAVORITE
 export class AddFavoriteAction {
   static type = '[Product] AddFavorite';
-  constructor(public uid: string) { }
 }
 export class AddFavoriteSuccessAction {
   static type = '[Product] AddFavoriteSuccess';
@@ -66,7 +65,6 @@ export class AddFavoriteFailedAction {
 // Remove FAVORITE
 export class RemoveFavoriteAction {
   static type = '[Product] RemoveFavorite';
-  constructor(public uid: string) { }
 }
 export class RemoveFavoriteSuccessAction {
   static type = '[Product] RemoveFavoriteSuccess';

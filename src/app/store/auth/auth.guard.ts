@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.uid$.pipe(
-      filter(data => !!data),
       map(u => {
         if (!u) {
           this.store.dispatch(new LoginRedirectAction());
