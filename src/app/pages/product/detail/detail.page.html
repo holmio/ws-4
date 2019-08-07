@@ -23,7 +23,7 @@
 </app-header>
 
 <ion-content *ngIf="(loading$ | async)">
-    <ion-slides mode="md" pager="md" scrollbar="md" centeredSlides="true">
+    <ion-slides mode="md" pager="md" scrollbar="md" [options]="slideOpts">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery">
             <img [src]="image">
         </ion-slide>
@@ -38,7 +38,7 @@
             </ion-col>
             <ion-col class="ion-text-end">
                 <div>
-                    <h1>{{(product$ | async)?.price}} <small>{{(product$ | async)?.currency}}</small></h1>
+                    <h1>{{(product$ | async)?.price | number}} <small>{{(product$ | async)?.currency}}</small></h1>
                 </div>
             </ion-col>
         </ion-row>

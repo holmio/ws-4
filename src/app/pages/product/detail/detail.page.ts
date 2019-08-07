@@ -16,6 +16,9 @@ export class DetailPage implements OnInit {
   @Select(ProductState.getProduct) product$: Observable<Product>;
   @Select(ProductState.getIsUserProduct) isUserProduct$: Observable<boolean>;
   id: string;
+  slidesOpts = {
+    centeredSlides: true,
+  };
   constructor(
     private route: ActivatedRoute,
     private store: Store,

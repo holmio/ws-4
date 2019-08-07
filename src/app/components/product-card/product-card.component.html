@@ -5,7 +5,7 @@
     <ion-card-title>
       <ion-row>
         <ion-col no-padding>
-          <ion-text text-left><span class="price"><strong>{{product.currency}} {{product.price}}</strong></span>
+          <ion-text text-left><span class="price"><strong>{{product.price | number}} </strong><small>{{product.currency}}</small></span>
           </ion-text>
         </ion-col>
       </ion-row>
