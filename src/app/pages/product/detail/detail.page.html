@@ -22,9 +22,9 @@
     </ion-buttons>
 </app-header>
 
-<ion-content *ngIf="(loading$ | async)">
-    <ion-slides mode="md" pager="md" scrollbar="md" [options]="slideOpts">
-        <ion-slide *ngFor="let image of (product$ | async)?.gallery">
+<ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
+    <ion-slides mode="md" pager="md" [options]="slideOpts">
+        <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>
     </ion-slides>
@@ -70,8 +70,8 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-<ion-fab vertical="bottom" horizontal="center" slot="fixed">
+<!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button routerLink="/product/create" routerDirection="forward">
         <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-</ion-fab>
+</ion-fab> -->

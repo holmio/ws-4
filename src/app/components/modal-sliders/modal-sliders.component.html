@@ -1,0 +1,12 @@
+<ion-header no-border>
+  <ion-toolbar color="transparent" class="ion-padding-horizontal">
+    <ion-icon color="light" (click)="closeModal()" size="large" slot="end" name="close"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen color="dark">
+    <ion-slides mode="md" pager="md" [options]="slideOpts">
+        <ion-slide *ngFor="let image of (product$ | async)?.gallery">
+            <img class="swiper-lazy" [lazyLoad]="image">
+        </ion-slide>
+    </ion-slides>
+</ion-content>

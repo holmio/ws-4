@@ -27,6 +27,7 @@ import { Router } from '@angular/router';
 import { take, tap } from 'rxjs/operators';
 import { User } from '../user/user.interface';
 import { UserInfo } from 'firebase';
+import { NavController } from '@ionic/angular';
 
 export interface AuthStateModel {
     uid: string;
@@ -45,6 +46,7 @@ export class AuthState implements NgxsOnInit {
         private auth: AuthService,
         private zone: NgZone,
         private router: Router,
+        private navController: NavController,
         private afAuth: AngularFireAuth,
     ) {
     }
@@ -111,7 +113,6 @@ export class AuthState implements NgxsOnInit {
 
     @Action(LoginSuccessAction)
     onLoginSuccess(sc: StateContext<AuthStateModel>, action: LoginSuccessAction) {
-        console.log('onLoginSuccess, navigating to /dashboard ', action.uid);
         const state = sc.getState();
         sc.setState({
             ...state,
@@ -120,13 +121,14 @@ export class AuthState implements NgxsOnInit {
         });
         sc.dispatch(new GetUserAction(action.uid));
         this.zone.run(() => {
-            // this.router.navigate([ROUTE.home]);
+            this.navController.back();
         });
     }
+
     @Action(LogoutSuccessAction)
     onLogoutSuccessAction(sc: StateContext<AuthStateModel>) {
         this.zone.run(() => {
-            this.router.navigate([ROUTE.home]);
+            this.router.navigate([ROUTE.home], {replaceUrl: true});
         });
     }
 

@@ -84,7 +84,7 @@ export class ProductState {
             const user = this.store.selectSnapshot(UserState.geUser);
             sc.setState({
                 ...state,
-                isFavorite: _.includes(data.followers, user.uid) || false,
+                isFavorite: (user && _.includes(data.followers, user.uid)) || false,
             });
             sc.dispatch(new GetProductSuccessAction(data));
         }, error => {
@@ -160,7 +160,7 @@ export class ProductState {
     async addFavorite(sc: StateContext<ProductStateModel>, action: AddFavoriteAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.productService.addFavorite(user.uid, action.uid).then(() => {
+        await this.productService.addFavorite(user.uid, state.product.uid).then(() => {
             sc.setState({
                 ...state,
                 isFavorite: true,
@@ -177,7 +177,7 @@ export class ProductState {
     async removeFavorite(sc: StateContext<ProductStateModel>, action: RemoveFavoriteAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.productService.removeFavorite(user.uid, action.uid).then(() => {
+        await this.productService.removeFavorite(user.uid, state.product.uid).then(() => {
             sc.setState({
                 ...state,
                 isFavorite: false,
@@ -206,7 +206,6 @@ export class ProductState {
             uid: user.uid,
         };
         action.product.followers = [];
-        action.product.thumbnail = 'https://picsum.photos/id/612/400/400';
         await this.productService.setProduct(action.product).then((uid) => {
             sc.dispatch(new SetProductSuccessAction(uid));
         }, error => {
