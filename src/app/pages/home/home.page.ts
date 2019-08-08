@@ -1,24 +1,22 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ProductState, ShortProduct } from 'src/app/store/product';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { ShortProduct } from 'src/app/store/product';
 import { ProductService } from 'src/app/store/product/product.service';
 import { AuthState } from 'src/app/store/auth';
-import { filter, take } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Select } from '@ngxs/store';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit, AfterContentInit {
+export class HomePage implements OnInit, OnDestroy {
 
   products$: Observable<ShortProduct[]>;
   @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
   uidUser: string;
-
-
+  private destroy$ = new Subject<boolean>();
   constructor(
     private productService: ProductService,
   ) {
@@ -27,15 +25,13 @@ export class HomePage implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.uidUser$.pipe(
       filter((uid) => !!uid),
-      take(1)
+      takeUntil(this.destroy$)
     ).subscribe(uid => this.uidUser = uid);
     this.products$ = this.productService.getProducts();
   }
 
-  ngAfterContentInit(): void {
+  ngOnDestroy(): void {
+    this.destroy$.complete();
+    this.destroy$.next(false);
   }
-
-  login() {
-  }
-
 }

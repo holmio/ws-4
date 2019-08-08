@@ -50,7 +50,7 @@ export class ProductService {
   }
 
   getProducts(): Observable<any> {
-    return this.productUserCollectionRef.valueChanges().pipe(take(1));
+    return this.productUserCollectionRef.valueChanges();
   }
 
   getProductsByUser(uid: string): Observable<any[]> {

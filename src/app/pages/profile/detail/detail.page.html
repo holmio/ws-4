@@ -12,9 +12,8 @@
           {{ (user$ | async)?.phone }}
         </ion-label>
         <div class="info">
-          <ion-text>Vendido: 2</ion-text>
-          <ion-text>Publicado: 6</ion-text>
-          <ion-text>Comprado: 3</ion-text>
+          <ion-text>Productos: {{(user$ | async)?.myProducts.length}}</ion-text>
+          <ion-text>Favoritos: {{(user$ | async)?.favorites.length}}</ion-text>
         </div>
       </div>
     </div>
