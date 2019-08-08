@@ -1,12 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductState, Product, GetProductAction, AddFavoriteAction, RemoveFavoriteAction, DeleteProductAction } from 'src/app/store/product';
+import { IonRefresher, ModalController } from '@ionic/angular';
+import {
+  Actions,
+  ofActionDispatched,
+  Select,
+  Store
+  } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import { ModalController } from '@ionic/angular';
+import {
+  filter,
+  takeUntil,
+  } from 'rxjs/operators';
 import { ModalSlidersComponent } from 'src/app/components/modal-sliders/modal-sliders.component';
-import { AuthState } from 'src/app/store/auth';
-import { take, tap, filter, takeUntil } from 'rxjs/operators';
+import { AuthState, LogoutSuccessAction, LoginSuccessAction } from 'src/app/store/auth';
+import {
+  AddFavoriteAction,
+  DeleteProductAction,
+  GetProductAction,
+  Product,
+  ProductState,
+  RemoveFavoriteAction
+  } from 'src/app/store/product';
+import { GetProductsSuccessAction } from 'src/app/store/products';
 import { ROUTE } from 'src/app/util/app.routes.const';
 
 @Component({
@@ -14,7 +30,7 @@ import { ROUTE } from 'src/app/util/app.routes.const';
   templateUrl: './detail.page.html',
   styleUrls: ['./detail.page.scss'],
 })
-export class DetailPage implements OnInit {
+export class DetailPage implements OnInit, OnDestroy {
 
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getIsFavorite) isFavorite$: Observable<boolean>;
@@ -30,8 +46,10 @@ export class DetailPage implements OnInit {
   };
   private isLogin = false;
   private destroy$ = new Subject<boolean>();
+  private ionRefresh: IonRefresher;
   constructor(
     private route: ActivatedRoute,
+    private actions: Actions,
     private router: Router,
     private modalController: ModalController,
     private store: Store,
@@ -45,15 +63,32 @@ export class DetailPage implements OnInit {
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      this.isLogin = true
+      this.isLogin = true;
+    });
+    this.actions.pipe(
+      ofActionDispatched(GetProductsSuccessAction),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      if (this.ionRefresh) {
+        this.ionRefresh.complete();
+      }
+    });
+    this.actions.pipe(
+      ofActionDispatched(LogoutSuccessAction, LoginSuccessAction),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(new GetProductAction(this.id));
     });
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     this.destroy$.complete();
     this.destroy$.next(false);
+  }
+
+  doRefresh(event) {
+    this.store.dispatch(new GetProductAction(this.id));
+    this.ionRefresh = event.target;
   }
 
   addFavorite() {
@@ -61,7 +96,7 @@ export class DetailPage implements OnInit {
       this.store.dispatch(new AddFavoriteAction());
       return;
     }
-    this.router.navigateByUrl(ROUTE.login)
+    this.router.navigateByUrl(ROUTE.login);
   }
 
   removeFavorite() {

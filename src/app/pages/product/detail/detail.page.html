@@ -2,27 +2,30 @@
     <ion-buttons header-right-action slot="end">
         <ng-container *ngIf="!(isUserProduct$ | async) && (loading$ | async)">
             <ion-button *ngIf="!(isFavorite$ | async)" (click)="addFavorite()">
-                <ion-icon slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
+                <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
             </ion-button>
             <ion-button *ngIf="(isFavorite$ | async)" (click)="removeFavorite()">
-                <ion-icon slot="end" size="large" slot="start" name="heart"></ion-icon>
+                <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart"></ion-icon>
             </ion-button>
             <ion-button routerLink="/chat" routerDirection="forward">
-                <ion-icon size="large" name="chatbubbles"></ion-icon>
+                <ion-icon mode="ios" size="large" name="chatbubbles"></ion-icon>
             </ion-button>
         </ng-container>
         <ng-container *ngIf="(isUserProduct$ | async) && (loading$ | async)">
             <ion-button [routerLink]="'/product/edit/' + id" routerDirection="forward">
-                <ion-icon size="large" name="create"></ion-icon>
+                <ion-icon mode="ios" size="large" name="create"></ion-icon>
             </ion-button>
             <ion-button (click)="delete()">
-                <ion-icon size="large" name="trash"></ion-icon>
+                <ion-icon mode="ios" size="large" name="trash"></ion-icon>
             </ion-button>
         </ng-container>
     </ion-buttons>
 </app-header>
 
 <ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullFactor="0.8" pullMin="60" pullMax="120">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-slides mode="md" pager="md" [options]="slideOpts">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
             <img class="swiper-lazy" [lazyLoad]="image">

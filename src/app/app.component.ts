@@ -16,7 +16,6 @@ import { LogoutAction } from './store/auth';
   styleUrls: ['app-component.scss']
 })
 export class AppComponent implements OnInit {
-  private items: Observable<any>;
   @Select(UserState.geUser) user$: Observable<User>;
 
   constructor(

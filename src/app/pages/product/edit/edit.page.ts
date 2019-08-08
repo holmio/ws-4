@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { ProductState, Product, UpdateProductAction } from 'src/app/store/product';
-import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { parseCategoryList } from 'src/app/util/common';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
@@ -13,13 +13,14 @@ import * as _ from 'lodash';
   templateUrl: './edit.page.html',
   styleUrls: ['./edit.page.scss'],
 })
-export class EditPage implements OnInit {
+export class EditPage implements OnInit, OnDestroy {
 
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getProduct) product$: Observable<Product>;
   myGroup: FormGroup;
   categories = _.cloneDeep(CATEGORIES);
   currencies = _.cloneDeep(CURRENCIES);
+  private destroy$ = new Subject<boolean>();
 
   private catSelected: string[] = [];
   constructor(
@@ -32,7 +33,7 @@ export class EditPage implements OnInit {
 
     this.product$.pipe(
       filter(data => !!data),
-      take(1)
+      takeUntil(this.destroy$)
     ).subscribe(product => {
       // Filter categories
       this.categories.filter(category => {
@@ -59,6 +60,11 @@ export class EditPage implements OnInit {
 
   categorySelected(event: { detail: { value: any; }; }) {
     this.catSelected = [...event.detail.value];
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.complete();
+    this.destroy$.next(false);
   }
 
   private getDirtyValues(form: any) {

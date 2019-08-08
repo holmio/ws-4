@@ -1,38 +1,35 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Camera } from '@ionic-native/camera/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
-
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
+import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.modue';
+import { AuthModule } from './store/auth';
+import { ProductModule } from './store/product';
+import { ProductsModule } from './store/products';
+import { UserModule } from './store/user';
+import { environment } from '../environments/environment';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+import { Camera } from '@ionic-native/camera/ngx';
+import { Facebook } from '@ionic-native/facebook/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsModule } from '@ngxs/store';
+import { intersectionObserverPreset, LazyLoadImageModule } from 'ng-lazyload-image';
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-import { environment } from '../environments/environment';
-import { SharedModule } from './shared/shared.modue';
-import { NgxsModule } from '@ngxs/store';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { AuthModule } from './store/auth';
-import { UserModule } from './store/user';
-import { ProductsModule } from './store/product';
-import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-image';
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -60,6 +57,7 @@ import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-ima
       }),
       AuthModule,
       UserModule,
+      ProductModule,
       ProductsModule,
       AppRoutingModule,
   ],
@@ -67,6 +65,7 @@ import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-ima
     StatusBar,
     SplashScreen,
     Camera,
+    Facebook,
     ImagePicker,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

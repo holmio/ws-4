@@ -22,9 +22,7 @@ export class LogoutAction {
 export class LogoutSuccessAction {
   static type = '[Auth] LogoutSuccess';
 }
-export class LoginRedirectAction {
-  static type = '[Auth] LoginRedirect';
-}
+
 export class LoginSuccessAction {
   static type = '[Auth] LoginSuccess';
   constructor(public uid: string) {}

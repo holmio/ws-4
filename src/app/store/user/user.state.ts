@@ -1,11 +1,4 @@
 import {
-    Action,
-    Selector,
-    State,
-    StateContext
-    } from '@ngxs/store';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import {
     GetUserAction,
     GetUserFailedAction,
     GetUserSuccessAction,
@@ -19,10 +12,15 @@ import {
     UpdateUserFailedAction,
     UpdateUserSuccessAction
     } from './user.actions';
-import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
-import { NavController } from '@ionic/angular';
-import { User, UserStateModel } from '../user/user.interface';
 import { UserService } from './user.service';
+import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
+import { User, UserStateModel } from '../user/user.interface';
+import {
+    Action,
+    Selector,
+    State,
+    StateContext
+    } from '@ngxs/store';
 
 @State<UserStateModel>({
     name: 'user',
@@ -32,11 +30,9 @@ import { UserService } from './user.service';
     },
 })
 export class UserState {
-
     
     constructor(
         private userService: UserService,
-        private navController: NavController,
     ) {
     }
 
@@ -114,7 +110,6 @@ export class UserState {
             ...state,
             loaded: true,
         });
-        this.navController.back();
     }
 
     @Action(SetUserAction)

@@ -1,12 +1,12 @@
-
+import { User } from '../user/user.interface';
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase/app';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Facebook } from '@ionic-native/facebook/ngx';
+import { auth } from 'firebase/app';
+
 import AuthProvider = firebase.auth.AuthProvider;
 
-
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { User } from '../user/user.interface';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ export class AuthService {
 	constructor(
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
+    private fb: Facebook,
   ) {
     this.userCollectionRef = this.afStore.collection<User>('users');
   }
@@ -34,12 +35,10 @@ export class AuthService {
 		return this.afAuth.auth.signOut();
 	}
 
-  signInWithFacebook(): Promise<any> {
-    return this.oauthSignIn(new firebase.auth.FacebookAuthProvider());
+  async signInWithFacebook(): Promise<any> {
+    const sdkFacebook = await this.fb.login(['email']);
+    const credentail = auth.FacebookAuthProvider.credential(sdkFacebook.authResponse.accessToken);
+    return this.afAuth.auth.signInWithCredential(credentail);
   }
-
-	private oauthSignIn(provider: AuthProvider): Promise<any> {
-		return this.afAuth.auth.signInWithPopup(provider);
-	}
 
 }

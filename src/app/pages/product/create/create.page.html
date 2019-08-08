@@ -5,7 +5,7 @@
     <div class="gallery-images ion-padding-top ion-padding-horizontal">
         <div class="product-image-wrapper">
             <div *ngIf="imagesSelected.length != 4" class="product-image-placeholder" (click)="presentSheet()">
-                <ion-icon name="camera"></ion-icon>
+                <ion-icon mode="ios" name="camera"></ion-icon>
             </div>
             <div class="container-product-image">
                 <div *ngFor="let picture of imagesSelected; let i = index;" (click)="deletePicture(i)"

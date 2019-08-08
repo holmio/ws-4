@@ -43,14 +43,16 @@ export class ProductService {
             map(
               (user) => Object.assign({}, { ...product, user: user }
               )
-            )
+            ),
+            take(1),
           )
-      )
-    )
+      ),
+      take(1),
+    );
   }
 
   getProducts(): Observable<any> {
-    return this.productUserCollectionRef.valueChanges();
+    return this.productUserCollectionRef.valueChanges().pipe(take(1));
   }
 
   getProductsByUser(uid: string): Observable<any[]> {

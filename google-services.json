@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:651347830704:android:bc92674cf1204520",
+        "mobilesdk_app_id": "1:651347830704:android:f87e072b10e4a7aa",
         "android_client_info": {
-          "package_name": "com.ws.wallasahara"
+          "package_name": "com.saila.marsa"
         }
       },
       "oauth_client": [

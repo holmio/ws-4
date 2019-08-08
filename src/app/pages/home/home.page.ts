@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ShortProduct } from 'src/app/store/product';
-import { ProductService } from 'src/app/store/product/product.service';
-import { AuthState } from 'src/app/store/auth';
-import { filter, takeUntil } from 'rxjs/operators';
-import { Select } from '@ngxs/store';
+import { Select, Store, Actions, ofActionDispatched, ofAction } from '@ngxs/store';
+import { ProductsState, GetProductsAction, GetProductsSuccessAction } from 'src/app/store/products';
+import { ShortProduct } from 'src/app/store/product/product.interface';
+import { IonRefresher } from '@ionic/angular';
+import { takeUntil } from 'rxjs/operators';
+import { LogoutSuccessAction, LoginFailedAction } from 'src/app/store/auth';
+import { GetUserSuccessAction, GetUserFailedAction } from 'src/app/store/user';
 
 @Component({
   selector: 'app-home',
@@ -13,21 +15,35 @@ import { Select } from '@ngxs/store';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  products$: Observable<ShortProduct[]>;
-  @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
-  uidUser: string;
+  @Select(ProductsState.getAllProducts) products$: Observable<ShortProduct[]>;
+  ionRefresh: IonRefresher;
   private destroy$ = new Subject<boolean>();
   constructor(
-    private productService: ProductService,
+    private store: Store,
+    private actions: Actions,
   ) {
   }
 
   ngOnInit(): void {
-    this.uidUser$.pipe(
-      filter((uid) => !!uid),
+    this.actions.pipe(
+      ofActionDispatched(GetProductsSuccessAction),
       takeUntil(this.destroy$)
-    ).subscribe(uid => this.uidUser = uid);
-    this.products$ = this.productService.getProducts();
+    ).subscribe(() => {
+      if (this.ionRefresh) {
+        this.ionRefresh.complete();
+      }
+    });
+    this.actions.pipe(
+      ofActionDispatched(GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(new GetProductsAction());
+    });
+  }
+
+  doRefresh(event) {
+    this.store.dispatch(new GetProductsAction());
+    this.ionRefresh = event.target;
   }
 
   ngOnDestroy(): void {

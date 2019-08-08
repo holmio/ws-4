@@ -13,7 +13,7 @@
             <div class="menu-item" *ngIf="!(user$ | async)">
               <ion-button (click)="goToPage('login')" Fill="clear" class="block">
                 <div class="icon">
-                  <ion-icon slot="start" name="log-in"></ion-icon>
+                  <ion-icon mode="ios" slot="start" name="log-in"></ion-icon>
                 </div>
                 <!-- <div class="text">
                   Login
@@ -23,7 +23,7 @@
             <div class="menu-item">
               <ion-button (click)="goToPage('home')" Fill="clear" class="block">
                 <div class="icon">
-                  <ion-icon slot="start" name="home"></ion-icon>
+                  <ion-icon mode="ios" slot="start" name="home"></ion-icon>
                 </div>
                 <!-- <div class="text">
                   Home
@@ -33,7 +33,7 @@
             <div class="menu-item">
               <ion-button (click)="goToPage('profile/messages')" Fill="clear" class="block">
                 <div class="icon">
-                  <ion-icon slot="start" name="chatbubbles"></ion-icon>
+                  <ion-icon mode="ios" slot="start" name="chatbubbles"></ion-icon>
                 </div>
                 <!-- <div class="text">
                   Mensajes
@@ -43,7 +43,7 @@
             <div class="menu-item" *ngIf="(user$ | async)">
               <ion-button (click)="goToPage('logout')" Fill="clear" class="block">
                 <div class="icon">
-                  <ion-icon slot="start" name="log-out"></ion-icon>
+                  <ion-icon mode="ios" slot="start" name="log-out"></ion-icon>
                 </div>
                 <!-- <div class="text">
                   Logout

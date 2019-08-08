@@ -1,16 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 import { SetProductAction, Product } from 'src/app/store/product';
 import { Platform, ActionSheetController } from '@ionic/angular';
-import { parseCategoryList } from 'src/app/util/common';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { ActionSheetOptions } from '@ionic/core';
 
 @Component({
   selector: 'app-create',

@@ -81,11 +81,6 @@ export class ProductState {
             loaded: false,
         });
         await this.productService.getProduct(action.uid).subscribe(data => {
-            const user = this.store.selectSnapshot(UserState.geUser);
-            sc.setState({
-                ...state,
-                isFavorite: (user && _.includes(data.followers, user.uid)) || false,
-            });
             sc.dispatch(new GetProductSuccessAction(data));
         }, error => {
             sc.dispatch(new GetProductFailedAction(error));
@@ -95,8 +90,10 @@ export class ProductState {
     @Action(GetProductSuccessAction)
     getProductSuccess(sc: StateContext<ProductStateModel>, action: GetProductSuccessAction) {
         const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
         sc.setState({
             ...state,
+            isFavorite: (user && _.includes(action.product.followers, user.uid)) || false,
             product: action.product,
             loaded: true,
         });

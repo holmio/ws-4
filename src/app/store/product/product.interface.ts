@@ -6,6 +6,10 @@ export interface ProductStateModel {
   product: Product;
   loaded: boolean;
 }
+export interface ProductsStateModel {
+  products: Product;
+  loaded: boolean;
+}
 export interface Product {
   name: string;
   price: number;

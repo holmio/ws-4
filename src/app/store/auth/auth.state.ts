@@ -10,7 +10,6 @@ import { AuthService } from './auth.service';
 import {
     CheckSessionAction,
     LoginFailedAction,
-    LoginRedirectAction,
     LoginSuccessAction,
     LoginWithEmailAndPasswordAction,
     LoginWithFacebookAction,
@@ -22,12 +21,9 @@ import {
     } from './auth.actions';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
 import { NgZone } from '@angular/core';
-import { ROUTE } from 'src/app/util/app.routes.const';
-import { Router } from '@angular/router';
 import { take, tap } from 'rxjs/operators';
 import { User } from '../user/user.interface';
 import { UserInfo } from 'firebase';
-import { NavController } from '@ionic/angular';
 
 export interface AuthStateModel {
     uid: string;
@@ -44,9 +40,6 @@ export class AuthState implements NgxsOnInit {
 
     constructor(
         private auth: AuthService,
-        private zone: NgZone,
-        private router: Router,
-        private navController: NavController,
         private afAuth: AngularFireAuth,
     ) {
     }
@@ -63,7 +56,7 @@ export class AuthState implements NgxsOnInit {
      */
     @Selector()
     static getUid(state: AuthStateModel) {
-        return state.uid || '';
+        return state.uid || null;
     }
 
 
@@ -103,14 +96,6 @@ export class AuthState implements NgxsOnInit {
         });
     }
 
-    @Action(LoginRedirectAction)
-    onLoginRedirect(sc: StateContext<AuthStateModel>) {
-        console.log('onLoginRedirect, navigating to /auth/login');
-        this.zone.run(() => {
-            this.router.navigate([ROUTE.login]);
-        });
-    }
-
     @Action(LoginSuccessAction)
     onLoginSuccess(sc: StateContext<AuthStateModel>, action: LoginSuccessAction) {
         const state = sc.getState();
@@ -120,16 +105,6 @@ export class AuthState implements NgxsOnInit {
             loaded: true,
         });
         sc.dispatch(new GetUserAction(action.uid));
-        this.zone.run(() => {
-            this.navController.back();
-        });
-    }
-
-    @Action(LogoutSuccessAction)
-    onLogoutSuccessAction(sc: StateContext<AuthStateModel>) {
-        this.zone.run(() => {
-            this.router.navigate([ROUTE.home], {replaceUrl: true});
-        });
     }
 
     /**********************************
@@ -188,7 +163,6 @@ export class AuthState implements NgxsOnInit {
             loaded: true,
         });
         sc.dispatch(new SetUserAction(action.user));
-        sc.dispatch(new LoginRedirectAction());
     }
     @Action([LoginFailedAction, LogoutSuccessAction, RegisternFailedAction])
     resetAuthState(sc: StateContext<AuthStateModel>) {
