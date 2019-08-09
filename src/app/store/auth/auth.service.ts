@@ -6,6 +6,7 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { auth } from 'firebase/app';
 
 import AuthProvider = firebase.auth.AuthProvider;
+import { Platform } from '@ionic/angular';
 
 
 @Injectable({
@@ -19,6 +20,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
     private fb: Facebook,
+    private platform: Platform,
   ) {
     this.userCollectionRef = this.afStore.collection<User>('users');
   }
@@ -36,9 +38,15 @@ export class AuthService {
 	}
 
   async signInWithFacebook(): Promise<any> {
-    const sdkFacebook = await this.fb.login(['email']);
-    const credentail = auth.FacebookAuthProvider.credential(sdkFacebook.authResponse.accessToken);
-    return this.afAuth.auth.signInWithCredential(credentail);
+    if (this.platform.is('cordova')) {
+      const sdkFacebook = await this.fb.login(['email']);
+      const credentail = auth.FacebookAuthProvider.credential(sdkFacebook.authResponse.accessToken);
+      return this.afAuth.auth.signInWithCredential(credentail);
+    } else {
+      return this.oauthSignIn(new auth.FacebookAuthProvider());
+    }
   }
-
+	private oauthSignIn(provider: AuthProvider): Promise<any> {
+		return this.afAuth.auth.signInWithPopup(provider);
+	}
 }

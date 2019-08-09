@@ -21,9 +21,9 @@ export class CreatePage implements OnInit {
   categories = _.cloneDeep(CATEGORIES);
   currencies = _.cloneDeep(CURRENCIES);
   customActionSheetOptions: any = {
-    header: 'Categorias',
-    subHeader: 'Selecciona la categoria de tu producto',
-    cssClass: 'category-sheet'
+    header: '[T]Categorias',
+    subHeader: '[T]Selecciona la categoria de tu producto',
+    cssClass: '[T]category-sheet'
   };
   private catSelected: string[] = [];
   private imagesSelected: string[] = [];
@@ -56,12 +56,12 @@ export class CreatePage implements OnInit {
 
   create() {
     if (this.catSelected.length === 0) {
-      return;
+      return this.toastService.show('[T]Selecciona categoria');
     }
     if (this.imagesSelected.length === 0) {
-      return;
+      return this.toastService.show('[T]Necesitas subir minimo una foto del producto');
     }
-    let productInfo: Product = {
+    const productInfo: Product = {
       category: this.catSelected,
       gallery: [...this.imagesSelected],
       ...this.myGroup.value
@@ -121,11 +121,11 @@ export class CreatePage implements OnInit {
         quality: 70,
         maximumImagesCount: 4 - this.imagesSelected.length,
         outputType: 1,
-      }
+      };
 
-      this.imagePicker.getPictures(configCamera).then((results) => {
-        for (var i = 0; i < results.length; i++) {
-          const base64Image = 'data:image/jpeg;base64,' + results[i];
+      this.imagePicker.getPictures(configCamera).then((pictures) => {
+        for (const picture of  pictures) {
+          const base64Image = 'data:image/jpeg;base64,' + picture;
           this.imagesSelected.push(base64Image);
           this.cdRef.detectChanges();
         }
@@ -146,7 +146,7 @@ export class CreatePage implements OnInit {
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         sourceType: this.sourceType,
-      }
+      };
       this.camera.getPicture(configCamera).then((data) => {
         const base64Image = 'data:image/jpeg;base64,' + data;
         this.imagesSelected.push(base64Image);

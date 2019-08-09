@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 import { Product, ShortProduct } from './product.interface';
@@ -75,7 +74,7 @@ export class ProductService {
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
     // Add gallery to the product
     product.gallery = await this.uploadGallery(product.gallery, product.uid);
-    product.thumbnail = product.gallery[0];
+    product.thumbnail = product.gallery[0] || '';
     batch.set(productColl, product);
     batch.set(productShortColl, product);
     return new Promise((resolve, reject) => {

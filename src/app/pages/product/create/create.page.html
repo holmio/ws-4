@@ -1,4 +1,4 @@
-<app-header title="Create Product"></app-header>
+<app-header title="[T]Create Product"></app-header>
 
 
 <ion-content>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <ion-item class="ion-padding-vertical">
-        <ion-label position="floating">Categoria</ion-label>
+        <ion-label position="floating">[T]Categoria</ion-label>
         <ion-select [interfaceOptions]="customActionSheetOptions" interface="action-sheet" (ionChange)="categorySelected($event)">
             <ion-select-option *ngFor="let category of categories" [value]="category.value"
                 [selected]="category.selected"> <ion-icon slot="start" name="add"></ion-icon> {{category.nameEs}}</ion-select-option>
@@ -26,19 +26,19 @@
                 <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="12">
                     <div padding>
                         <ion-item>
-                            <ion-label position="floating">Nombre Product</ion-label>
+                            <ion-label position="floating">[T]Nombre Product</ion-label>
                             <ion-input formControlName="name" type="text" required></ion-input>
                         </ion-item>
                         <ion-row color="primary" justify-content-center>
                             <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
                                 <ion-item>
-                                    <ion-label position="floating">Precio</ion-label>
+                                    <ion-label position="floating">[T]Precio</ion-label>
                                     <ion-input formControlName="price" type="number" required></ion-input>
                                 </ion-item>
                             </ion-col>
                             <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
                                 <ion-item>
-                                    <ion-label position="floating">Moneda</ion-label>
+                                    <ion-label position="floating">[T]Moneda</ion-label>
                                     <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar" required>
                                         <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                             {{currency.nameEs}}</ion-select-option>
@@ -47,16 +47,16 @@
                             </ion-col>
                         </ion-row>
                         <ion-item>
-                            <ion-label position="floating">Localizacion</ion-label>
+                            <ion-label position="floating">[T]Localizacion</ion-label>
                             <ion-input formControlName="localization" type="text" required></ion-input>
                         </ion-item>
                         <ion-item>
-                            <ion-label position="floating">Descripción</ion-label>
+                            <ion-label position="floating">[T]Descripción</ion-label>
                             <ion-textarea formControlName="description" required></ion-textarea>
                         </ion-item>
                     </div>
                     <div padding>
-                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">Crear
+                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">[T]Crear
                         </ion-button>
                     </div>
                 </ion-col>

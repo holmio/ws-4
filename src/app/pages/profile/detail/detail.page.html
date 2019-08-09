@@ -4,9 +4,7 @@
   </ion-buttons>
   <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
-      <ion-avatar (click)="presentSheet()">
-        <img [lazyLoad]="(user$ | async)?.avatar" />
-      </ion-avatar>
+      <img (click)="presentSheet()" [lazyLoad]="(user$ | async)?.avatar" />
       <div class="userDetail">
         <ion-label class="phone">
           {{ (user$ | async)?.phone }}
