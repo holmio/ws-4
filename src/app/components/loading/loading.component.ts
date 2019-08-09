@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Actions, ofAction } from '@ngxs/store';
+import { Actions, ofAction, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
 import {
   CheckSessionAction,
   LoginFailedAction,
@@ -58,7 +58,7 @@ export class LoadingComponent implements OnInit {
 
   ngOnInit(): void {
     this.actions.pipe(
-      ofAction(
+      ofActionSuccessful(
         CheckSessionAction,
         SetUserAction,
         SetProductAction,
@@ -79,7 +79,7 @@ export class LoadingComponent implements OnInit {
     });
 
     this.actions.pipe(
-      ofAction(
+      ofActionSuccessful(
         SetUserSuccessAction,
         SetUserFailedAction,
         SetProductSuccessAction,

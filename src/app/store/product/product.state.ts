@@ -80,9 +80,13 @@ export class ProductState {
             loaded: false,
         });
         await this.productService.getProduct(action.uid).subscribe(data => {
-            sc.dispatch(new GetProductSuccessAction(data));
+            setTimeout(() => {
+                sc.dispatch(new GetProductSuccessAction(data));
+            }, 10);
         }, error => {
-            sc.dispatch(new GetProductFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new GetProductFailedAction(error));
+            }, 10);
         });
     }
 
@@ -114,9 +118,13 @@ export class ProductState {
         };
         action.product.uid = state.product.uid;
         await this.productService.updateProduct(action.product).then(() => {
-            sc.dispatch(new UpdateProductSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new UpdateProductSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new UpdateProductFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new UpdateProductFailedAction(error));
+            }, 10);
         });
     }
 
@@ -130,9 +138,13 @@ export class ProductState {
             loaded: false,
         });
         await this.productService.deleteProduct(state.product).then(() => {
-            sc.dispatch(new DeleteProductSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new DeleteProductSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new DeleteProductFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new DeleteProductFailedAction(error));
+            }, 10);
         });
     }
 
@@ -198,9 +210,13 @@ export class ProductState {
         };
         action.product.followers = [];
         await this.productService.setProduct(action.product).then((uid) => {
-            sc.dispatch(new SetProductSuccessAction(uid));
+            setTimeout(() => {
+                sc.dispatch(new SetProductSuccessAction(uid));
+            }, 10);
         }, error => {
-            sc.dispatch(new SetProductFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new SetProductFailedAction(error));
+            }, 10);
         });
     }
 

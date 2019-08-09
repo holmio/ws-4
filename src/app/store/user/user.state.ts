@@ -52,9 +52,13 @@ export class UserState {
             loaded: false,
         });
         this.userService.getUser(action.uid).subscribe((user: User) => {
-            sc.dispatch(new GetUserSuccessAction(user));
+            setTimeout(() => {
+                sc.dispatch(new GetUserSuccessAction(user));
+            }, 10);
         }, error => {
-            sc.dispatch(new GetUserFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new GetUserFailedAction(error));
+            }, 10);
         });
     }
     @Action(GetUserSuccessAction)
@@ -75,9 +79,13 @@ export class UserState {
             loaded: false,
         });
         this.userService.updateAvatar(action.file, state.user.uid).then(() => {
-            sc.dispatch(new UpdateAvatarUserSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new UpdateAvatarUserSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new UpdateAvatarUserFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new UpdateAvatarUserFailedAction(error));
+            }, 10);
         });
     }
     @Action(UpdateAvatarUserSuccessAction)
@@ -98,9 +106,13 @@ export class UserState {
             loaded: false,
         });
         this.userService.updateUser(state.user.uid, action.user).then(() => {
-            sc.dispatch(new UpdateUserSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new UpdateUserSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new UpdateUserFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new UpdateUserFailedAction(error));
+            }, 10);
         });
     }
     @Action(UpdateUserSuccessAction)
@@ -122,10 +134,13 @@ export class UserState {
         });
         console.log(action.user);
         this.userService.setUser(uid, action.user).then((data) => {
-            console.log(data);
-            sc.dispatch(new SetUserSuccessAction(action.user));
+            setTimeout(() => {
+                sc.dispatch(new SetUserSuccessAction(action.user));
+            }, 10);
         }, error => {
-            sc.dispatch(new SetUserFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new SetUserFailedAction(error));
+            }, 10);
         });
     }
 

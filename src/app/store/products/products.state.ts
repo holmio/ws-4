@@ -37,9 +37,13 @@ export class ProductsState {
     async getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
         const state = sc.getState();
         await this.productService.getProducts().subscribe((data) => {
-            sc.dispatch(new GetProductsSuccessAction(data));
+            setTimeout(() => {
+                sc.dispatch(new GetProductsSuccessAction(data));
+            }, 10);
         }, error => {
-            sc.dispatch(new GetProductsFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new GetProductsFailedAction(error));
+            }, 10);
         });
     }
 

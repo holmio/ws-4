@@ -67,10 +67,14 @@ export class AuthState implements NgxsOnInit {
             tap((user: UserInfo) => {
                 if (user) {
                     console.log(`CheckSession: ${user.displayName} is logged in`);
-                    sc.dispatch(new LoginSuccessAction(user.uid));
+                    setTimeout(() => {
+                        sc.dispatch(new LoginSuccessAction(user.uid));
+                    }, 10);
                     return;
                 } else {
-                    sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
+                    setTimeout(() => {
+                        sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
+                    }, 10);
                 }
                 console.log('CheckSession: no user found');
             }));
@@ -82,10 +86,13 @@ export class AuthState implements NgxsOnInit {
     @Action(LoginWithEmailAndPasswordAction)
     async loginWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: LoginWithEmailAndPasswordAction) {
         await this.auth.signInWithEmail(action.email, action.password).then(data => {
-            console.log(data);
-            sc.dispatch(new LoginSuccessAction(data.user.uid));
+            setTimeout(() => {
+                sc.dispatch(new LoginSuccessAction(data.user.uid));
+            }, 10);
         }, error => {
-            sc.dispatch(new LoginFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new LoginFailedAction(error));
+            }, 10);
         });
     }
 
@@ -146,10 +153,14 @@ export class AuthState implements NgxsOnInit {
                 lastSignInTime: null,
                 avatar: '../../assets/images/default-avatar.png',
                 email: data.user.email,
-            }
-            sc.dispatch(new RegisterSuccessAction(userInformation));
+            };
+            setTimeout(() => {
+                sc.dispatch(new RegisterSuccessAction(userInformation));
+            }, 10);
         }, error => {
-            sc.dispatch(new RegisternFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new RegisternFailedAction(error));
+            }, 10);
         });
     }
 
