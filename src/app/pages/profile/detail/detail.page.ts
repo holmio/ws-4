@@ -47,7 +47,7 @@ export class DetailPage implements OnInit {
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         sourceType: this.sourceType,
-      }
+      };
       this.camera.getPicture(configCamera).then((data) => {
         const base64Image = 'data:image/jpeg;base64,' + data;
         this.store.dispatch(new UpdateAvatarUserAction(base64Image));

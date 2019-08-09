@@ -37,7 +37,6 @@ export class ProductState {
     @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
     constructor(
         private productService: ProductService,
-        private navController: NavController,
         private store: Store,
     ) {
 
@@ -112,7 +111,7 @@ export class ProductState {
         // Necessary to get permission to edit table products
         action.product.user = {
             uid: state.product.user.uid,
-        }
+        };
         action.product.uid = state.product.uid;
         await this.productService.updateProduct(action.product).then(() => {
             sc.dispatch(new UpdateProductSuccessAction());
@@ -133,22 +132,17 @@ export class ProductState {
         await this.productService.deleteProduct(state.product).then(() => {
             sc.dispatch(new DeleteProductSuccessAction());
         }, error => {
-            sc.setState({
-                ...state,
-                loaded: true,
-            });
             sc.dispatch(new DeleteProductFailedAction(error));
         });
     }
 
-    @Action([UpdateProductSuccessAction, DeleteProductSuccessAction])
+    @Action([UpdateProductSuccessAction, DeleteProductSuccessAction, DeleteProductFailedAction])
     resetProductSuccess(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
         sc.setState({
             ...state,
             loaded: true,
         });
-        this.navController.back();
     }
 
     // ADD FAVORITE
@@ -165,7 +159,7 @@ export class ProductState {
             sc.dispatch(new AddFavoriteSuccessAction());
         }, error => {
             sc.dispatch(new AddFavoriteFailedAction(error));
-        })
+        });
     }
 
     // REMOVE FAVORITE
@@ -182,7 +176,7 @@ export class ProductState {
             sc.dispatch(new RemoveFavoriteSuccessAction());
         }, error => {
             sc.dispatch(new RemoveFavoriteFailedAction(error));
-        })
+        });
     }
 
     // SET PRODUCT
@@ -217,7 +211,6 @@ export class ProductState {
             ...state,
             loaded: true,
         });
-        this.navController.navigateRoot('product/detail/' + action.uid);
     }
 
     @Action([GetProductFailedAction])

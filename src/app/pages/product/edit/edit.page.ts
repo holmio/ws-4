@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { ProductState, Product, UpdateProductAction } from 'src/app/store/product';
+import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { parseCategoryList } from 'src/app/util/common';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit',
@@ -26,6 +27,8 @@ export class EditPage implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
+    private navController: NavController,
+    private actions: Actions
   ) {
   }
 
@@ -50,6 +53,18 @@ export class EditPage implements OnInit, OnDestroy {
         isSold: [product.isSold || false, Validators.required],
       });
     });
+
+    this.actions.pipe(
+      ofActionDispatched(UpdateProductSuccessAction),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.navController.back();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.complete();
+    this.destroy$.next(false);
   }
 
   update() {
@@ -60,11 +75,6 @@ export class EditPage implements OnInit, OnDestroy {
 
   categorySelected(event: { detail: { value: any; }; }) {
     this.catSelected = [...event.detail.value];
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.complete();
-    this.destroy$.next(false);
   }
 
   private getDirtyValues(form: any) {

@@ -30,7 +30,7 @@ import {
     },
 })
 export class UserState {
-    
+
     constructor(
         private userService: UserService,
     ) {

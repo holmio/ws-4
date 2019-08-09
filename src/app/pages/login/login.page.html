@@ -1,10 +1,10 @@
-<app-header title="Login"></app-header>
+<app-header title="[T]Login"></app-header>
 
 <ion-content no-padding>
   <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
     <div class="main">
       <div class="sub-text-1">
-        Login instantly with
+        [T]Login instantly with
       </div>
       <div class="social">
         <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
@@ -12,31 +12,31 @@
         </ion-button>
       </div>
       <div class="sub-text-2">
-        OR
+          [T]OR
       </div>
       <ion-card no-margin padding>
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
+          <ion-label position="floating">[T]Email</ion-label>
           <ion-input clearInput type="text" formControlName="email">
           </ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">Password</ion-label>
+          <ion-label position="floating">[T]Password</ion-label>
           <ion-input clearInput type="password" formControlName="password">
           </ion-input>
         </ion-item>
         <div class="sub-text-3">
           <div class="check">
-            <ion-checkbox></ion-checkbox> Remember me
+            <ion-checkbox></ion-checkbox> [T]Remember me
           </div>
-          <div class="forgot">Forgot Password ?</div>
+          <div class="forgot">[T]Forgot Password ?</div>
         </div>
         <div class="button">
           <ion-button type="submit" [disabled]="!loginForm.valid" expand="block" class="login-button">Login</ion-button>
         </div>
         <div class="sub-text-4">
-          <ion-text>Don't have an account? - </ion-text>
-          <a routerLink="/registration" routerDirection="forward">Signup here</a>
+          <ion-text>[T]Don't have an account? - </ion-text>
+          <a routerLink="/registration" routerDirection="forward">[T]Signup here</a>
         </div>
       </ion-card>
     </div>

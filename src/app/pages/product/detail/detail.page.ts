@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonRefresher, ModalController } from '@ionic/angular';
+import { IonRefresher, ModalController, NavController } from '@ionic/angular';
 import {
   Actions,
   ofActionDispatched,
   Select,
   Store
-  } from '@ngxs/store';
+} from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import {
   filter,
   takeUntil,
-  } from 'rxjs/operators';
+} from 'rxjs/operators';
 import { ModalSlidersComponent } from 'src/app/components/modal-sliders/modal-sliders.component';
 import { AuthState, LogoutSuccessAction, LoginSuccessAction } from 'src/app/store/auth';
 import {
@@ -20,8 +20,9 @@ import {
   GetProductAction,
   Product,
   ProductState,
-  RemoveFavoriteAction
-  } from 'src/app/store/product';
+  RemoveFavoriteAction,
+  DeleteProductSuccessAction
+} from 'src/app/store/product';
 import { GetProductsSuccessAction } from 'src/app/store/products';
 import { ROUTE } from 'src/app/util/app.routes.const';
 
@@ -50,6 +51,7 @@ export class DetailPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private actions: Actions,
+    private navController: NavController,
     private router: Router,
     private modalController: ModalController,
     private store: Store,
@@ -65,6 +67,7 @@ export class DetailPage implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.isLogin = true;
     });
+
     this.actions.pipe(
       ofActionDispatched(GetProductsSuccessAction),
       takeUntil(this.destroy$)
@@ -73,11 +76,19 @@ export class DetailPage implements OnInit, OnDestroy {
         this.ionRefresh.complete();
       }
     });
+
     this.actions.pipe(
       ofActionDispatched(LogoutSuccessAction, LoginSuccessAction),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.store.dispatch(new GetProductAction(this.id));
+    });
+
+    this.actions.pipe(
+      ofActionDispatched(DeleteProductSuccessAction),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.navController.back();
     });
   }
 

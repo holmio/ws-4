@@ -1,4 +1,4 @@
-<app-header title="Edit Product"></app-header>
+<app-header title="[T]Edit Product"></app-header>
 
 <ion-content *ngIf="(loading$ | async)">
     <form [formGroup]="myGroup" (ngSubmit)="update()">
@@ -7,42 +7,42 @@
                 <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
                     <div padding>
                         <ion-item>
-                            <ion-label position="floating">Nombre</ion-label>
+                            <ion-label position="floating">[T]Nombre</ion-label>
                             <ion-input formControlName="name" type="text" required></ion-input>
                         </ion-item>
                         <ion-item>
-                            <ion-label position="floating">Precio</ion-label>
+                            <ion-label position="floating">[T]Precio</ion-label>
                             <ion-input formControlName="price" type="text" required></ion-input>
                         </ion-item>
                         <ion-item>
-                            <ion-label position="floating">Descripción</ion-label>
+                            <ion-label position="floating">[T]Descripción</ion-label>
                             <ion-textarea formControlName="description" required></ion-textarea>
                         </ion-item>
                         <ion-item>
-                            <ion-label position="floating">Moneda</ion-label>
+                            <ion-label position="floating">[T]Moneda</ion-label>
                             <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar">
                                 <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                     {{currency.nameEs}}</ion-select-option>
                             </ion-select>
                         </ion-item>
                         <ion-item>
-                            <ion-label position="floating">Categoria</ion-label>
+                            <ion-label position="floating">[T]Categoria</ion-label>
                             <ion-select multiple="true" okText="Okay" cancelText="Ocultar" (ionChange)="categorySelected($event)">
                                 <ion-select-option *ngFor="let category of categories" [value]="category.value"
                                     [selected]="category.selected">{{category.nameEs}}</ion-select-option>
                             </ion-select>
                         </ion-item>
                         <ion-item>
-                            <ion-label>Activado</ion-label>
+                            <ion-label>[T]Activado</ion-label>
                             <ion-toggle formControlName="isEnabled"></ion-toggle>
                         </ion-item>
                         <ion-item>
-                            <ion-label>Vendido</ion-label>
+                            <ion-label>[T]Vendido</ion-label>
                             <ion-toggle formControlName="isSold"></ion-toggle>
                         </ion-item>
                     </div>
                     <div padding>
-                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">Guardar
+                        <ion-button size="large" type="submit" [disabled]="!myGroup.valid" expand="block">[T]Guardar
                         </ion-button>
                     </div>
                 </ion-col>

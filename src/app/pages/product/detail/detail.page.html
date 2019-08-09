@@ -1,6 +1,6 @@
 <app-header>
     <ion-buttons header-right-action slot="end">
-        <ng-container *ngIf="!(isUserProduct$ | async) && (loading$ | async)">
+        <ng-container *ngIf="!(isUserProduct$ | async)">
             <ion-button *ngIf="!(isFavorite$ | async)" (click)="addFavorite()">
                 <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
             </ion-button>
@@ -11,7 +11,7 @@
                 <ion-icon mode="ios" size="large" name="chatbubbles"></ion-icon>
             </ion-button>
         </ng-container>
-        <ng-container *ngIf="(isUserProduct$ | async) && (loading$ | async)">
+        <ng-container *ngIf="(isUserProduct$ | async)">
             <ion-button [routerLink]="'/product/edit/' + id" routerDirection="forward">
                 <ion-icon mode="ios" size="large" name="create"></ion-icon>
             </ion-button>
@@ -31,7 +31,7 @@
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>
     </ion-slides>
-    <small class="ion-padding-horizontal">Actualizado: {{(product$ | async)?.timestamp | date }}</small>
+    <small class="ion-padding-horizontal">[T]Actualizado: {{(product$ | async)?.timestamp | date }}</small>
     <ion-grid>
         <ion-row>
             <ion-col>

@@ -1,21 +1,23 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
+import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
-import { SetProductAction, Product } from 'src/app/store/product';
-import { Platform, ActionSheetController } from '@ionic/angular';
+import { SetProductAction, Product, SetProductSuccessAction } from 'src/app/store/product';
+import { Platform, ActionSheetController, NavController } from '@ionic/angular';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.page.html',
   styleUrls: ['./create.page.scss'],
 })
-export class CreatePage implements OnInit {
+export class CreatePage implements OnInit, OnDestroy {
 
   myGroup: FormGroup;
   categories = _.cloneDeep(CATEGORIES);
@@ -28,6 +30,8 @@ export class CreatePage implements OnInit {
   private catSelected: string[] = [];
   private imagesSelected: string[] = [];
   private sourceType: any;
+  private destroy$ = new Subject<boolean>();
+
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
@@ -35,6 +39,8 @@ export class CreatePage implements OnInit {
     private camera: Camera,
     private actionSheetCtrl: ActionSheetController,
     private cdRef: ChangeDetectorRef,
+    private actions: Actions,
+    private navController: NavController,
     private toastService: ToastService,
     private translate: TranslateService,
     private imagePicker: ImagePicker,
@@ -48,6 +54,18 @@ export class CreatePage implements OnInit {
       localization: ['', Validators.required],
       currency: ['DZD', Validators.required],
     });
+
+    this.actions.pipe(
+      ofActionDispatched(SetProductSuccessAction),
+      takeUntil(this.destroy$)
+    ).subscribe((action) => {
+      this.navController.navigateRoot('product/detail/' + action.uid);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.complete();
+    this.destroy$.next(false);
   }
 
   categorySelected(event: { detail: { value: any; }; }) {
