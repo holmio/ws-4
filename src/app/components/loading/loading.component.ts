@@ -1,8 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Actions, ofAction } from '@ngxs/store';
-import { GetUserSuccessAction, GetUserAction } from 'src/app/store/user';
-import { GetProductsAction, GetProductsSuccessAction } from 'src/app/store/products';
+import {
+  CheckSessionAction,
+  LoginFailedAction,
+  LoginSuccessAction,
+  LoginWithEmailAndPasswordAction,
+  LoginWithFacebookAction,
+  RegisternFailedAction,
+  RegisterSuccessAction,
+  RegisterWithEmailAndPasswordAction
+  } from 'src/app/store/auth';
+import {
+  GetProductAction,
+  GetProductFailedAction,
+  GetProductSuccessAction,
+  SetProductAction,
+  SetProductFailedAction,
+  SetProductSuccessAction,
+  DeleteProductAction,
+  UpdateProductAction,
+  DeleteProductSuccessAction,
+  DeleteProductFailedAction,
+  UpdateProductSuccessAction,
+  UpdateProductFailedAction
+  } from 'src/app/store/product';
+import { GetProductsAction, GetProductsFailedAction, GetProductsSuccessAction } from 'src/app/store/products';
+import {
+  GetUserAction,
+  GetUserFailedAction,
+  GetUserSuccessAction,
+  SetUserAction,
+  SetUserFailedAction,
+  SetUserSuccessAction,
+  UpdateAvatarUserAction,
+  UpdateUserAction,
+  UpdateAvatarUserSuccessAction,
+  UpdateAvatarUserFailedAction,
+  UpdateUserSuccessAction,
+  UpdateUserFailedAction
+  } from 'src/app/store/user';
 
 @Component({
   selector: 'app-loading',
@@ -11,7 +48,7 @@ import { GetProductsAction, GetProductsSuccessAction } from 'src/app/store/produ
 export class LoadingComponent implements OnInit {
 
   private count = 0;
-  private loading: any;
+  private spinner: any;
 
   constructor(
     private loadingController: LoadingController,
@@ -20,33 +57,87 @@ export class LoadingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.presentLoading();
     this.actions.pipe(
       ofAction(
+        CheckSessionAction,
+        SetUserAction,
+        SetProductAction,
         GetUserAction,
+        GetProductAction,
         GetProductsAction,
+        LoginWithEmailAndPasswordAction,
+        LoginWithFacebookAction,
+        RegisterWithEmailAndPasswordAction,
+        DeleteProductAction,
+        UpdateAvatarUserAction,
+        UpdateProductAction,
+        UpdateUserAction,
       ),
     ).subscribe(async () => {
       this.count++;
-      await this.loading.present();
+      this.toggleLoading(this.count);
     });
 
     this.actions.pipe(
       ofAction(
+        SetUserSuccessAction,
+        SetUserFailedAction,
+        SetProductSuccessAction,
+        SetProductFailedAction,
         GetUserSuccessAction,
-        GetProductsSuccessAction
+        GetUserFailedAction,
+        GetProductsSuccessAction,
+        GetProductsFailedAction,
+        GetProductSuccessAction,
+        GetProductFailedAction,
+        LoginSuccessAction,
+        LoginFailedAction,
+        RegisterSuccessAction,
+        RegisternFailedAction,
+        DeleteProductSuccessAction,
+        DeleteProductFailedAction,
+        UpdateAvatarUserSuccessAction,
+        UpdateAvatarUserFailedAction,
+        UpdateProductSuccessAction,
+        UpdateProductFailedAction,
+        UpdateUserSuccessAction,
+        UpdateUserFailedAction,
       ),
     ).subscribe(() => {
       this.count--;
-      if (this.count === 0) {
-        this.loading.dismiss();
-      }
+      this.toggleLoading(this.count);
     });
   }
-  private async presentLoading() {
-    this.loading = await this.loadingController.create({
-      message: 'Hellooo',
+
+  private toggleLoading(loadingCount: number) {
+    if (loadingCount > 0) {
+      this.showLoading();
+    } else {
+      this.hideLoading();
+    }
+  }
+
+  private showLoading() {
+    if (this.spinner) {
+      return;
+    }
+
+    this.spinner = new Promise((resolve) => {
+      this.loadingController.create({}).then((spinner) => {
+        spinner.present().then(() => {
+          resolve(spinner);
+        });
+      });
     });
+  }
+
+  private hideLoading() {
+    if (!this.spinner) {
+      return;
+    }
+
+    this.spinner.then(spinner => spinner.dismiss());
+    this.spinner = undefined;
   }
 
 }

@@ -49,6 +49,7 @@ export class EditPage implements OnInit, OnDestroy {
         price: [product.price || '', Validators.required],
         description: [product.description || '', Validators.required],
         currency: [product.currency || 'DZD', Validators.required],
+        category: [product.category || '', Validators.required],
         isEnabled: [product.isEnabled || false, Validators.required],
         isSold: [product.isSold || false, Validators.required],
       });
