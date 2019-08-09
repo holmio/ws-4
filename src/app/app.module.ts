@@ -46,20 +46,20 @@ export function HttpLoaderFactory(http: HttpClient) {
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     NgxsModule.forRoot([],
       { developmentMode: !environment.production }),
-      NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
-      SharedModule.forRoot(),
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      }),
-      AuthModule,
-      UserModule,
-      ProductModule,
-      ProductsModule,
-      AppRoutingModule,
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    SharedModule.forRoot(),
+    AuthModule,
+    UserModule,
+    ProductModule,
+    ProductsModule,
+    AppRoutingModule,
   ],
   providers: [
     StatusBar,
@@ -71,4 +71,4 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

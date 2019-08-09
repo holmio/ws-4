@@ -6,9 +6,12 @@ import { IonicModule } from "@ionic/angular";
 import { HeaderModule } from '../components/header/header.module';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { RouterModule } from '@angular/router';
+import { LoadingModule } from '../components/loading/loading.module';
 
 
 @NgModule({
+  declarations: [],
+  entryComponents: [],
   imports: [
     CommonModule,
     FormsModule,
@@ -18,8 +21,8 @@ import { RouterModule } from '@angular/router';
     HeaderModule,
     LazyLoadImageModule,
     RouterModule,
+    LoadingModule,
   ],
-  declarations: [],
   exports: [
     CommonModule,
     FormsModule,
@@ -29,6 +32,7 @@ import { RouterModule } from '@angular/router';
     HeaderModule,
     LazyLoadImageModule,
     RouterModule,
+    LoadingModule,
   ]
 })
 export class SharedModule {
