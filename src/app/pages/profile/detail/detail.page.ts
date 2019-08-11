@@ -52,7 +52,7 @@ export class DetailPage implements OnInit {
         const base64Image = 'data:image/jpeg;base64,' + data;
         this.store.dispatch(new UpdateAvatarUserAction(base64Image));
       }, (error) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'error');
+        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
       });
     }
   }

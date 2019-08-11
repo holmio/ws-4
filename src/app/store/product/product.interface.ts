@@ -21,6 +21,7 @@ export interface Product {
   isEnabled: boolean;
   isSold?: boolean;
   timestamp: number;
+  creationDate?: number;
   thumbnail?: string;
   user?: UserShortInfo;
   uid?: string;

@@ -5,9 +5,10 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 
 import { Product, ShortProduct } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize, map, mergeMap, take } from 'rxjs/operators';
+import { finalize, map, mergeMap, take, filter } from 'rxjs/operators';
 import { User, UserShortInfo } from '../user/user.interface';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -42,20 +43,26 @@ export class ProductService {
             map(
               (user) => Object.assign({}, { ...product, user: user }
               )
-            ),
-            take(1),
+            )
           )
       ),
-      take(1),
     );
   }
 
-  getProducts(): Observable<any> {
-    return this.productUserCollectionRef.valueChanges().pipe(take(1));
+  getProducts(uidUser = ''): Observable<any> {
+    return this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
+      map(actions => actions.map(a => {
+        let data = a as Product;
+        if (data.uid === uidUser) {
+          data = undefined;
+        }
+        return data;
+      })), take(1)
+    );
   }
 
   getProductsByUser(uid: string): Observable<any[]> {
-    return this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges();
+    return this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges().pipe(take(1));
   }
 
   updateProduct(product: Product): Promise<any> {
@@ -74,8 +81,13 @@ export class ProductService {
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
     // Add gallery to the product
     product.gallery = await this.uploadGallery(product.gallery, product.uid);
-    product.thumbnail = product.gallery[0] || '';
+    product.thumbnail = product.gallery[0] || '';
     batch.set(productColl, product);
+    // Delete unnecessary information
+    delete product.followers;
+    delete product.gallery;
+    delete product.description;
+    delete product.creationDate;
     batch.set(productShortColl, product);
     return new Promise((resolve, reject) => {
       batch.commit().then(() => resolve(product.uid), error => reject(error));
@@ -83,20 +95,12 @@ export class ProductService {
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uidProduct}`);
-    batch.update(productColl, { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
-    batch.update(productShortColl, { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
-    return batch.commit();
+    return productColl.update({ followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${uidProduct}`);
-    batch.update(productColl, { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
-    batch.update(productShortColl, { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
-    return batch.commit();
+    return productColl.update({ followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
   }
 
   async deleteProduct(product: Product) {

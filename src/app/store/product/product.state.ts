@@ -203,6 +203,7 @@ export class ProductState {
         // select the snapshot state from users
         const user = this.store.selectSnapshot(UserState.geUser);
         action.product.timestamp = this.timestamp;
+        action.product.creationDate = this.timestamp;
         action.product.isSold = false;
         action.product.isEnabled = true;
         action.product.user = {

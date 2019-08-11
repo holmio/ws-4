@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Select, Store, Actions, ofActionDispatched, ofAction } from '@ngxs/store';
+import { Select, Store, Actions, ofActionDispatched, ofAction, ofActionSuccessful } from '@ngxs/store';
 import { ProductsState, GetProductsAction, GetProductsSuccessAction } from 'src/app/store/products';
 import { ShortProduct } from 'src/app/store/product/product.interface';
 import { IonRefresher } from '@ionic/angular';
@@ -34,7 +34,7 @@ export class HomePage implements OnInit, OnDestroy {
       }
     });
     this.actions.pipe(
-      ofActionDispatched(GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction),
+      ofActionSuccessful(GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.store.dispatch(new GetProductsAction());

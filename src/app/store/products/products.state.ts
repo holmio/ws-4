@@ -36,7 +36,8 @@ export class ProductsState {
     @Action(GetProductsAction)
     async getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
         const state = sc.getState();
-        await this.productService.getProducts().subscribe((data) => {
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.productService.getProducts(user && user.uid).subscribe((data) => {
             setTimeout(() => {
                 sc.dispatch(new GetProductsSuccessAction(data));
             }, 10);
@@ -50,12 +51,6 @@ export class ProductsState {
     @Action(GetProductsSuccessAction)
     getProductsSuccess(sc: StateContext<ProductsStateModel>, action: GetProductsSuccessAction) {
         const state = sc.getState();
-        const user = this.store.selectSnapshot(UserState.geUser);
-        if (user) {
-            action.products = _.remove(action.products, (n) => {
-                return n.user.uid !== user.uid;
-            });
-        }
         sc.setState({
             ...state,
             products: action.products,

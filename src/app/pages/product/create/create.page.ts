@@ -70,7 +70,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      return this.toastService.show('[T]Necesitas subir minimo una foto del producto');
+      // return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],
@@ -140,7 +140,7 @@ export class CreatePage implements OnInit, OnDestroy {
           this.cdRef.detectChanges();
         }
       }, (err) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'error');
+        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
       });
     }
   }
@@ -162,7 +162,7 @@ export class CreatePage implements OnInit, OnDestroy {
         this.imagesSelected.push(base64Image);
         this.cdRef.detectChanges();
       }, (error) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'error');
+        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
       });
     }
   }
