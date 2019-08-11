@@ -11,6 +11,7 @@ import { Observable, Subject } from 'rxjs';
 import {
   filter,
   takeUntil,
+  take,
 } from 'rxjs/operators';
 import { ModalSlidersComponent } from 'src/app/components/modal-sliders/modal-sliders.component';
 import { AuthState, LogoutSuccessAction, LoginSuccessAction } from 'src/app/store/auth';
@@ -61,20 +62,16 @@ export class DetailPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new GetProductAction(this.id));
+    this.product$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((data) => {
+      console.log(data);
+    })
     this.uid$.pipe(
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.isLogin = true;
-    });
-
-    this.actions.pipe(
-      ofActionDispatched(GetProductsSuccessAction),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      if (this.ionRefresh) {
-        this.ionRefresh.complete();
-      }
     });
 
     this.actions.pipe(

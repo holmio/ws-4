@@ -47,7 +47,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.complete();
-    this.destroy$.next(false);
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

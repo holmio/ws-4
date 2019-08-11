@@ -23,9 +23,6 @@
 </app-header>
 
 <ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullFactor="0.8" pullMin="60" pullMax="120">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
     <ion-slides mode="md" pager="md" [options]="slideOpts">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
             <img class="swiper-lazy" [lazyLoad]="image">
