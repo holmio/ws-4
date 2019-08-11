@@ -29,7 +29,7 @@ export class SetProductFailedAction {
 // UPDATE PRODUCT
 export class UpdateProductAction {
   static type = '[Product] UpdateProduct';
-  constructor(public product: Product) { }
+  constructor(public product: Product, public imagesToDelete: string[]) { }
 }
 export class UpdateProductSuccessAction {
   static type = '[Product] UpdateProductSuccess';

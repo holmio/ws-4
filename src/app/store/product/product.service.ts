@@ -3,12 +3,14 @@ import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { Product, ShortProduct } from './product.interface';
+import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize, map, mergeMap, take, filter } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { User, UserShortInfo } from '../user/user.interface';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import * as _ from 'lodash';
+import { isUrl } from 'src/app/util/common';
+import { ToastService } from 'src/app/services/toast/toast.services';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +30,7 @@ export class ProductService {
     private storage: AngularFireStorage,
     private afStore: AngularFirestore,
     private storageService: StorageService,
+    private toast: ToastService,
   ) {
     this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
     this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
@@ -59,11 +62,25 @@ export class ProductService {
     return this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges().pipe(take(1));
   }
 
-  updateProduct(product: Product): Promise<any> {
+  getFavoritesByUser(uid: string): Observable<any[]> {
+    return this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('followers', 'array-contains', uid)).valueChanges();
+  }
+
+  async updateProduct(product: Product, imagesToDelete: string[]): Promise<any> {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
     const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    // Delete file from firestorage
+    await this.deleteGallery(imagesToDelete);
+    // Upload gallery to firestorage and firestore the url
+    product.gallery = await this.uploadGallery(product.gallery, product.uid);
+    product.thumbnail = product.gallery[0] || '';
     batch.update(productColl, product);
+    // Delete unnecessary information
+    delete product.followers;
+    delete product.gallery;
+    delete product.description;
+    delete product.creationDate;
     batch.update(productShortColl, product);
     return batch.commit();
   }
@@ -107,27 +124,37 @@ export class ProductService {
     return batch.commit();
   }
 
-  async uploadGallery(gallery: string[], productUid: string): Promise<any> {
+  private async uploadGallery(gallery: string[], productUid: string): Promise<any> {
     let galleryUploaded: string[] = [];
     let count = 0;
     for (const value of gallery) {
-      const filePath: string = `gallery/${productUid}_${count}.jpg`;
-      const fileRef = this.storage.ref(filePath);
-      const file = await this.storageService.uploadContent(value, filePath, fileRef)
-      galleryUploaded.push(file);
+      if (!isUrl(value)) {
+        const filePath: string = `gallery/${productUid}_${count}.jpg`;
+        const fileRef = this.storage.ref(filePath);
+        try {
+          const file = await this.storageService.uploadContent(value, filePath, fileRef)
+          galleryUploaded.push(file);
+        } catch (error) {
+          this.toast.show(`No se ha podido subir la imagen ${error}`, 'warning', '', 5000)
+        }
+      } else {
+        galleryUploaded.push(value);
+      }
       count++;
     }
     return galleryUploaded;
   }
 
-  async deleteGallery(gallery: string[]): Promise<any> {
+  private async deleteGallery(gallery: string[]): Promise<any> {
     for (const url of gallery) {
       const fileRef = await this.storage.storage.refFromURL(url);
-      await fileRef.delete();
+      try {
+        await fileRef.delete();
+      } catch (error) {
+        this.toast.show(`Algo fue mal eliminando la imagen ${error}`, 'warning', '', 5000)
+      }
     }
   }
-
-
 
   private uuidv4() {
     return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

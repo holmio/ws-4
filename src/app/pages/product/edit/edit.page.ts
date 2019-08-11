@@ -1,13 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
 import { Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { parseCategoryList } from 'src/app/util/common';
+import { isUrl } from 'src/app/util/common';
 import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
-import { NavController } from '@ionic/angular';
+import { NavController, ActionSheetController, Platform } from '@ionic/angular';
+import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from 'src/app/services/toast/toast.services';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
   selector: 'app-edit',
@@ -21,11 +25,20 @@ export class EditPage implements OnInit, OnDestroy {
   myGroup: FormGroup;
   categories = _.cloneDeep(CATEGORIES);
   currencies = _.cloneDeep(CURRENCIES);
+  gallery: string[] = [];
+  imagesToDelete: string[] = [];
+  private sourceType: any;
   private destroy$ = new Subject<boolean>();
 
-  private catSelected: string[] = [];
   constructor(
     private formBuilder: FormBuilder,
+    private imagePicker: ImagePicker,
+    private actionSheetCtrl: ActionSheetController,
+    private cdRef: ChangeDetectorRef,
+    private toastService: ToastService,
+    private platform: Platform,
+    private camera: Camera,
+    private translate: TranslateService,
     private store: Store,
     private navController: NavController,
     private actions: Actions
@@ -36,7 +49,7 @@ export class EditPage implements OnInit, OnDestroy {
 
     this.product$.pipe(
       filter(data => !!data),
-      takeUntil(this.destroy$)
+      take(1),
     ).subscribe(product => {
       // Filter categories
       this.categories.filter(category => {
@@ -44,6 +57,7 @@ export class EditPage implements OnInit, OnDestroy {
           category.selected = true;
         }
       });
+      this.gallery = [...product.gallery];
       this.myGroup = this.formBuilder.group({
         name: [product.name || '', Validators.required],
         price: [product.price || '', Validators.required],
@@ -56,10 +70,12 @@ export class EditPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionDispatched(UpdateProductSuccessAction),
+      ofActionDispatched(UpdateProductAction),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      this.navController.back();
+      setTimeout(() => {
+        this.navController.back();
+      }, 100);
     });
   }
 
@@ -69,13 +85,105 @@ export class EditPage implements OnInit, OnDestroy {
   }
 
   update() {
-    const finalProduct: Product = this.getDirtyValues(this.myGroup) as any;
-    finalProduct.category = Object.assign(parseCategoryList(this.catSelected));
-    this.store.dispatch(new UpdateProductAction(finalProduct));
+    const finalProduct: Product = {
+      ...this.getDirtyValues(this.myGroup) as any,
+      gallery: [...this.gallery],
+    };
+    setTimeout(() => {
+      this.store.dispatch(new UpdateProductAction(finalProduct, this.imagesToDelete));
+    }, 100);
   }
 
-  categorySelected(event: { detail: { value: any; }; }) {
-    this.catSelected = [...event.detail.value];
+  /**
+   * Method to delete the picture selected
+   * @param index number of picture
+   */
+  deletePicture(index: number) {
+    // If the picture deleted is the thumbnail then we generate a new thumbnail of the second picture of the gallery
+    this.cdRef.detectChanges();
+    // To delete old picture from gallery is it necessary to have the url not base64
+    if(isUrl(this.gallery[index])) {
+      this.imagesToDelete.push(this.gallery[index]);
+    }
+    this.gallery.splice(index, 1);
+    this.cdRef.detectChanges();
+  }
+
+  /**
+   * Present an action sheet to slelect the mode to upload the picture
+   */
+  async presentSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: this.translate.instant('TAKE_PICTURE_SELECT_METHOD_OF_IMAGE_TITEL'),
+      buttons: [
+        {
+          text: this.translate.instant('TAKE_PICTURE_BUTTON_IMAGE'),
+          icon: 'image',
+          handler: () => {
+            this.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
+            this.selectFromGallery();
+          }
+        },
+        {
+          text: this.translate.instant('TAKE_PICTURE_BUTTON_CAMERA'),
+          icon: 'camera',
+          handler: () => {
+            this.sourceType = this.camera.PictureSourceType.CAMERA;
+            this.takePicture();
+          }
+        },
+        {
+          text: this.translate.instant('COMMON_BUTTON_CANCEL'),
+          role: 'cancel',
+          icon: 'close-circle',
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  private selectFromGallery() {
+    if (this.platform.is('cordova')) {
+      const configCamera: ImagePickerOptions = {
+        width: 600,
+        height: 600,
+        quality: 70,
+        maximumImagesCount: 4 - this.gallery.length,
+        outputType: 1,
+      };
+
+      this.imagePicker.getPictures(configCamera).then((pictures) => {
+        for (const picture of pictures) {
+          const base64Image = 'data:image/jpeg;base64,' + picture;
+          this.gallery.push(base64Image);
+          this.cdRef.detectChanges();
+        }
+      }, (err) => {
+        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
+      });
+    }
+  }
+
+  private takePicture() {
+    if (this.platform.is('cordova')) {
+      const configCamera: CameraOptions = {
+        destinationType: this.camera.DestinationType.DATA_URL,
+        targetWidth: 400,
+        targetHeight: 400,
+        quality: 70,
+        correctOrientation: true,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        sourceType: this.sourceType,
+      };
+      this.camera.getPicture(configCamera).then((data) => {
+        const base64Image = 'data:image/jpeg;base64,' + data;
+        this.gallery.push(base64Image);
+        this.cdRef.detectChanges();
+      }, (error) => {
+        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
+      });
+    }
   }
 
   private getDirtyValues(form: any) {

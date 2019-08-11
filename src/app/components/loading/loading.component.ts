@@ -58,7 +58,7 @@ export class LoadingComponent implements OnInit {
 
   ngOnInit(): void {
     this.actions.pipe(
-      ofActionSuccessful(
+      ofAction(
         CheckSessionAction,
         SetUserAction,
         SetProductAction,
@@ -79,7 +79,7 @@ export class LoadingComponent implements OnInit {
     });
 
     this.actions.pipe(
-      ofActionSuccessful(
+      ofAction(
         SetUserSuccessAction,
         SetUserFailedAction,
         SetProductSuccessAction,
@@ -113,6 +113,7 @@ export class LoadingComponent implements OnInit {
     if (loadingCount > 0) {
       this.showLoading();
     } else {
+      this.count = 0;
       this.hideLoading();
     }
   }

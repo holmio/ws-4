@@ -27,7 +27,7 @@ export class CreatePage implements OnInit, OnDestroy {
     subHeader: '[T]Selecciona la categoria de tu producto',
     cssClass: '[T]category-sheet'
   };
-  private imagesSelected: string[] = [];
+  imagesSelected: string[] = [];
   private sourceType: any;
   private destroy$ = new Subject<boolean>();
 
@@ -70,7 +70,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      // return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
+      return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],

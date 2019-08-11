@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonRefresher, ModalController, NavController } from '@ionic/angular';
+import { IonRefresher, ModalController, NavController, IonSlides } from '@ionic/angular';
 import {
   Actions,
   ofActionDispatched,
@@ -22,7 +22,8 @@ import {
   Product,
   ProductState,
   RemoveFavoriteAction,
-  DeleteProductSuccessAction
+  DeleteProductSuccessAction,
+  UpdateProductSuccessAction
 } from 'src/app/store/product';
 import { GetProductsSuccessAction } from 'src/app/store/products';
 import { ROUTE } from 'src/app/util/app.routes.const';
@@ -41,14 +42,14 @@ export class DetailPage implements OnInit, OnDestroy {
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
   id: string;
-  slideOpts = {
+  slideOpts  = {
     centeredSlides: true,
     preloadImages: false,
     lazy: true,
   };
+  
   private isLogin = false;
   private destroy$ = new Subject<boolean>();
-  private ionRefresh: IonRefresher;
   constructor(
     private route: ActivatedRoute,
     private actions: Actions,
@@ -87,11 +88,6 @@ export class DetailPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-  }
-
-  doRefresh(event) {
-    this.store.dispatch(new GetProductAction(this.id));
-    this.ionRefresh = event.target;
   }
 
   addFavorite() {

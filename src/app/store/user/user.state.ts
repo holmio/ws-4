@@ -152,7 +152,9 @@ export class UserState {
             user: action.user,
             loaded: true,
         });
-        sc.dispatch(new LoginSuccessAction(action.user.uid));
+        setTimeout(() => {
+            sc.dispatch(new LoginSuccessAction(action.user.uid));
+        }, 10);
     }
     @Action([GetUserFailedAction, LogoutSuccessAction])
     resetUserState(sc: StateContext<UserStateModel>) {

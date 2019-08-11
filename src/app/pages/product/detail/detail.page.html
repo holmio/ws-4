@@ -23,7 +23,7 @@
 </app-header>
 
 <ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
-    <ion-slides mode="md" pager="md" [options]="slideOpts">
+    <ion-slides mode="md" pager="md" [options]="slideOpts" *ngIf="(product$ | async)?.gallery">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>

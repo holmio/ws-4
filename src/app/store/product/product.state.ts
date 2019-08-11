@@ -117,7 +117,7 @@ export class ProductState {
             uid: state.product.user.uid,
         };
         action.product.uid = state.product.uid;
-        await this.productService.updateProduct(action.product).then(() => {
+        await this.productService.updateProduct(action.product, action.imagesToDelete).then(() => {
             setTimeout(() => {
                 sc.dispatch(new UpdateProductSuccessAction());
             }, 10);
