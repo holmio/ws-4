@@ -99,7 +99,9 @@ export class AuthState implements NgxsOnInit {
     @Action(LogoutAction)
     async logout(sc: StateContext<AuthStateModel>) {
         return this.afAuth.auth.signOut().then(() => {
-            sc.dispatch(new LogoutSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new LogoutSuccessAction());
+            }, 10);
         });
     }
 
@@ -111,7 +113,9 @@ export class AuthState implements NgxsOnInit {
             uid: action.uid,
             loaded: true,
         });
-        sc.dispatch(new GetUserAction(action.uid));
+        setTimeout(() => {
+            sc.dispatch(new GetUserAction(action.uid));
+        }, 10);
     }
 
     /**********************************
@@ -131,12 +135,18 @@ export class AuthState implements NgxsOnInit {
                     email: data.user.email,
                     favorites: [],
                 };
-                sc.dispatch(new SetUserAction(userInformation));
+                setTimeout(() => {
+                    sc.dispatch(new SetUserAction(userInformation));
+                }, 10);
             } else {
-                sc.dispatch(new LoginSuccessAction(data.user.uid));
+                setTimeout(() => {
+                    sc.dispatch(new LoginSuccessAction(data.user.uid));
+                }, 10);
             }
         }, error => {
-            sc.dispatch(new LoginFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new LoginFailedAction(error));
+            }, 10);
         });
     }
 
@@ -173,7 +183,9 @@ export class AuthState implements NgxsOnInit {
             uid: action.user.uid,
             loaded: true,
         });
-        sc.dispatch(new SetUserAction(action.user));
+        setTimeout(() => {
+            sc.dispatch(new SetUserAction(action.user));
+        }, 10);
     }
     @Action([LoginFailedAction, LogoutSuccessAction, RegisternFailedAction])
     resetAuthState(sc: StateContext<AuthStateModel>) {

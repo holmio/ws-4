@@ -62,7 +62,7 @@
             <ion-col>
                 <ion-item lines="none">
                     <ion-avatar slot="start">
-                        <img [lazyLoad]="(product$ | async)?.user.avatar.downloadUrl" />
+                        <img [lazyLoad]="(product$ | async)?.user.avatar" />
                     </ion-avatar>
                     <ion-label>{{(product$ | async)?.user.name}}</ion-label>
                 </ion-item>

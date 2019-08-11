@@ -4,7 +4,7 @@ import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +31,7 @@ export class LoginPage implements OnInit, OnDestroy {
     });
     this.actions.pipe(
       ofActionDispatched(LoginSuccessAction),
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe(() => {
       this.navController.back();
     });

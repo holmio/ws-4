@@ -51,13 +51,7 @@ export class ProductService {
 
   getProducts(uidUser = ''): Observable<any> {
     return this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
-      map(actions => actions.map(a => {
-        let data = a as Product;
-        if (data.uid === uidUser) {
-          data = undefined;
-        }
-        return data;
-      })), take(1)
+      map(actions => actions.filter((data:Product) => data.user.uid !== uidUser)), take(1)
     );
   }
 

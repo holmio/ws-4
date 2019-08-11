@@ -62,11 +62,6 @@ export class DetailPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new GetProductAction(this.id));
-    this.product$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe((data) => {
-      console.log(data);
-    })
     this.uid$.pipe(
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
@@ -83,7 +78,7 @@ export class DetailPage implements OnInit, OnDestroy {
 
     this.actions.pipe(
       ofActionDispatched(DeleteProductSuccessAction),
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe(() => {
       this.navController.back();
     });

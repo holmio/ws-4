@@ -168,9 +168,13 @@ export class ProductState {
                 ...state,
                 isFavorite: true,
             });
-            sc.dispatch(new AddFavoriteSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new AddFavoriteSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new AddFavoriteFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new AddFavoriteFailedAction(error));
+            }, 10);
         });
     }
 
@@ -185,9 +189,13 @@ export class ProductState {
                 ...state,
                 isFavorite: false,
             });
-            sc.dispatch(new RemoveFavoriteSuccessAction());
+            setTimeout(() => {
+                sc.dispatch(new RemoveFavoriteSuccessAction());
+            }, 10);
         }, error => {
-            sc.dispatch(new RemoveFavoriteFailedAction(error));
+            setTimeout(() => {
+                sc.dispatch(new RemoveFavoriteFailedAction(error));
+            }, 10);
         });
     }
 
