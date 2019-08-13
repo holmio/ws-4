@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
+import { APP_CONST } from 'src/app/util/app.constants';
 import { SetProductAction, Product, SetProductSuccessAction } from 'src/app/store/product';
 import { Platform, ActionSheetController, NavController } from '@ionic/angular';
 import * as _ from 'lodash';
@@ -20,8 +20,8 @@ import { Subject } from 'rxjs';
 export class CreatePage implements OnInit, OnDestroy {
 
   myGroup: FormGroup;
-  categories = _.cloneDeep(CATEGORIES);
-  currencies = _.cloneDeep(CURRENCIES);
+  categories = _.cloneDeep(APP_CONST.categories);
+  currencies = _.cloneDeep(APP_CONST.currencies);
   customActionSheetOptions: any = {
     header: '[T]Categorias',
     subHeader: '[T]Selecciona la categoria de tu producto',

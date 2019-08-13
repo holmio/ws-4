@@ -6,11 +6,12 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { map, mergeMap, take } from 'rxjs/operators';
-import { User, UserShortInfo } from '../user/user.interface';
+import { UserShortInfo } from '../user/user.interface';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import * as _ from 'lodash';
 import { isUrl } from 'src/app/util/common';
 import { ToastService } from 'src/app/services/toast/toast.services';
+import { APP_CONST } from 'src/app/util/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +19,7 @@ import { ToastService } from 'src/app/services/toast/toast.services';
 export class ProductService {
 
   private productCollectionRef: AngularFirestoreCollection<any>;
-  private productUserCollectionRef: AngularFirestoreCollection<any>;
-  private userCollectionRef: AngularFirestoreCollection<any>;
   private userShortInfoCollectionRef: AngularFirestoreCollection<any>;
-  private PRODUCTS = 'products';
-  private PRODUCTS_BY_USER = 'productsByUser';
-  private USERS = 'users';
-  private USERS_SHORT_INFO = 'userShortInfo';
 
   constructor(
     private storage: AngularFireStorage,
@@ -32,10 +27,8 @@ export class ProductService {
     private storageService: StorageService,
     private toast: ToastService,
   ) {
-    this.productCollectionRef = this.afStore.collection<Product>(this.PRODUCTS);
-    this.productUserCollectionRef = this.afStore.collection<Product>(this.PRODUCTS_BY_USER);
-    this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(this.USERS_SHORT_INFO);
-    this.userCollectionRef = this.afStore.collection<User>(this.USERS);
+    this.productCollectionRef = this.afStore.collection<Product>(APP_CONST.db.products);
+    this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.users_detail);
   }
 
   getProduct(uid: string): Observable<any> {
@@ -44,8 +37,7 @@ export class ProductService {
         this.userShortInfoCollectionRef.doc(product.user.uid).valueChanges()
           .pipe(
             map(
-              (user) => Object.assign({}, { ...product, user: user }
-              )
+              (user) => Object.assign({}, { ...product, user: user })
             )
           )
       ),
@@ -53,23 +45,16 @@ export class ProductService {
   }
 
   getProducts(uidUser = ''): Observable<any> {
-    return this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
-      map(actions => actions.filter((data:Product) => data.user.uid !== uidUser)), take(1)
+    return this.afStore.collection(APP_CONST.db.products_detail, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
+      map(actions => actions.filter((data: Product) => data.user.uid !== uidUser)), take(1)
     );
-  }
-
-  getProductsByUser(uid: string): Observable<any[]> {
-    return this.userCollectionRef.doc(uid).collection(this.PRODUCTS_BY_USER).valueChanges().pipe(take(1));
-  }
-
-  getFavoritesByUser(uid: string): Observable<any[]> {
-    return this.afStore.collection(this.PRODUCTS_BY_USER, ref => ref.where('followers', 'array-contains', uid)).valueChanges();
   }
 
   async updateProduct(product: Product, imagesToDelete: string[]): Promise<any> {
     const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${APP_CONST.db.products_detail}/${product.uid}`);
+    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${product.uid}`);
     // Delete file from firestorage
     await this.deleteGallery(imagesToDelete);
     // Upload gallery to firestorage and firestore the url
@@ -82,14 +67,18 @@ export class ProductService {
     delete product.description;
     delete product.creationDate;
     batch.update(productShortColl, product);
+    delete product.category;
+    delete product.user;
+    batch.update(favoriteProductsColl, product);
     return batch.commit();
   }
 
   async setProduct(product: Product): Promise<any> {
     product.uid = this.uuidv4();
     const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${APP_CONST.db.products_detail}/${product.uid}`);
+    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${product.uid}`);
     // Add gallery to the product
     product.gallery = await this.uploadGallery(product.gallery, product.uid);
     product.thumbnail = product.gallery[0] || '';
@@ -100,26 +89,31 @@ export class ProductService {
     delete product.description;
     delete product.creationDate;
     batch.set(productShortColl, product);
+    delete product.category;
+    delete product.user;
+    batch.set(favoriteProductsColl, product);
     return new Promise((resolve, reject) => {
       batch.commit().then(() => resolve(product.uid), error => reject(error));
     });
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
-    return productColl.update({ followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
+    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${uidProduct}`);
+    return favoriteProductsColl.update({ followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${uidProduct}`);
-    return productColl.update({ followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
+    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${uidProduct}`);
+    return favoriteProductsColl.update({ followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
   }
 
   async deleteProduct(product: Product) {
     const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc(`${this.PRODUCTS}/${product.uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${this.PRODUCTS_BY_USER}/${product.uid}`);
+    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${product.uid}`);
+    const productShortColl = this.afStore.firestore.doc(`${APP_CONST.db.products_detail}/${product.uid}`);
+    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${product.uid}`);
     batch.delete(productColl);
     batch.delete(productShortColl);
+    batch.delete(favoriteProductsColl);
     await this.deleteGallery(product.gallery)
     return batch.commit();
   }

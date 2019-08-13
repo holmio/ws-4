@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
+import { ProductState, Product, UpdateProductAction } from 'src/app/store/product';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { isUrl } from 'src/app/util/common';
-import { CATEGORIES, CURRENCIES } from 'src/app/util/app.constants';
+import { APP_CONST } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
 import { NavController, ActionSheetController, Platform } from '@ionic/angular';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
@@ -23,8 +23,8 @@ export class EditPage implements OnInit, OnDestroy {
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getProduct) product$: Observable<Product>;
   myGroup: FormGroup;
-  categories = _.cloneDeep(CATEGORIES);
-  currencies = _.cloneDeep(CURRENCIES);
+  categories = _.cloneDeep(APP_CONST.categories);
+  currencies = _.cloneDeep(APP_CONST.currencies);
   gallery: string[] = [];
   imagesToDelete: string[] = [];
   private sourceType: any;

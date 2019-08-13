@@ -3,7 +3,6 @@ import { User } from 'src/app/store/user/user.interface';
 import { Select, Store } from '@ngxs/store';
 import { UserState, UpdateAvatarUserAction } from 'src/app/store/user';
 import { Observable } from 'rxjs';
-import { ShortProduct, ProductService } from 'src/app/store/product';
 import { Platform, ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
@@ -17,14 +16,12 @@ import { ToastService } from 'src/app/services/toast/toast.services';
 export class DetailPage implements OnInit {
 
   @Select(UserState.geUser) user$: Observable<User | undefined>;
-  favorites$: Observable<any>;
   selectSegment = 'products';
   private sourceType: any;
 
   constructor(
     private platform: Platform,
     private camera: Camera,
-    private productService: ProductService,
     private actionSheetCtrl: ActionSheetController,
     private toastService: ToastService,
     private translate: TranslateService,
@@ -32,7 +29,6 @@ export class DetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.favorites$ = this.productService.getFavoritesByUser()
   }
 
   takePicture() {
