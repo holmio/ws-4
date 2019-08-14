@@ -16,6 +16,8 @@ export interface User {
     localization?: string;
     myProducts?: Product[];
     favorites?: Product[];
+    willaya?: string;
+    daira?: string;
   }
   
   export interface ProductsUser {

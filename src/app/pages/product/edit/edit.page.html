@@ -31,7 +31,7 @@
                         </ion-item>
                         <ion-item>
                             <ion-label position="floating">[T]Moneda</ion-label>
-                            <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar">
+                            <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar" interface="action-sheet">
                                 <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                     {{currency.nameEs}}</ion-select-option>
                             </ion-select>

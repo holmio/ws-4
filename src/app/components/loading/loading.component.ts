@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Actions, ofAction, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
+import { Actions, ofAction, ofActionDispatched, ofActionSuccessful, ofActionCompleted } from '@ngxs/store';
 import {
   CheckSessionAction,
   LoginFailedAction,
@@ -58,7 +58,7 @@ export class LoadingComponent implements OnInit {
 
   ngOnInit(): void {
     this.actions.pipe(
-      ofAction(
+      ofActionDispatched(
         CheckSessionAction,
         SetUserAction,
         SetProductAction,
@@ -75,36 +75,30 @@ export class LoadingComponent implements OnInit {
       ),
     ).subscribe(async () => {
       this.count++;
+      console.log('I: ' + this.count);
       this.toggleLoading(this.count);
     });
 
     this.actions.pipe(
-      ofAction(
-        SetUserSuccessAction,
-        SetUserFailedAction,
-        SetProductSuccessAction,
-        SetProductFailedAction,
-        GetUserSuccessAction,
-        GetUserFailedAction,
-        GetProductsSuccessAction,
-        GetProductsFailedAction,
-        GetProductSuccessAction,
-        GetProductFailedAction,
-        LoginSuccessAction,
-        LoginFailedAction,
-        RegisterSuccessAction,
-        RegisternFailedAction,
-        DeleteProductSuccessAction,
-        DeleteProductFailedAction,
-        UpdateAvatarUserSuccessAction,
-        UpdateAvatarUserFailedAction,
-        UpdateProductSuccessAction,
-        UpdateProductFailedAction,
-        UpdateUserSuccessAction,
-        UpdateUserFailedAction,
+      ofActionCompleted(
+        CheckSessionAction,
+        SetUserAction,
+        SetProductAction,
+        GetUserAction,
+        GetProductAction,
+        GetProductsAction,
+        LoginWithEmailAndPasswordAction,
+        LoginWithFacebookAction,
+        RegisterWithEmailAndPasswordAction,
+        DeleteProductAction,
+        UpdateAvatarUserAction,
+        UpdateProductAction,
+        UpdateUserAction,
       ),
-    ).subscribe(() => {
+    ).subscribe((actions) => {
       this.count--;
+      console.log('D: ' + this.count);
+      console.log(actions);
       this.toggleLoading(this.count);
     });
   }
@@ -113,7 +107,6 @@ export class LoadingComponent implements OnInit {
     if (loadingCount > 0) {
       this.showLoading();
     } else {
-      this.count = 0;
       this.hideLoading();
     }
   }
@@ -133,6 +126,7 @@ export class LoadingComponent implements OnInit {
   }
 
   private hideLoading() {
+    this.count = 0;
     if (!this.spinner) {
       return;
     }

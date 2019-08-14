@@ -9,22 +9,21 @@
         <ion-label class="phone">
           {{ (user$ | async)?.phone }}
         </ion-label>
-        <div class="info">
-          <ion-text>[T]Productos: {{(user$ | async)?.myProducts.length}}</ion-text>
-          <ion-text>[T]Favoritos: {{(user$ | async)?.favorites.length}}</ion-text>
-        </div>
       </div>
     </div>
   </ion-toolbar>
   <ion-toolbar color="primary">
     <ion-segment [(ngModel)]="selectSegment">
       <ion-segment-button value="products" class="segmentButton" color="light">
+        <ion-badge color="primary" mode="md">{{(user$ | async)?.myProducts.length}}</ion-badge>
         <ion-label>[T]Productos</ion-label>
       </ion-segment-button>
       <ion-segment-button value="favorites" color="light">
+        <ion-badge color="primary" mode="md">{{(user$ | async)?.favorites.length}}</ion-badge>
         <ion-label>[T]Favoritos</ion-label>
       </ion-segment-button>
       <ion-segment-button value="messages" color="light">
+        <ion-badge color="primary" mode="md">0</ion-badge>
         <ion-label>[T]Mensajes</ion-label>
       </ion-segment-button>
     </ion-segment>

@@ -25,6 +25,8 @@ export interface Product {
   thumbnail?: string;
   user?: UserShortInfo;
   uid?: string;
+  willaya?: string;
+  daira?: string;
 }
 
 export interface ShortProduct {
