@@ -59,7 +59,6 @@ export class LoadingComponent implements OnInit {
   ngOnInit(): void {
     this.actions.pipe(
       ofActionDispatched(
-        CheckSessionAction,
         SetUserAction,
         SetProductAction,
         GetUserAction,
@@ -81,7 +80,6 @@ export class LoadingComponent implements OnInit {
 
     this.actions.pipe(
       ofActionCompleted(
-        CheckSessionAction,
         SetUserAction,
         SetProductAction,
         GetUserAction,

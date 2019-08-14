@@ -5,7 +5,8 @@ import {
   Actions,
   ofActionDispatched,
   Select,
-  Store
+  Store,
+  ofActionSuccessful
 } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import {
@@ -78,7 +79,7 @@ export class DetailPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionDispatched(DeleteProductSuccessAction),
+      ofActionSuccessful(DeleteProductAction),
       take(1)
     ).subscribe(() => {
       this.navController.back();

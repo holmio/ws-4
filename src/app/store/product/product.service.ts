@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 
 import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { map, mergeMap, take } from 'rxjs/operators';
+import { map, mergeMap, take, first } from 'rxjs/operators';
 import { UserShortInfo } from '../user/user.interface';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import * as _ from 'lodash';
@@ -46,7 +46,7 @@ export class ProductService {
 
   getProducts(uidUser = ''): Observable<any> {
     return this.afStore.collection(APP_CONST.db.products_detail, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
-      map(actions => actions.filter((data: Product) => data.user.uid !== uidUser)), take(1)
+      map(actions => actions.filter((data: Product) => data.user.uid !== uidUser))
     );
   }
 

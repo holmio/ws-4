@@ -37,9 +37,7 @@ export class EditPage implements OnInit, OnDestroy {
       filter(data => !!data),
       takeUntil(this.destroy$)
     ).subscribe(user => {
-      if (user.willaya) {
-        this.dairas = [..._.find(this.willayas, { value: user.willaya }).dairas];
-      }
+      this.getDaira(user.willaya);
       this.myGroup = this.formBuilder.group({
         name: [user.name || '', Validators.required],
         phone: [user.phone || '', Validators.required],
@@ -68,10 +66,17 @@ export class EditPage implements OnInit, OnDestroy {
 
   onChangeWillaya(event) {
     const willayaSelected = event.target.value;
-    this.dairas = [];
-    this.dairas = [..._.find(this.willayas, { value: willayaSelected }).dairas];
+    this.getDaira(willayaSelected);
     this.myGroup.controls['daira'].enable();
     console.log(this.dairas);
+  }
+
+  private getDaira(willaya: string) {
+    if (!willaya) {
+      return;
+    }
+    this.dairas = [];
+    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
   }
 
 }
