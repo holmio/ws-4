@@ -1,6 +1,8 @@
 import { Product } from '../product';
 
 export interface ProductsStateModel {
-  products: Product[];
+  products?: Product[];
+  myProducts: Product[];
+  favoriteProducts: Product[];
   loaded: boolean;
 }

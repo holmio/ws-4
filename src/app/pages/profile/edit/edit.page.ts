@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, Select, Actions, ofActionDispatched } from '@ngxs/store';
+import { Store, Select, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { User } from 'src/app/store/user/user.interface';
@@ -48,7 +48,7 @@ export class EditPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionDispatched(UpdateUserSuccessAction),
+      ofActionSuccessful(UpdateUserSuccessAction),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.navController.back();

@@ -41,11 +41,6 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  doRefresh(event) {
-    this.store.dispatch(new GetProductsAction());
-    this.ionRefresh = event.target;
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();

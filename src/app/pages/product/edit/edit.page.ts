@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { ProductState, Product, UpdateProductAction } from 'src/app/store/product';
+import { Select, Store, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
+import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -70,7 +70,7 @@ export class EditPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionDispatched(UpdateProductAction),
+      ofActionSuccessful(UpdateProductSuccessAction),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       setTimeout(() => {

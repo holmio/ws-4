@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginWithEmailAndPasswordAction, LoginWithFacebookAction, LoginSuccessAction } from 'src/app/store/auth';
-import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { Store, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Subject } from 'rxjs';
@@ -30,7 +30,7 @@ export class LoginPage implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
     this.actions.pipe(
-      ofActionDispatched(LoginSuccessAction),
+      ofActionSuccessful(LoginSuccessAction),
       take(1)
     ).subscribe(() => {
       this.navController.back();

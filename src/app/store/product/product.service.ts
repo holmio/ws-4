@@ -50,31 +50,35 @@ export class ProductService {
     );
   }
 
+  getMyProducts(uidUser: string): Observable<any> {
+    return this.afStore.collection(APP_CONST.db.products_detail, ref => ref.where('user.uid', '==', uidUser)).valueChanges()
+  }
+  
+  getFavoriteProductsByUid(uidUser: string): Observable<any> {
+    return this.afStore.collection(APP_CONST.db.favorite_products, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges()
+  }
+
   async updateProduct(product: Product, imagesToDelete: string[]): Promise<any> {
-    const batch = this.afStore.firestore.batch();
-    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${product.uid}`);
-    const productShortColl = this.afStore.firestore.doc(`${APP_CONST.db.products_detail}/${product.uid}`);
-    const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${product.uid}`);
-    // Delete file from firestorage
-    await this.deleteGallery(imagesToDelete);
-    // Upload gallery to firestorage and firestore the url
-    product.gallery = await this.uploadGallery(product.gallery, product.uid);
-    product.thumbnail = product.gallery[0] || '';
-    batch.update(productColl, product);
-    // Delete unnecessary information
-    delete product.followers;
-    delete product.gallery;
-    delete product.description;
-    delete product.creationDate;
-    batch.update(productShortColl, product);
-    delete product.category;
-    delete product.user;
-    batch.update(favoriteProductsColl, product);
+    try {
+      if (imagesToDelete.length > 0) {
+        await this.deleteGallery(imagesToDelete);
+      }
+    } catch (error) {
+      return;
+    }
+    const batch = await this.handelProductData(product, 'update');
     return batch.commit();
   }
 
   async setProduct(product: Product): Promise<any> {
     product.uid = this.uuidv4();
+    const batch = await this.handelProductData(product, 'set');
+    return new Promise((resolve, reject) => {
+      batch.commit().then(() => resolve(product.uid), error => reject(error));
+    });
+  }
+
+  private async handelProductData(product: Product, action: 'set' | 'update') {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${product.uid}`);
     const productShortColl = this.afStore.firestore.doc(`${APP_CONST.db.products_detail}/${product.uid}`);
@@ -82,28 +86,48 @@ export class ProductService {
     // Add gallery to the product
     product.gallery = await this.uploadGallery(product.gallery, product.uid);
     product.thumbnail = product.gallery[0] || '';
-    batch.set(productColl, product);
+    if (action === 'set') {
+      batch.set(productColl, product);
+    } else {
+      batch.update(productColl, product);
+    }
     // Delete unnecessary information
     delete product.followers;
     delete product.gallery;
     delete product.description;
     delete product.creationDate;
-    batch.set(productShortColl, product);
+    if (action === 'set') {
+      batch.set(productShortColl, product);
+    } else {
+      batch.update(productShortColl, product);
+    }
     delete product.category;
     delete product.user;
-    batch.set(favoriteProductsColl, product);
-    return new Promise((resolve, reject) => {
-      batch.commit().then(() => resolve(product.uid), error => reject(error));
-    });
+    if (action === 'set') {
+      batch.set(favoriteProductsColl, product);
+    } else {
+      batch.update(favoriteProductsColl, product);
+    }
+    return batch;
   }
 
   addFavorite(uidUser: string, uidProduct: string): Promise<any> {
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${uidProduct}`);
-    return favoriteProductsColl.update({ followers: firebase.firestore.FieldValue.arrayUnion(uidUser) });
+    const addFollower = { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) };
+    batch.update(productColl, addFollower);
+    batch.update(favoriteProductsColl, addFollower);
+    return batch.commit();
   }
   removeFavorite(uidUser: string, uidProduct: string): Promise<any> {
+    const batch = this.afStore.firestore.batch();
+    const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favorite_products}/${uidProduct}`);
-    return favoriteProductsColl.update({ followers: firebase.firestore.FieldValue.arrayRemove(uidUser) });
+    const addFollower = { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) };
+    batch.update(productColl, addFollower);
+    batch.update(favoriteProductsColl, addFollower);
+    return batch.commit();
   }
 
   async deleteProduct(product: Product) {
