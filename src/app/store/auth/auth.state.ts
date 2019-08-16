@@ -87,7 +87,7 @@ export class AuthState implements NgxsOnInit {
     async loginWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: LoginWithEmailAndPasswordAction) {
         await this.auth.signInWithEmail(action.email, action.password).then(data => {
             setTimeout(() => {
-                sc.dispatch(new LoginSuccessAction(data.user.uid));
+                sc.dispatch(new LoginSuccessAction(data.userUid));
             }, 10);
         }, error => {
             setTimeout(() => {
@@ -128,7 +128,7 @@ export class AuthState implements NgxsOnInit {
             // If the user is new, we create a new account
             if (data.additionalUserInfo.isNewUser) {
                 const userInformation: User = {
-                    uid: data.user.uid,
+                    uid: data.userUid,
                     name: data.user.displayName,
                     lastSignInTime: null,
                     avatar: data.user.photoUR,
@@ -140,7 +140,7 @@ export class AuthState implements NgxsOnInit {
                 }, 10);
             } else {
                 setTimeout(() => {
-                    sc.dispatch(new LoginSuccessAction(data.user.uid));
+                    sc.dispatch(new LoginSuccessAction(data.userUid));
                 }, 10);
             }
         }, error => {
@@ -158,7 +158,7 @@ export class AuthState implements NgxsOnInit {
         await this.auth.createUserWithEmailAndPassword(action.email, action.password).then(data => {
             console.log(data);
             const userInformation: User = {
-                uid: data.user.uid,
+                uid: data.userUid,
                 name: action.name,
                 lastSignInTime: null,
                 avatar: '../../assets/images/default-avatar.png',

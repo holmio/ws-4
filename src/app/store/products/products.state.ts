@@ -76,11 +76,13 @@ export class ProductsState {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         await this.productService.getMyProducts(user.uid).subscribe((products) => {
-            sc.setState({
-                ...state,
-                myProducts: products,
-                loaded: true,
-            });
+            setTimeout(() => {
+                sc.setState({
+                    ...state,
+                    myProducts: products,
+                    loaded: true,
+                });
+            }, 500);
         }, error => {
             console.log(error);
         });

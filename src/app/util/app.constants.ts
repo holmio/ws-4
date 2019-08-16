@@ -1,11 +1,11 @@
 
 export const APP_CONST = {
     db: {
-        products_detail: 'productsByUser',
+        productsDetail: 'productsDetail',
         users: 'users',
         products: 'products',
-        users_detail: 'userShortInfo',
-        favorite_products: 'favoriteProducts',
+        usersDetail: 'userShortInfo',
+        favoriteProducts: 'favoriteProducts',
     },
     categories: [
         { value: 'coches', nameEs: 'Coches', nameAr: '[AR]Coches', selected: false },

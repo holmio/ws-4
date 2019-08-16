@@ -33,7 +33,10 @@ export class DetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch([new GetMyProductsAction, new GetFavoriteProductsAction])
+    this.store.dispatch([
+      new GetMyProductsAction(),
+      new GetFavoriteProductsAction()
+    ]);
   }
 
   takePicture() {

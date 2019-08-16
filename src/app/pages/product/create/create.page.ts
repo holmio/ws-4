@@ -22,6 +22,8 @@ export class CreatePage implements OnInit, OnDestroy {
   myGroup: FormGroup;
   categories = _.cloneDeep(APP_CONST.categories);
   currencies = _.cloneDeep(APP_CONST.currencies);
+  willayas = _.cloneDeep(APP_CONST.willayas);
+  dairas = [];
   customActionSheetOptions: any = {
     header: '[T]Categorias',
     subHeader: '[T]Selecciona la categoria de tu producto',
@@ -50,7 +52,8 @@ export class CreatePage implements OnInit, OnDestroy {
       name: ['', Validators.required],
       price: ['', Validators.required],
       description: ['', Validators.required],
-      localization: ['', Validators.required],
+      willaya: ['', Validators.required],
+      daira: [{ value: '', disabled: true}, Validators.required],
       currency: ['DZD', Validators.required],
       category: ['', Validators.required],
     });
@@ -70,7 +73,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
+      // return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],
@@ -88,6 +91,20 @@ export class CreatePage implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
     this.imagesSelected.splice(index, 1);
     this.cdRef.detectChanges();
+  }
+
+  onChangeWillaya(event) {
+    const willayaSelected = event.target.value;
+    this.getDaira(willayaSelected);
+    this.myGroup.controls['daira'].enable();
+  }
+
+  private getDaira(willaya: string) {
+    if (!willaya) {
+      return;
+    }
+    this.dairas = [];
+    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
   }
 
   /**

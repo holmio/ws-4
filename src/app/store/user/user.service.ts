@@ -22,17 +22,21 @@ export class UserService {
     private storageService: StorageService
   ) {
     this.userCollectionRef = this.afStore.collection<User>(APP_CONST.db.users);
-    this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.users_detail);
+    this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.usersDetail);
   }
 
   getUser(uid: string): Observable<any> {
     return this.userCollectionRef.doc(uid).valueChanges();
   }
 
+  getShortUser(uid: string): Observable<any> {
+    return this.userShortInfoCollectionRef.doc(uid).valueChanges();
+  }
+
   setUser(uid: string, userInformation: User): Promise<any> {
     const batch = this.afStore.firestore.batch();
     const usersColl = this.afStore.firestore.doc(`${APP_CONST.db.users}/${uid}`);
-    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.users_detail}/${uid}`);
+    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.usersDetail}/${uid}`);
     batch.set(usersColl, userInformation);
     const userShortInfo: UserShortInfo = {
       avatar: userInformation.avatar,
@@ -46,7 +50,7 @@ export class UserService {
   updateUser(uid: string, user: User): Promise<any> {
     const batch = this.afStore.firestore.batch();
     const usersColl = this.afStore.firestore.doc(`${APP_CONST.db.users}/${uid}`);
-    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.users_detail}/${uid}`);
+    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.usersDetail}/${uid}`);
     batch.update(usersColl, user);
     batch.update(usertShortColl, user);
     return batch.commit();

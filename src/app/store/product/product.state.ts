@@ -62,7 +62,7 @@ export class ProductState {
 
     @Selector([AuthState])
     static getIsUserProduct(productState: ProductStateModel, authState: AuthStateModel) {
-        return productState.product.user.uid === authState.uid;
+        return productState.product.userUid === authState.uid;
     }
 
     @Selector()
@@ -113,9 +113,7 @@ export class ProductState {
         });
         action.product.timestamp = this.timestamp;
         // Necessary to get permission to edit table products
-        action.product.user = {
-            uid: state.product.user.uid,
-        };
+        action.product.userUid = state.product.userUid;
         action.product.uid = state.product.uid;
         await this.productService.updateProduct(action.product, action.imagesToDelete).then(() => {
             setTimeout(() => {
@@ -214,9 +212,7 @@ export class ProductState {
         action.product.creationDate = this.timestamp;
         action.product.isSold = false;
         action.product.isEnabled = true;
-        action.product.user = {
-            uid: user.uid,
-        };
+        action.product.userUid = user.uid;
         action.product.followers = [];
         await this.productService.setProduct(action.product).then((uid) => {
             setTimeout(() => {

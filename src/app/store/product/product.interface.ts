@@ -23,7 +23,7 @@ export interface Product {
   timestamp: number;
   creationDate?: number;
   thumbnail?: string;
-  user?: UserShortInfo;
+  userUid: string;
   uid?: string;
   willaya?: string;
   daira?: string;

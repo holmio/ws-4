@@ -48,12 +48,22 @@
                             </ion-col>
                         </ion-row>
                         <ion-item>
-                            <ion-label position="floating">[T]Localizacion</ion-label>
-                            <ion-input formControlName="localization" type="text" required></ion-input>
-                        </ion-item>
-                        <ion-item>
                             <ion-label position="floating">[T]Descripción</ion-label>
                             <ion-textarea formControlName="description" required></ion-textarea>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">[T]Lugar donde lo vendes</ion-label>
+                            <ion-select formControlName="willaya" cancelText="Ocultar" interface="action-sheet" (ionChange)="onChangeWillaya($event)">
+                                <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
+                                    {{willaya.nameEs}}</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">[T]Elige Daira</ion-label>
+                            <ion-select formControlName="daira" cancelText="Ocultar" interface="action-sheet">
+                                <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
+                                    {{daira.nameEs}}</ion-select-option>
+                            </ion-select>
                         </ion-item>
                     </div>
                     <div class="ion-padding-horizontal">

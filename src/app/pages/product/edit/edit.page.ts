@@ -25,6 +25,13 @@ export class EditPage implements OnInit, OnDestroy {
   myGroup: FormGroup;
   categories = _.cloneDeep(APP_CONST.categories);
   currencies = _.cloneDeep(APP_CONST.currencies);
+  willayas = _.cloneDeep(APP_CONST.willayas);
+  dairas = [];
+  customActionSheetOptions: any = {
+    header: '[T]Categorias',
+    subHeader: '[T]Selecciona la categoria de tu producto',
+    cssClass: '[T]category-sheet'
+  };
   gallery: string[] = [];
   imagesToDelete: string[] = [];
   private sourceType: any;
@@ -57,6 +64,7 @@ export class EditPage implements OnInit, OnDestroy {
           category.selected = true;
         }
       });
+      this.getDaira(product.willaya);
       this.gallery = [...product.gallery];
       this.myGroup = this.formBuilder.group({
         name: [product.name || '', Validators.required],
@@ -65,6 +73,8 @@ export class EditPage implements OnInit, OnDestroy {
         currency: [product.currency || 'DZD', Validators.required],
         category: [product.category || '', Validators.required],
         isEnabled: [product.isEnabled || false, Validators.required],
+        willaya: [product.willaya || '', Validators.required],
+        daira: [{ value: product.daira || '', disabled: !product.willaya}, Validators.required],
         isSold: [product.isSold || false, Validators.required],
       });
     });
@@ -107,6 +117,20 @@ export class EditPage implements OnInit, OnDestroy {
     }
     this.gallery.splice(index, 1);
     this.cdRef.detectChanges();
+  }
+
+  onChangeWillaya(event) {
+    const willayaSelected = event.target.value;
+    this.getDaira(willayaSelected);
+    this.myGroup.controls['daira'].enable();
+  }
+
+  private getDaira(willaya: string) {
+    if (!willaya) {
+      return;
+    }
+    this.dairas = [];
+    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
   }
 
   /**
