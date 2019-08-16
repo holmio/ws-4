@@ -1,11 +1,13 @@
-import { UserShortInfo } from '../user/user.interface';
+import { UserShortInfo } from '../user';
 
 export interface ProductStateModel {
   isUserProduct: boolean;
   isFavorite: boolean;
   product: Product;
+  userInfo: UserShortInfo;
   loaded: boolean;
 }
+
 export interface ProductsStateModel {
   products: Product;
   loaded: boolean;

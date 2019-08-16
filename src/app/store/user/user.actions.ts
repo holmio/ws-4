@@ -2,7 +2,7 @@ import { User } from './user.interface';
 
 // GET
 export class GetUserAction {
-  static type = '[User] GetUserData';
+  static type = '[User] GetUser';
   constructor(public uid: string) {}
 }
 export class GetUserSuccessAction {

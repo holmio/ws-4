@@ -24,10 +24,13 @@ import {
   ProductState,
   RemoveFavoriteAction,
   DeleteProductSuccessAction,
-  UpdateProductSuccessAction
+  UpdateProductSuccessAction,
+  GetUserProductAction,
+  GetProductSuccessAction
 } from 'src/app/store/product';
 import { GetProductsSuccessAction } from 'src/app/store/products';
 import { ROUTE } from 'src/app/util/app.routes.const';
+import { UserShortInfo } from 'src/app/store/user';
 
 @Component({
   selector: 'app-detail',
@@ -38,17 +41,18 @@ export class DetailPage implements OnInit, OnDestroy {
 
   @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getIsFavorite) isFavorite$: Observable<boolean>;
+  @Select(ProductState.getUserOfProduct) ownerOfProduct$: Observable<UserShortInfo>;
   @Select(ProductState.getProduct) product$: Observable<Product>;
   @Select(ProductState.getIsUserProduct) isUserProduct$: Observable<boolean>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
   id: string;
-  slideOpts  = {
+  slideOpts = {
     centeredSlides: true,
     preloadImages: false,
     lazy: true,
   };
-  
+
   private isLogin = false;
   private destroy$ = new Subject<boolean>();
   constructor(
@@ -63,7 +67,9 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new GetProductAction(this.id));
+    setTimeout(() => {
+      this.store.dispatch(new GetProductAction(this.id));
+    }, 500);
     this.uid$.pipe(
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
@@ -72,10 +78,10 @@ export class DetailPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionDispatched(LogoutSuccessAction, LoginSuccessAction),
-      takeUntil(this.destroy$)
+      ofActionSuccessful(GetProductSuccessAction),
+      take(1)
     ).subscribe(() => {
-      this.store.dispatch(new GetProductAction(this.id));
+      this.store.dispatch(new GetUserProductAction());
     });
 
     this.actions.pipe(

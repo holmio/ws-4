@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { Action, Select, Selector, State, StateContext, Store } from '@ngxs/store';
 
-import { AuthState, AuthStateModel } from '../auth';
+import { AuthState, AuthStateModel, LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import {
     GetProductAction, GetProductFailedAction, GetProductSuccessAction, SetProductAction,
     SetProductFailedAction, SetProductSuccessAction, UpdateProductAction, UpdateProductFailedAction,
@@ -16,18 +16,21 @@ import {
     RemoveFavoriteFailedAction,
     DeleteProductAction,
     DeleteProductSuccessAction,
-    DeleteProductFailedAction
+    DeleteProductFailedAction,
+    GetUserProductAction
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
 import { UserState } from '../user';
 import * as _ from 'lodash';
+import { UserService } from '../user/user.service';
 
 @State<ProductStateModel>({
     name: 'product',
     defaults: {
         isUserProduct: false,
         isFavorite: false,
+        userInfo: null,
         product: null,
         loaded: false,
     },
@@ -37,6 +40,7 @@ export class ProductState {
     @Select(AuthState.getUid) uidUser$: Observable<string | undefined>;
     constructor(
         private productService: ProductService,
+        private userService: UserService,
         private store: Store,
     ) {
 
@@ -58,6 +62,11 @@ export class ProductState {
     @Selector()
     static getIsFavorite(productState: ProductStateModel) {
         return productState.isFavorite;
+    }
+
+    @Selector()
+    static getUserOfProduct(productState: ProductStateModel) {
+        return productState.userInfo;
     }
 
     @Selector([AuthState])
@@ -96,9 +105,23 @@ export class ProductState {
         const user = this.store.selectSnapshot(UserState.geUser);
         sc.setState({
             ...state,
-            isFavorite: (user && !!_.includes(action.product.followers, user.uid)) || false,
             product: action.product,
             loaded: true,
+        });
+    }
+
+    // GET USER INFO
+
+    @Action(GetUserProductAction)
+    async getUserInfo(sc: StateContext<ProductStateModel>) {
+        const state = sc.getState();
+        await this.userService.getShortUserInfo(state.product.userUid).subscribe(data => {
+            sc.setState({
+                ...state,
+                userInfo: data,
+            });
+        }, error => {
+            console.log(error);
         });
     }
 
@@ -234,12 +257,24 @@ export class ProductState {
         });
     }
 
+    @Action([LogoutSuccessAction, LoginSuccessAction, GetProductSuccessAction])
+    checkFavoriteProductState(sc: StateContext<ProductStateModel>) {
+        const user = this.store.selectSnapshot(UserState.geUser);
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            isFavorite: (user && !!_.includes(state.product.followers, user.uid)) || false,
+            loaded: true
+        });
+    }
+
     @Action([GetProductFailedAction])
     resetProductState(sc: StateContext<ProductStateModel>) {
         sc.setState({
             isUserProduct: false,
             isFavorite: false,
             product: null,
+            userInfo: null,
             loaded: false
         });
     }

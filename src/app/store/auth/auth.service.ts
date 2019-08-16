@@ -16,7 +16,7 @@ export class AuthService {
   private user: firebase.User;
   private userCollectionRef: AngularFirestoreCollection<any>;
 
-	constructor(
+  constructor(
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
     private fb: Facebook,
@@ -25,17 +25,17 @@ export class AuthService {
     this.userCollectionRef = this.afStore.collection<User>('users');
   }
 
-	signInWithEmail(email: string, password: string): Promise<any> {
+  signInWithEmail(email: string, password: string): Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-	createUserWithEmailAndPassword(email: string, password: string): Promise<any> {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email,password);
-	}
+  createUserWithEmailAndPassword(email: string, password: string): Promise<any> {
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+  }
 
-	signOut(): Promise<void> {
-		return this.afAuth.auth.signOut();
-	}
+  signOut(): Promise<void> {
+    return this.afAuth.auth.signOut();
+  }
 
   async signInWithFacebook(): Promise<any> {
     if (this.platform.is('cordova')) {
@@ -46,7 +46,7 @@ export class AuthService {
       return this.oauthSignIn(new auth.FacebookAuthProvider());
     }
   }
-	private oauthSignIn(provider: AuthProvider): Promise<any> {
-		return this.afAuth.auth.signInWithPopup(provider);
-	}
+  private oauthSignIn(provider: AuthProvider): Promise<any> {
+    return this.afAuth.auth.signInWithPopup(provider);
+  }
 }

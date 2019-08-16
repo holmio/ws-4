@@ -73,3 +73,8 @@ export class RemoveFavoriteFailedAction {
   constructor(public error: any) { }
 }
 
+// GET USER INFO
+
+export class GetUserProductAction {
+  static type = '[Product] GetUserProduct';
+}

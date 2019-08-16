@@ -32,16 +32,7 @@ export class ProductService {
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges().pipe(
-      mergeMap((product: Product) =>
-        this.userShortInfoCollectionRef.doc(product.userUid).valueChanges()
-          .pipe(
-            map(
-              (user) => Object.assign({}, { ...product, user: user })
-            )
-          )
-      ),
-    );
+    return this.productCollectionRef.doc(uid).valueChanges();
   }
 
   getProducts(uidUser = ''): Observable<any> {
