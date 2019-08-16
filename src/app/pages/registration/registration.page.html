@@ -1,37 +1,37 @@
-<app-header title="[T]Register"></app-header>
-<ion-content text-center center>
-    <div class="content">
-      <div class="top">
-        <div class="logo">
-          <img src="../../../../assets/beach.png" />
-        </div>
-        <ion-text class="title" color="light">[T]Canvas</ion-text>
+<app-header color="transparent"></app-header>
+<ion-content text-center center fullscreen class="gradientBackground">
+  <div class="content">
+    <div class="top">
+      <div class="logo">
+        <img src="../../../../assets/beach.png" />
       </div>
-      <div class="bottom" padding-horizontal>
-        <div class="content-list">
-          <form [formGroup]="registerForm" (submit)="onSubmit()">
-            <ion-card no-margin padding>
-              <ion-item lines="none">
-                <ion-label position="floating">[T]Full Name</ion-label>
-                <ion-input type="text" formControlName="name" padding-start></ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label position="floating">[T]Email</ion-label>
-                <ion-input type="email" formControlName="email" padding-start></ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label position="floating">[T]Password</ion-label>
-                <ion-input type="password" formControlName="password" padding-start></ion-input>
-              </ion-item>
-              <ion-button [disabled]="!registerForm.valid" type="submit" expand="block">[T]Register</ion-button>
-            </ion-card>
-          </form>
-        </div>
-        <div class="loginBtn" margin-vertical>
-          <ion-text class="font-small">[T]Already have an account?<span ion-text class="link">
-              [T]Click here</span>
-          </ion-text>
-        </div>
+      <ion-text class="title" color="light">[T]Canvas</ion-text>
+    </div>
+    <div class="bottom" padding-horizontal>
+      <div class="content-list">
+        <form [formGroup]="registerForm" (submit)="onSubmit()">
+          <ion-item color="transparent">
+            <ion-label position="floating">[T]Full Name</ion-label>
+            <ion-input type="text" formControlName="name" padding-start></ion-input>
+          </ion-item>
+          <ion-item color="transparent">
+            <ion-label position="floating">[T]Email</ion-label>
+            <ion-input type="email" formControlName="email" padding-start inputmode="email" required></ion-input>
+          </ion-item>
+          <ion-item color="transparent">
+            <ion-label position="floating">[T]Password</ion-label>
+            <ion-input type="password" formControlName="password" padding-start inputmode="password" required></ion-input>
+          </ion-item>
+          <div class="button" class="ion-padding-top">
+            <ion-button fill="outline" color="light" size="large" [disabled]="!registerForm.valid" type="submit" expand="block">[T]Register</ion-button>
+          </div>
+        </form>
+      </div>
+      <div class="loginBtn" margin-vertical>
+        <ion-text class="font-small">[T]Already have an account?<span ion-text class="link">
+            [T]Click here</span>
+        </ion-text>
       </div>
     </div>
-  </ion-content>
+  </div>
+</ion-content>

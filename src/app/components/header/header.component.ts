@@ -9,6 +9,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() title: string;
   @Input() showBackButton = true;
+  @Input() color = 'primary';
 
   constructor() { }
 

@@ -1,6 +1,6 @@
-<app-header title="[T]Login"></app-header>
+<app-header color="transparent"></app-header>
 
-<ion-content no-padding>
+<ion-content fullscreen no-padding class="gradientBackground">
   <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
     <div class="main">
       <div class="sub-text-1">
@@ -8,37 +8,33 @@
       </div>
       <div class="social">
         <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
-          <ion-icon mode="ios" color="tertiary" size="large" name="logo-facebook"></ion-icon>
+          <ion-icon mode="ios" color="light" size="large" name="logo-facebook"></ion-icon>
         </ion-button>
       </div>
       <div class="sub-text-2">
           [T]OR
       </div>
-      <ion-card no-margin padding>
-        <ion-item>
+        <ion-item color="transparent">
           <ion-label position="floating">[T]Email</ion-label>
-          <ion-input clearInput type="text" formControlName="email">
+          <ion-input type="email" formControlName="email" inputmode="email" required>
           </ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item color="transparent">
           <ion-label position="floating">[T]Password</ion-label>
-          <ion-input clearInput type="password" formControlName="password">
+          <ion-input type="password" formControlName="password" inputmode="password" required>
           </ion-input>
         </ion-item>
-        <div class="sub-text-3">
-          <div class="check">
-            <ion-checkbox></ion-checkbox> [T]Remember me
-          </div>
+        <div class="sub-text-4">
           <div class="forgot">[T]Forgot Password ?</div>
         </div>
         <div class="button">
-          <ion-button type="submit" [disabled]="!loginForm.valid" expand="block" class="login-button">Login</ion-button>
+          <ion-button fill="outline" color="light" type="submit" size="large" [disabled]="!loginForm.valid" expand="block" class="login-button">Login</ion-button>
         </div>
         <div class="sub-text-4">
-          <ion-text>[T]Don't have an account? - </ion-text>
-          <a routerLink="/registration" routerDirection="forward">[T]Signup here</a>
+          <ion-button color="light" fill="outline" routerLink="/registration" routerDirection="forward">
+              [T]Signup here
+          </ion-button>
         </div>
-      </ion-card>
     </div>
   </form>
 </ion-content>

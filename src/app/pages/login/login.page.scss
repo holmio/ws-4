@@ -1,3 +1,6 @@
+ion-content {
+  --background: linear-gradient(0deg, rgba(226, 145, 71, 1) 0%, rgba(219, 58, 52, 1) 100%);
+}
 form {
   .main {
     padding: 20px;
@@ -6,7 +9,7 @@ form {
     justify-content: space-evenly;
     height: 90vh;
     font-family: sans-serif;
-  
+
     .logo {
       text-align: center;
       font-size: 48px;
@@ -14,6 +17,17 @@ form {
       padding: 30px;
     }
 
+    ion-item {
+      --highlight-color-invalid: var(--ion-color-dark);
+      --color: var(--ion-color-light);
+      --color-activated: var(--ion-color-light);
+      ion-label {
+        font-size: 18px !important;
+      }
+      ion-input {
+        font-size: 22px !important;
+      }
+    }
 
     .radio {
       display: flex;
@@ -31,28 +45,27 @@ form {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        img {
-          width: 30px;
+        ion-icon {
+          height: 50px;
+          width: 50px;
         }
       }
     }
-  
+
     .sub-text-1 {
-      color: #999;
+      color: #fff;
       text-align: center;
       font-size: 14px;
       letter-spacing: 1px;
     }
     .sub-text-2 {
-      color: #999;
+      color: #fff;
       padding-top: 20px;
       text-align: center;
       font-size: 14px;
     }
     .sub-text-3 {
-      color: #999;
+      color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -69,11 +82,9 @@ form {
       }
     }
     .sub-text-4 {
-      color: #999;
+      color: #fff;
       text-align: center;
       font-size: 14px;
     }
   }
-
 }
-
