@@ -15,11 +15,11 @@
   <ion-toolbar color="primary">
     <ion-segment [(ngModel)]="selectSegment">
       <ion-segment-button value="products" class="segmentButton" color="light">
-        <ion-badge color="primary" mode="md">{{(user$ | async)?.myProducts.length}}</ion-badge>
+        <ion-badge color="primary" mode="md">{{(products$ | async)?.length}}</ion-badge>
         <ion-label>[T]Productos</ion-label>
       </ion-segment-button>
       <ion-segment-button value="favorites" color="light">
-        <ion-badge color="primary" mode="md">{{(user$ | async)?.favorites.length}}</ion-badge>
+        <ion-badge color="primary" mode="md">{{(favorites$ | async)?.length}}</ion-badge>
         <ion-label>[T]Favoritos</ion-label>
       </ion-segment-button>
       <ion-segment-button value="messages" color="light">
@@ -33,14 +33,14 @@
 <ion-content fullscreen>
   <ion-grid *ngIf="selectSegment == 'products'">
     <ion-row>
-      <ion-col size="6" *ngFor="let product of (user$ | async)?.myProducts">
+      <ion-col size="6" *ngFor="let product of (products$ | async)">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
     </ion-row>
   </ion-grid>
   <ion-grid *ngIf="selectSegment == 'favorites'">
     <ion-row>
-      <ion-col size="6" *ngFor="let product of (user$ | async)?.favorites">
+      <ion-col size="6" *ngFor="let product of (favorites$ | async)">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
     </ion-row>

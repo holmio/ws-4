@@ -12,3 +12,10 @@ export class GetProductsFailedAction {
   static type = '[Products] GetProductsFailed';
   constructor(public error: any) { }
 }
+
+export class GetMyProductsAction {
+  static type = '[Products] GetMyProducts';
+}
+export class GetFavoriteProductsAction {
+  static type = '[Products] GetFavoriteProducts';
+}

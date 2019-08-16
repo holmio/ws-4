@@ -3,17 +3,22 @@ import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import {
     GetProductsAction,
     GetProductsSuccessAction,
-    GetProductsFailedAction
+    GetProductsFailedAction,
+    GetMyProductsAction,
+    GetFavoriteProductsAction
 } from './products.actions';
 import * as _ from 'lodash';
 import { ProductService } from '../product/product.service';
 import { UserState } from '../user';
 import { ProductsStateModel } from './products.interface';
+import { LogoutSuccessAction } from '../auth';
 
 @State<ProductsStateModel>({
     name: 'products',
     defaults: {
-        products: null,
+        products: [],
+        myProducts: [],
+        favoriteProducts: [],
         loaded: false,
     },
 })
@@ -29,6 +34,14 @@ export class ProductsState {
     @Selector()
     static getAllProducts(state: ProductsStateModel) {
         return state.products || null;
+    }
+    @Selector()
+    static getMyProducts(state: ProductsStateModel) {
+        return state.myProducts || null;
+    }
+    @Selector()
+    static getFavoriteProducts(state: ProductsStateModel) {
+        return state.favoriteProducts || null;
     }
 
     // GET PRODUCTS
@@ -55,6 +68,43 @@ export class ProductsState {
             ...state,
             products: action.products,
             loaded: true,
+        });
+    }
+
+    @Action(GetMyProductsAction)
+    async getMyProducts(sc: StateContext<ProductsStateModel>) {
+        const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.productService.getMyProducts(user.uid).subscribe((products) => {
+            sc.setState({
+                ...state,
+                myProducts: products,
+                loaded: true,
+            });
+        }, error => {
+            console.log(error);
+        });
+    }
+    @Action(GetFavoriteProductsAction)
+    async getFavoriteProducts(sc: StateContext<ProductsStateModel>) {
+        const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.productService.getFavoriteProductsByUid(user.uid).subscribe((products) => {
+            sc.setState({
+                ...state,
+                favoriteProducts: products,
+                loaded: true,
+            });
+        }, error => {
+            console.log(error);
+        });
+    }
+    @Action([LogoutSuccessAction])
+    resetProductsState(sc: StateContext<ProductsStateModel>) {
+        sc.setState({
+            myProducts: [],
+            favoriteProducts: [],
+            loaded: true
         });
     }
 }

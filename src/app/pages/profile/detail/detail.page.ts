@@ -7,6 +7,8 @@ import { Platform, ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ToastService } from 'src/app/services/toast/toast.services';
+import { Product } from 'src/app/store/product';
+import { GetFavoriteProductsAction, ProductsState, GetMyProductsAction } from 'src/app/store/products';
 
 @Component({
   selector: 'app-detail',
@@ -16,9 +18,11 @@ import { ToastService } from 'src/app/services/toast/toast.services';
 export class DetailPage implements OnInit {
 
   @Select(UserState.geUser) user$: Observable<User | undefined>;
+  @Select(ProductsState.getMyProducts) products$: Observable<Product | undefined>;
+  @Select(ProductsState.getFavoriteProducts) favorites$: Observable<Product | undefined>;
   selectSegment = 'products';
+  messages$: Observable<any>;
   private sourceType: any;
-
   constructor(
     private platform: Platform,
     private camera: Camera,
@@ -29,6 +33,7 @@ export class DetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.store.dispatch([new GetMyProductsAction, new GetFavoriteProductsAction])
   }
 
   takePicture() {

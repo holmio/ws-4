@@ -96,7 +96,7 @@ export class ProductState {
         const user = this.store.selectSnapshot(UserState.geUser);
         sc.setState({
             ...state,
-            isFavorite: (user && !!_.find(user.favorites, {uid: action.product.uid})) || false,
+            isFavorite: (user && !!_.includes(action.product.followers, user.uid)) || false,
             product: action.product,
             loaded: true,
         });

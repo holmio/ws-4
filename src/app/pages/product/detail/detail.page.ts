@@ -79,7 +79,7 @@ export class DetailPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionSuccessful(DeleteProductAction),
+      ofActionSuccessful(DeleteProductSuccessAction),
       take(1)
     ).subscribe(() => {
       this.navController.back();
