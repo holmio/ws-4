@@ -1,30 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'src/app/store/user/user.interface';
-import { Select, Store } from '@ngxs/store';
-import { UserState, UpdateAvatarUserAction } from 'src/app/store/user';
+import { Select, Store, Actions } from '@ngxs/store';
+import { UserState, UpdateAvatarUserAction, GetMyProductsAction } from 'src/app/store/user';
 import { Observable } from 'rxjs';
 import { Platform, ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { Product } from 'src/app/store/product';
-import { GetFavoriteProductsAction, ProductsState, GetMyProductsAction } from 'src/app/store/products';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
   styleUrls: ['./detail.page.scss'],
 })
-export class DetailPage implements OnInit {
+export class DetailPage implements OnInit, OnDestroy {
 
   @Select(UserState.geUser) user$: Observable<User | undefined>;
-  @Select(ProductsState.getMyProducts) products$: Observable<Product | undefined>;
-  @Select(ProductsState.getFavoriteProducts) favorites$: Observable<Product | undefined>;
+  @Select(UserState.getMyProducts) products$: Observable<Product | undefined>;
+  @Select(UserState.getFavoriteProducts) favorites$: Observable<Product | undefined>;
   selectSegment = 'products';
   messages$: Observable<any>;
   private sourceType: any;
   constructor(
     private platform: Platform,
+    private actions: Actions,
     private camera: Camera,
     private actionSheetCtrl: ActionSheetController,
     private toastService: ToastService,
@@ -33,10 +34,11 @@ export class DetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch([
-      new GetMyProductsAction(),
-      new GetFavoriteProductsAction()
-    ]);
+    this.store.dispatch(new GetMyProductsAction());
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   takePicture() {

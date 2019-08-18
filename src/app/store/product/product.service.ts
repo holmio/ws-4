@@ -32,7 +32,7 @@ export class ProductService {
   }
 
   getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges();
+    return this.productCollectionRef.doc(uid).valueChanges().pipe(take(1));
   }
 
   getProducts(uidUser = ''): Observable<any> {

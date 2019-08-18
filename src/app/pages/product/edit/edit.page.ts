@@ -81,11 +81,11 @@ export class EditPage implements OnInit, OnDestroy {
 
     this.actions.pipe(
       ofActionSuccessful(UpdateProductSuccessAction),
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe(() => {
       setTimeout(() => {
         this.navController.back();
-      }, 100);
+      }, 300);
     });
   }
 

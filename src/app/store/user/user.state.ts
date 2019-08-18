@@ -10,8 +10,9 @@ import {
     UpdateAvatarUserSuccessAction,
     UpdateUserAction,
     UpdateUserFailedAction,
-    UpdateUserSuccessAction
-    } from './user.actions';
+    UpdateUserSuccessAction,
+    GetMyProductsAction,
+} from './user.actions';
 import { UserService } from './user.service';
 import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import { User, UserStateModel } from '../user/user.interface';
@@ -20,18 +21,24 @@ import {
     Selector,
     State,
     StateContext
-    } from '@ngxs/store';
+} from '@ngxs/store';
+import { ProductService } from '../product/product.service';
+import { mergeMap, map } from 'rxjs/operators';
+import { Product } from '../product';
 
 @State<UserStateModel>({
     name: 'user',
     defaults: {
         user: null,
+        myProducts: [],
+        favoriteProducts: [],
         loaded: false,
     },
 })
 export class UserState {
 
     constructor(
+        private productService: ProductService,
         private userService: UserService,
     ) {
     }
@@ -41,7 +48,15 @@ export class UserState {
      */
     @Selector()
     static geUser(state: UserStateModel) {
-        return state.user || null;
+        return state.user;
+    }
+    @Selector()
+    static getMyProducts(state: UserStateModel) {
+        return state.myProducts;
+    }
+    @Selector()
+    static getFavoriteProducts(state: UserStateModel) {
+        return state.favoriteProducts;
     }
 
     @Action(GetUserAction)
@@ -156,10 +171,38 @@ export class UserState {
             sc.dispatch(new LoginSuccessAction(action.user.uid));
         }, 10);
     }
+
+    @Action(GetMyProductsAction)
+    async getMyProducts(sc: StateContext<UserStateModel>) {
+        const state = sc.getState();
+        const myProducts$ = this.productService.getMyProducts(state.user.uid);
+        const favorites$ = this.productService.getFavoriteProductsByUid(state.user.uid)
+        await myProducts$.pipe(
+            mergeMap((myProducts) =>
+                favorites$.pipe(
+                    map(
+                        (favorites) => Object.assign({}, { favorites: favorites, myProducts: myProducts })
+                    )
+                )
+            ),
+        ).subscribe((products) => {
+            sc.setState({
+                ...state,
+                myProducts: products.myProducts,
+                favoriteProducts: products.favorites,
+                loaded: true,
+            });
+        }, error => {
+            console.log(error);
+        });
+    }
+
     @Action([GetUserFailedAction, LogoutSuccessAction])
     resetUserState(sc: StateContext<UserStateModel>) {
         sc.setState({
             user: null,
+            myProducts: [],
+            favoriteProducts: [],
             loaded: true
         });
     }

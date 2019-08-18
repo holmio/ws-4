@@ -1,44 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Actions, ofAction, ofActionDispatched, ofActionSuccessful, ofActionCompleted } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionCompleted } from '@ngxs/store';
 import {
-  CheckSessionAction,
-  LoginFailedAction,
-  LoginSuccessAction,
   LoginWithEmailAndPasswordAction,
   LoginWithFacebookAction,
-  RegisternFailedAction,
-  RegisterSuccessAction,
   RegisterWithEmailAndPasswordAction
   } from 'src/app/store/auth';
 import {
   GetProductAction,
-  GetProductFailedAction,
-  GetProductSuccessAction,
   SetProductAction,
-  SetProductFailedAction,
-  SetProductSuccessAction,
   DeleteProductAction,
   UpdateProductAction,
-  DeleteProductSuccessAction,
-  DeleteProductFailedAction,
-  UpdateProductSuccessAction,
-  UpdateProductFailedAction
   } from 'src/app/store/product';
-import { GetProductsAction, GetProductsFailedAction, GetProductsSuccessAction } from 'src/app/store/products';
+import { GetProductsAction } from 'src/app/store/products';
 import {
   GetUserAction,
-  GetUserFailedAction,
-  GetUserSuccessAction,
   SetUserAction,
-  SetUserFailedAction,
-  SetUserSuccessAction,
   UpdateAvatarUserAction,
   UpdateUserAction,
-  UpdateAvatarUserSuccessAction,
-  UpdateAvatarUserFailedAction,
-  UpdateUserSuccessAction,
-  UpdateUserFailedAction
   } from 'src/app/store/user';
 
 @Component({
@@ -115,7 +94,9 @@ export class LoadingComponent implements OnInit {
     }
 
     this.spinner = new Promise((resolve) => {
-      this.loadingController.create({}).then((spinner) => {
+      this.loadingController.create({
+        spinner: 'bubbles'
+      }).then((spinner) => {
         spinner.present().then(() => {
           resolve(spinner);
         });
@@ -124,11 +105,11 @@ export class LoadingComponent implements OnInit {
   }
 
   private hideLoading() {
-    this.count = 0;
     if (!this.spinner) {
       return;
     }
-
+    
+    this.count = 0;
     this.spinner.then(spinner => spinner.dismiss());
     this.spinner = undefined;
   }

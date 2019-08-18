@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonRefresher, ModalController, NavController, IonSlides } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import {
   Actions,
-  ofActionDispatched,
   Select,
   Store,
   ofActionSuccessful
@@ -15,7 +14,7 @@ import {
   take,
 } from 'rxjs/operators';
 import { ModalSlidersComponent } from 'src/app/components/modal-sliders/modal-sliders.component';
-import { AuthState, LogoutSuccessAction, LoginSuccessAction } from 'src/app/store/auth';
+import { AuthState } from 'src/app/store/auth';
 import {
   AddFavoriteAction,
   DeleteProductAction,
@@ -24,11 +23,10 @@ import {
   ProductState,
   RemoveFavoriteAction,
   DeleteProductSuccessAction,
-  UpdateProductSuccessAction,
   GetUserProductAction,
-  GetProductSuccessAction
+  GetProductSuccessAction,
+  UpdateProductSuccessAction
 } from 'src/app/store/product';
-import { GetProductsSuccessAction } from 'src/app/store/products';
 import { ROUTE } from 'src/app/util/app.routes.const';
 import { UserShortInfo } from 'src/app/store/user';
 
@@ -67,9 +65,6 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.store.dispatch(new GetProductAction(this.id));
-    }, 500);
     this.uid$.pipe(
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
@@ -77,11 +72,20 @@ export class DetailPage implements OnInit, OnDestroy {
       this.isLogin = true;
     });
 
+    this.store.dispatch(new GetProductAction(this.id));
     this.actions.pipe(
       ofActionSuccessful(GetProductSuccessAction),
       take(1)
     ).subscribe(() => {
       this.store.dispatch(new GetUserProductAction());
+    });
+
+    this.actions.pipe(
+      ofActionSuccessful(UpdateProductSuccessAction),
+    ).subscribe(() => {
+      setTimeout(() => {
+        this.store.dispatch(new GetProductAction(this.id));
+      }, 500);
     });
 
     this.actions.pipe(

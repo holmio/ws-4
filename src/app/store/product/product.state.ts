@@ -263,7 +263,7 @@ export class ProductState {
         const state = sc.getState();
         sc.setState({
             ...state,
-            isFavorite: (user && !!_.includes(state.product.followers, user.uid)) || false,
+            isFavorite: (user && state.product && !!_.includes(state.product.followers, user.uid)) || false,
             loaded: true
         });
     }

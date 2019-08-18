@@ -87,7 +87,7 @@ export class AuthState implements NgxsOnInit {
     async loginWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: LoginWithEmailAndPasswordAction) {
         await this.auth.signInWithEmail(action.email, action.password).then(data => {
             setTimeout(() => {
-                sc.dispatch(new LoginSuccessAction(data.uid));
+                sc.dispatch(new LoginSuccessAction(data.user.uid));
             }, 10);
         }, error => {
             setTimeout(() => {
@@ -139,7 +139,7 @@ export class AuthState implements NgxsOnInit {
                 }, 10);
             } else {
                 setTimeout(() => {
-                    sc.dispatch(new LoginSuccessAction(data.uid));
+                    sc.dispatch(new LoginSuccessAction(data.user.uid));
                 }, 10);
             }
         }, error => {

@@ -7,6 +7,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { mergeMap, map } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { APP_CONST } from 'src/app/util/app.constants';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +58,8 @@ export class UserService {
       name: user.name,
       uid: user.uid,
     };
-    batch.update(usertShortColl, userShortInfo);
+    const tempUser = _.omitBy(userShortInfo, _.isUndefined);
+    batch.update(usertShortColl, tempUser);
     return batch.commit();
   }
 
