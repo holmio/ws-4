@@ -1,17 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Select, Store, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Select, Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { isUrl } from 'src/app/util/common';
 import { APP_CONST } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
-import { NavController, ActionSheetController, Platform } from '@ionic/angular';
-import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { TranslateService } from '@ngx-translate/core';
-import { ToastService } from 'src/app/services/toast/toast.services';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit',
@@ -34,18 +29,10 @@ export class EditPage implements OnInit, OnDestroy {
   };
   gallery: string[] = [];
   imagesToDelete: string[] = [];
-  private sourceType: any;
   private destroy$ = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
-    private imagePicker: ImagePicker,
-    private actionSheetCtrl: ActionSheetController,
-    private cdRef: ChangeDetectorRef,
-    private toastService: ToastService,
-    private platform: Platform,
-    private camera: Camera,
-    private translate: TranslateService,
     private store: Store,
     private navController: NavController,
     private actions: Actions
@@ -104,25 +91,14 @@ export class EditPage implements OnInit, OnDestroy {
     }, 100);
   }
 
-  /**
-   * Method to delete the picture selected
-   * @param index number of picture
-   */
-  deletePicture(index: number) {
-    // If the picture deleted is the thumbnail then we generate a new thumbnail of the second picture of the gallery
-    this.cdRef.detectChanges();
-    // To delete old picture from gallery is it necessary to have the url not base64
-    if(isUrl(this.gallery[index])) {
-      this.imagesToDelete.push(this.gallery[index]);
-    }
-    this.gallery.splice(index, 1);
-    this.cdRef.detectChanges();
-  }
-
   onChangeWillaya(event) {
     const willayaSelected = event.target.value;
     this.getDaira(willayaSelected);
     this.myGroup.controls['daira'].enable();
+  }
+
+  handleImagesDeleted(image: string) {
+    this.imagesToDelete.push(image);
   }
 
   private getDaira(willaya: string) {
@@ -131,83 +107,6 @@ export class EditPage implements OnInit, OnDestroy {
     }
     this.dairas = [];
     this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
-  }
-
-  /**
-   * Present an action sheet to slelect the mode to upload the picture
-   */
-  async presentSheet() {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: this.translate.instant('TAKE_PICTURE_SELECT_METHOD_OF_IMAGE_TITEL'),
-      buttons: [
-        {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_IMAGE'),
-          icon: 'image',
-          handler: () => {
-            this.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
-            this.selectFromGallery();
-          }
-        },
-        {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_CAMERA'),
-          icon: 'camera',
-          handler: () => {
-            this.sourceType = this.camera.PictureSourceType.CAMERA;
-            this.takePicture();
-          }
-        },
-        {
-          text: this.translate.instant('COMMON_BUTTON_CANCEL'),
-          role: 'cancel',
-          icon: 'close-circle',
-        }
-      ]
-    });
-    actionSheet.present();
-  }
-
-  private selectFromGallery() {
-    if (this.platform.is('cordova')) {
-      const configCamera: ImagePickerOptions = {
-        width: 600,
-        height: 600,
-        quality: 70,
-        maximumImagesCount: 4 - this.gallery.length,
-        outputType: 1,
-      };
-
-      this.imagePicker.getPictures(configCamera).then((pictures) => {
-        for (const picture of pictures) {
-          const base64Image = 'data:image/jpeg;base64,' + picture;
-          this.gallery.push(base64Image);
-          this.cdRef.detectChanges();
-        }
-      }, (err) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
-      });
-    }
-  }
-
-  private takePicture() {
-    if (this.platform.is('cordova')) {
-      const configCamera: CameraOptions = {
-        destinationType: this.camera.DestinationType.DATA_URL,
-        targetWidth: 400,
-        targetHeight: 400,
-        quality: 70,
-        correctOrientation: true,
-        encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE,
-        sourceType: this.sourceType,
-      };
-      this.camera.getPicture(configCamera).then((data) => {
-        const base64Image = 'data:image/jpeg;base64,' + data;
-        this.gallery.push(base64Image);
-        this.cdRef.detectChanges();
-      }, (error) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
-      });
-    }
   }
 
   private getDirtyValues(form: any) {

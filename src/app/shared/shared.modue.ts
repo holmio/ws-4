@@ -7,10 +7,11 @@ import { HeaderModule } from '../components/header/header.module';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { RouterModule } from '@angular/router';
 import { LoadingModule } from '../components/loading/loading.module';
+import { GalleryManagerComponent } from '../components/gallery-manager/gallery-manager.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [GalleryManagerComponent],
   entryComponents: [],
   imports: [
     CommonModule,
@@ -33,6 +34,7 @@ import { LoadingModule } from '../components/loading/loading.module';
     LazyLoadImageModule,
     RouterModule,
     LoadingModule,
+    GalleryManagerComponent,
   ]
 })
 export class SharedModule {

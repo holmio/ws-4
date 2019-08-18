@@ -2,17 +2,7 @@
 
 
 <ion-content>
-    <div class="gallery-images ion-padding-top ion-padding-horizontal">
-        <div class="product-image-wrapper">
-            <div *ngIf="imagesSelected.length != 4" class="product-image-placeholder" (click)="presentSheet()">
-                <ion-icon mode="ios" name="camera"></ion-icon>
-            </div>
-            <div class="container-product-image">
-                <div *ngFor="let picture of imagesSelected; let i = index;" (click)="deletePicture(i)"
-                    class="product-image" [style.background-image]="'url(' + picture + ')'"></div>
-            </div>
-        </div>
-    </div>
+    <app-gallery-manager (changeGallery)="handleGallery($event)"></app-gallery-manager>
     <form [formGroup]="myGroup" (ngSubmit)="create()">
         <ion-grid class="ion-no-padding">
             <ion-row color="primary" justify-content-center>
