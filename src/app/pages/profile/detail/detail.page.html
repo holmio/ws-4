@@ -1,6 +1,6 @@
 <app-header [title]="(user$ | async)?.name">
   <ion-buttons header-right-action routerLink="/profile/edit" routerDirection="forward" slot="end" padding-end>
-    [T]Edit
+    <ion-icon name="settings" size="large"></ion-icon>
   </ion-buttons>
   <ion-toolbar color="primary">
     <div class="userSection" padding-horizontal>
