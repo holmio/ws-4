@@ -9,7 +9,7 @@ import { ToastService } from 'src/app/services/toast/toast.services';
 import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -60,7 +60,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
     this.actions.pipe(
       ofActionDispatched(SetProductSuccessAction),
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe((action) => {
       this.navController.navigateRoot('product/detail/' + action.uid);
     });
