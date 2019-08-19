@@ -1,14 +1,14 @@
-import { Product } from '../product/product.interface';
+import { Chat } from './chat.interface';
 
 // GETTING PRODUCT
-export class GetProductsAction {
-  static type = '[Products] GetProducts';
+export class GetChatAction {
+  static type = '[Chat] GetChat';
 }
-export class GetProductsSuccessAction {
-  static type = '[Products] GetProductsSuccess';
-  constructor(public products: Product[]) { }
+export class GetChatSuccessAction {
+  static type = '[Chat] GetChatSuccess';
+  constructor(public chat: Chat) { }
 }
-export class GetProductsFailedAction {
-  static type = '[Products] GetProductsFailed';
+export class GetChatFailedAction {
+  static type = '[Chat] GetChatFailed';
   constructor(public error: any) { }
 }

@@ -7,6 +7,8 @@ import { auth } from 'firebase/app';
 
 import AuthProvider = firebase.auth.AuthProvider;
 import { Platform } from '@ionic/angular';
+import { switchMap, map, first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -15,6 +17,7 @@ import { Platform } from '@ionic/angular';
 export class AuthService {
   private user: firebase.User;
   private userCollectionRef: AngularFirestoreCollection<any>;
+  user$: Observable<any>;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -23,6 +26,13 @@ export class AuthService {
     private platform: Platform,
   ) {
     this.userCollectionRef = this.afStore.collection<User>('users');
+    this.user$ = this.afAuth.authState.pipe(
+      map(user => user.uid)
+    );
+  }
+
+  getUser() {
+    return this.user$.pipe(first()).toPromise();
   }
 
   signInWithEmail(email: string, password: string): Promise<any> {

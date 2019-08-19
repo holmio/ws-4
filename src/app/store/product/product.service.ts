@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import * as firebase from 'firebase/app';
+import { firestore } from 'firebase';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
@@ -109,7 +109,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = { followers: firebase.firestore.FieldValue.arrayUnion(uidUser) };
+    const addFollower = { followers: firestore.FieldValue.arrayUnion(uidUser) };
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();
@@ -118,7 +118,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = { followers: firebase.firestore.FieldValue.arrayRemove(uidUser) };
+    const addFollower = { followers: firestore.FieldValue.arrayRemove(uidUser) };
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();

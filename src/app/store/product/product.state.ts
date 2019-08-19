@@ -46,7 +46,7 @@ export class ProductState {
 
     }
 
-    /// Firebase Server Timestamp
+    // Firebase Server Timestamp
     get timestamp() {
         return new Date().getTime();
     }
