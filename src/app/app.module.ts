@@ -25,6 +25,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { intersectionObserverPreset, LazyLoadImageModule } from 'ng-lazyload-image';
+import { ChatModule } from './store/chat';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -59,6 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserModule,
     ProductModule,
     ProductsModule,
+    ChatModule,
     AppRoutingModule,
   ],
   providers: [

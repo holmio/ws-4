@@ -45,6 +45,7 @@ export class DetailPage implements OnInit, OnDestroy {
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
   id: string;
+  chatId: string;
   slideOpts = {
     centeredSlides: true,
     preloadImages: false,
@@ -54,22 +55,25 @@ export class DetailPage implements OnInit, OnDestroy {
   private isLogin = false;
   private destroy$ = new Subject<boolean>();
   constructor(
-    private route: ActivatedRoute,
+    private activRoute: ActivatedRoute,
     private actions: Actions,
     private navController: NavController,
     private router: Router,
     private modalController: ModalController,
     private store: Store,
   ) {
-    this.id = this.route.snapshot.params.id;
+    this.id = this.activRoute.snapshot.params.id;
   }
 
   ngOnInit() {
     this.uid$.pipe(
       filter((uid) => !!uid),
       takeUntil(this.destroy$)
-    ).subscribe(() => {
+    ).subscribe((userUid) => {
       this.isLogin = true;
+      if (this.isLogin) {
+        this.chatId = userUid+this.id;
+      }
     });
 
     this.store.dispatch(new GetProductAction(this.id));

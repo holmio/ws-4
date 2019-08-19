@@ -12,11 +12,11 @@ export interface Chat {
   uidProduct: string;
   productName: string;
   ownerAvatar: string;
-  createdAt: string;
+  createdAt: number;
   messages?: Message[];
 }
 export interface Message {
   uid: string;
-  timestamp: string;
+  timestamp: number;
   message: string;
 }

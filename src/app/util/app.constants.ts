@@ -6,7 +6,8 @@ export const APP_CONST = {
         products: 'products',
         usersDetail: 'userShortInfo',
         favoriteProducts: 'favoriteProducts',
-        chats: 'chats'
+        chats: 'chats',
+        listChats: 'listChats',
     },
     categories: [
         { value: 'coches', nameEs: 'Coches', nameAr: '[AR]Coches', selected: false },

@@ -7,7 +7,7 @@
             <ion-button *ngIf="(isFavorite$ | async)" (click)="removeFavorite()">
                 <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart"></ion-icon>
             </ion-button>
-            <ion-button routerLink="/chat" routerDirection="forward">
+            <ion-button [routerLink]="'/chat/' + chatId" routerDirection="forward">
                 <ion-icon mode="ios" size="large" name="chatbubbles"></ion-icon>
             </ion-button>
         </ng-container>
