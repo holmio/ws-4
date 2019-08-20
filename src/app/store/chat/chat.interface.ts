@@ -14,11 +14,13 @@ export interface Chat {
   userAvatar: string;
   createdAt: number;
   messages?: Message[];
+  thumbnail?: string;
   members: MembersEntity;
 }
 
 export interface ChatDetail {
   uid: string;
+  thumbnail: string;
   productName: string;
   timestamp: number;
   message: string;

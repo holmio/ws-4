@@ -207,7 +207,7 @@ ion-toolbar,ion-footer{
      p{
        padding: 5px 10px;
        text-align: left;
-       font-size: 0.8em;
+       font-size: 0.9em;
      }
      .ChatproifilePic{
      width: 28px;
@@ -223,38 +223,6 @@ ion-toolbar,ion-footer{
      align-items: center;
      min-height: 25px;
      height: 30px;
-     }
-     
-     ion-img.imageFrom_footer {
-          width: calc(62vw - 10px);
-       height: 140px;
-       object-fit: cover;
-       max-width: 72vw;
-     }
-     .imageFrom_footer {
-       width: 72vw;
-       max-width: 72vw;
-       height: 146px;
-        display: flex;
-       justify-content: center;
-       align-items: center;
-     }
-     .imageFrom_footerMap {
-      width: calc(62vw - 10px);
-      height: 245px;
-      padding: 4px 4px 4px 4px;
-     }
-     .imageFrom_footerdiv{
-     width: calc(62vw - 10px);
-     height: 132px;
-     border-radius: 5px
-     }
-     .videoFrom_footer{
-          width: calc(62vw - 10px);
-       -o-object-fit: fill;
-       object-fit: fill;
-       height: 135px;
-       border-radius: 5px;
      }
       
    }

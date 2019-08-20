@@ -31,6 +31,9 @@ import { LogoutSuccessAction, LoginFailedAction } from '../auth';
 })
 
 export class ChatState {
+
+    private isChatCreated = false;
+
     constructor(
         private store: Store,
         private chatService: ChatService,
@@ -62,14 +65,13 @@ export class ChatState {
         await this.chatService.getChat(action.uid).subscribe(data => {
             console.log(data);
             if (!data) {
-                setTimeout(() => {
-                    sc.dispatch(new SetChatAction(action.uid));
-                }, 10);
+                this.isChatCreated = false;
             } else {
-                setTimeout(() => {
-                    sc.dispatch(new GetChatSuccessAction(data));
-                }, 10);
+                this.isChatCreated = true;
             }
+            setTimeout(() => {
+                sc.dispatch(new GetChatSuccessAction(data));
+            }, 10);
         }, error => {
             setTimeout(() => {
                 sc.dispatch(new GetChatFailedAction(error));
@@ -93,11 +95,32 @@ export class ChatState {
     async sendMessage(sc: StateContext<ChatStateModel>, action: SendMessageAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
+        const product = this.store.selectSnapshot(ProductState.getProduct);
+        const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
         const finalMessage: Message = {
             message: action.message,
             timestamp: this.timestamp,
             uid: user.uid,
         };
+        // Creat first chat if it is not created
+        if (!this.isChatCreated) {
+            const uidChat = user.uid + product.uid;
+            const chat: Chat = {
+                createdAt: this.timestamp,
+                messages: [finalMessage],
+                productName: product.name,
+                thumbnail: product.thumbnail,
+                uid: uidChat,
+                uidUser: product.userUid,
+                userAvatar: userProduct.avatar,
+                uidProduct: product.uid,
+                members: {
+                    [user.uid]: true,
+                    [product.userUid]: true,
+                }
+            };
+            await sc.dispatch(new SetChatAction(chat));
+        }
         await this.chatService.sendMessage(state.chat.uid, finalMessage).then(data => {
             setTimeout(() => {
                 sc.dispatch(new SendMessageSuccessAction());
@@ -114,25 +137,9 @@ export class ChatState {
     @Action(SetChatAction)
     async setChat(sc: StateContext<ChatStateModel>, action: SetChatAction) {
         const state = sc.getState();
-        const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
-        const product = this.store.selectSnapshot(ProductState.getProduct);
-        const user = this.store.selectSnapshot(UserState.geUser);
-        const chat: Chat = {
-            createdAt: this.timestamp,
-            messages: [],
-            productName: product.name,
-            uid: action.uid,
-            uidUser: product.userUid,
-            userAvatar: userProduct.avatar,
-            uidProduct: product.uid,
-            members: {
-                [user.uid]: true,
-                [product.userUid]: true,
-            }
-        };
-        await this.chatService.create(chat).then(data => {
+        await this.chatService.create(action.chat).then(data => {
             setTimeout(() => {
-                sc.dispatch(new SetChatSuccessAction(chat));
+                sc.dispatch(new SetChatSuccessAction());
             }, 10);
         }, error => {
             setTimeout(() => {
@@ -146,7 +153,6 @@ export class ChatState {
         const state = sc.getState();
         sc.setState({
             ...state,
-            chat: action.chat,
             loaded: true,
         });
     }

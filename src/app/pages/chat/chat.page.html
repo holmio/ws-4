@@ -3,8 +3,15 @@
 
 <ion-content #IonContent>
 
-    <div class="ion-text-center">
-        <p>Este chat fue creado: <b>{{(chat$ | async)?.createdAt | date}}</b></p>
+    <div center text-center>
+        <div *ngIf="(chat$ | async)?.createdAt">
+            <ion-avatar>
+                <img [lazyLoad]="(chat$ | async)?.userAvatar" />
+            </ion-avatar>
+            <h5>{{(chat$ | async)?.productName}}</h5>
+            
+        </div>
+        <h3 *ngIf="!(chat$ | async)?.createdAt">[T]Iniciar conversacion</h3>
     </div>
     <ion-list>
         <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">

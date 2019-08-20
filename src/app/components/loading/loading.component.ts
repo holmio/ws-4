@@ -19,6 +19,7 @@ import {
   UpdateAvatarUserAction,
   UpdateUserAction,
   } from 'src/app/store/user';
+import { GetChatAction } from 'src/app/store/chat';
 
 @Component({
   selector: 'app-loading',
@@ -50,6 +51,7 @@ export class LoadingComponent implements OnInit {
         UpdateAvatarUserAction,
         UpdateProductAction,
         UpdateUserAction,
+        GetChatAction,
       ),
     ).subscribe(async () => {
       this.count++;
@@ -71,6 +73,7 @@ export class LoadingComponent implements OnInit {
         UpdateAvatarUserAction,
         UpdateProductAction,
         UpdateUserAction,
+        GetChatAction,
       ),
     ).subscribe((actions) => {
       this.count--;

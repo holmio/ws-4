@@ -38,8 +38,9 @@ export class ChatService {
     const messageDetail: ChatDetail = {
       uid: data.uid,
       productName: data.productName,
+      thumbnail: data.thumbnail,
       timestamp: data.createdAt,
-      message: 'Menssage por defecto',
+      message: data.messages[0].message,
       members: data.members
     };
     batch.set(chatsDetailColl, messageDetail);
@@ -53,8 +54,9 @@ export class ChatService {
     const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${chatId}`);
     const chatsDetailColl = this.afStore.firestore.doc(`${APP_CONST.db.chatsDetail}/${chatId}`);
     const addMessage = { messages: firestore.FieldValue.arrayUnion(message) };
-
+    
     batch.update(chatColl, addMessage);
+    message.uid = chatId;
     batch.update(chatsDetailColl, message);
     return batch.commit();
   }
