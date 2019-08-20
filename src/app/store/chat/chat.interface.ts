@@ -3,20 +3,33 @@ import { Product } from '../product';
 export interface ChatStateModel {
   chat: Chat;
   loaded: boolean;
+  chatsDetail: ChatDetail[];
 }
 
 export interface Chat {
   uid: string;
-  uidOwner: string;
-  uidVisitor: string;
   uidProduct: string;
   productName: string;
-  ownerAvatar: string;
+  uidUser: string;
+  userAvatar: string;
   createdAt: number;
   messages?: Message[];
+  members: MembersEntity;
+}
+
+export interface ChatDetail {
+  uid: string;
+  productName: string;
+  timestamp: number;
+  message: string;
+  members: MembersEntity;
 }
 export interface Message {
   uid: string;
   timestamp: number;
   message: string;
+}
+
+export interface MembersEntity {
+  [key: string]: boolean;
 }

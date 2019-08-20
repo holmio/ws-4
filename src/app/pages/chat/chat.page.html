@@ -3,6 +3,9 @@
 
 <ion-content #IonContent>
 
+    <div class="ion-text-center">
+        <p>Este chat fue creado: <b>{{(chat$ | async)?.createdAt | date}}</b></p>
+    </div>
     <ion-list>
         <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">
             <ion-row *ngIf="chat.uid != (uid$ | async)">
@@ -20,7 +23,7 @@
                                 <p text-wrap padding>{{chat.message}}</p>
                             </div>
                             <div class="timedivRight"
-                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])">
+                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
                                 <ion-text class="footer-text-size">{{chat.timestamp | date:'short' }}</ion-text>
                             </div>
                         </ion-label>

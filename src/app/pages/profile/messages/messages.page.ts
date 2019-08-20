@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
+import { ChatState, ChatDetail, GetChatsDetailAction } from 'src/app/store/chat';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -7,7 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessagesPage implements OnInit {
 
-  constructor() { }
+  @Select(ChatState.getChatsDetail) chatsDetail$: Observable<ChatDetail>;
+
+  constructor(
+    private store: Store,
+  ) {
+    this.store.dispatch(new GetChatsDetailAction());
+  }
 
   ngOnInit() {
   }

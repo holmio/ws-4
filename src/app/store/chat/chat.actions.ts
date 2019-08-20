@@ -1,4 +1,4 @@
-import { Chat, Message } from './chat.interface';
+import { Chat, Message, ChatDetail } from './chat.interface';
 
 // GET CHAT
 export class GetChatAction {
@@ -17,11 +17,11 @@ export class GetChatFailedAction {
 // SET CHAT
 export class SetChatAction {
   static type = '[Chat] SetChat';
-  constructor(public chat: Chat) { }
+  constructor(public uid: string) { }
 }
 export class SetChatSuccessAction {
   static type = '[Chat] SetChatSuccess';
-  constructor(public uid: string) { }
+  constructor(public chat: Chat) { }
 }
 export class SetChatFailedAction {
   static type = '[Chat] SetChatFailed';
@@ -38,5 +38,18 @@ export class SendMessageSuccessAction {
 }
 export class SendMessageFailedAction {
   static type = '[Chat] SendMessageFailed';
+  constructor(public error: any) { }
+}
+
+// GET CHATS DETAIL
+export class GetChatsDetailAction {
+  static type = '[Chat] GetChatsDetail';
+}
+export class GetChatsDetailSuccessAction {
+  static type = '[Chat] GetChatsDetailSuccess';
+  constructor(public chatsDetail: ChatDetail[]) { }
+}
+export class GetChatsDetailFailedAction {
+  static type = '[Chat] GetChatsDetailFailed';
   constructor(public error: any) { }
 }

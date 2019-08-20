@@ -2,4 +2,16 @@
 
 <ion-content>
 
+    <ng-container *ngFor="let chat of chatsDetail$ | async">
+        <ion-card button [routerLink]="['/chat/'+chat.uid]">
+            <ion-card-header>
+                <ion-card-title>{{chat.productName}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                {{chat.message}}
+            </ion-card-content>
+        </ion-card>
+    </ng-container>
+    
+        
 </ion-content>

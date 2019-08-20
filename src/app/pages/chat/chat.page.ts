@@ -17,7 +17,7 @@ export class ChatPage implements OnInit {
   id: string;
   @Select(ChatState.getChat) chat$: Observable<Chat>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
-  
+
 
   data: {}[];
 
@@ -52,15 +52,15 @@ export class ChatPage implements OnInit {
   sendMsg() {
     if (this.user_input !== '') {
 
-      this.store.dispatch(new SendMessageAction(this.user_input));      
-  
+      this.store.dispatch(new SendMessageAction(this.user_input));
+
       this.user_input = '';
       this.scrollDown()
-      
+
     }
     this.show = false
   }
-  
+
   scrollDown() {
     setTimeout(() => {
       this.content.scrollToBottom(50)
