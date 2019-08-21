@@ -1,24 +1,60 @@
 <ion-app>
   <ion-split-pane>
-    <ion-menu type="overlay">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
-                {{p.title}}
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+    <ion-menu class="sidemenu" side="end" type="overlay">
+      <ion-content class="content">
+        <div>
+          <div *ngIf="(user$ | async)" class="profile-block" (click)="goToPage('profile/detail')">
+            <div class="profile-image">
+              <img [lazyLoad]="(user$ | async).avatar" />
+            </div>
+            <ion-text color="light">{{(user$ | async)?.name}}</ion-text>
+          </div>
+          <div class="menu">
+            <div class="menu-item" *ngIf="!(user$ | async)">
+              <ion-button (click)="goToPage('login')" Fill="clear" class="block">
+                <div class="icon">
+                  <ion-icon mode="ios" slot="start" name="log-in"></ion-icon>
+                </div>
+                <!-- <div class="text">
+                  Login
+                </div> -->
+              </ion-button>
+            </div>
+            <div class="menu-item">
+              <ion-button (click)="goToPage('home')" Fill="clear" class="block">
+                <div class="icon">
+                  <ion-icon mode="ios" slot="start" name="home"></ion-icon>
+                </div>
+                <!-- <div class="text">
+                  Home
+                </div> -->
+              </ion-button>
+            </div>
+            <div class="menu-item">
+              <ion-button (click)="goToPage('profile/messages')" Fill="clear" class="block">
+                <div class="icon">
+                  <ion-icon mode="ios" slot="start" name="chatbubbles"></ion-icon>
+                </div>
+                <!-- <div class="text">
+                  Mensajes
+                </div> -->
+              </ion-button>
+            </div>
+            <div class="menu-item" *ngIf="(user$ | async)">
+              <ion-button (click)="goToPage('logout')" Fill="clear" class="block">
+                <div class="icon">
+                  <ion-icon mode="ios" slot="start" name="log-out"></ion-icon>
+                </div>
+                <!-- <div class="text">
+                  Logout
+                </div> -->
+              </ion-button>
+            </div>
+          </div>
+        </div>
       </ion-content>
     </ion-menu>
+    <app-loading></app-loading>
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

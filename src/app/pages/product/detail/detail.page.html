@@ -1,0 +1,77 @@
+<app-header>
+    <ion-buttons header-right-action slot="end">
+        <ng-container *ngIf="!(isUserProduct$ | async)">
+            <ion-button *ngIf="!(isFavorite$ | async)" (click)="addFavorite()">
+                <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="(isFavorite$ | async)" (click)="removeFavorite()">
+                <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart"></ion-icon>
+            </ion-button>
+            <ion-button [routerLink]="'/chat/' + chatId" routerDirection="forward">
+                <ion-icon mode="ios" size="large" name="chatbubbles"></ion-icon>
+            </ion-button>
+        </ng-container>
+        <ng-container *ngIf="(isUserProduct$ | async)">
+            <ion-button [routerLink]="'/product/edit/' + id" routerDirection="forward">
+                <ion-icon mode="ios" size="large" name="create"></ion-icon>
+            </ion-button>
+            <ion-button (click)="delete()">
+                <ion-icon mode="ios" size="large" name="trash"></ion-icon>
+            </ion-button>
+        </ng-container>
+    </ion-buttons>
+</app-header>
+
+<ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
+    <ion-slides mode="md" pager="md" [options]="slideOpts" *ngIf="(product$ | async)?.gallery">
+        <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
+            <img class="swiper-lazy" [lazyLoad]="image">
+        </ion-slide>
+    </ion-slides>
+    <small class="ion-padding-horizontal">[T]Actualizado: {{(product$ | async)?.timestamp | date }}</small>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <h1>{{(product$ | async)?.name}}</h1>
+                </div>
+            </ion-col>
+            <ion-col class="ion-text-end">
+                <div>
+                    <h1>{{(product$ | async)?.price | number}} <small>{{(product$ | async)?.currency}}</small></h1>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <div>
+                    <p>{{(product$ | async)?.description}}</p>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <div class="localization">
+                    <h3>
+                        <ion-icon name="pin"></ion-icon> {{(product$ | async)?.willaya}}, {{(product$ | async)?.daira}}
+                    </h3>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!(isUserProduct$ | async)">
+            <ion-col>
+                <ion-item lines="none">
+                    <ion-avatar slot="start">
+                        <img [lazyLoad]="(ownerOfProduct$ | async)?.avatar" />
+                    </ion-avatar>
+                    <ion-label>{{(ownerOfProduct$ | async)?.name}}</ion-label>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button routerLink="/product/create" routerDirection="forward">
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+</ion-fab> -->

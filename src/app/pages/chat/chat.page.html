@@ -1,0 +1,102 @@
+<app-header title="Chat">
+</app-header>
+
+<ion-content #IonContent>
+
+    <div center text-center>
+        <div *ngIf="(chat$ | async)?.createdAt">
+            <ion-avatar>
+                <img [lazyLoad]="(chat$ | async)?.userAvatar" />
+            </ion-avatar>
+            <h5>{{(chat$ | async)?.productName}}</h5>
+            
+        </div>
+        <h3 *ngIf="!(chat$ | async)?.createdAt">[T]Iniciar conversacion</h3>
+    </div>
+    <ion-list>
+        <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">
+            <ion-row *ngIf="chat.uid != (uid$ | async)">
+                <ion-col class="right"
+                    [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
+                    size="12">
+                    <div class="imageAvatarRight">
+                        <ion-label color="light">
+                            <div class="chatDiv"
+                                [ngClass]="{'sharper':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid) && 
+                          ((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid)),
+                          'sharper-top':((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid),
+                          'sharper-bottom':((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid)}">
+
+                                <p text-wrap padding>{{chat.message}}</p>
+                            </div>
+                            <div class="timedivRight"
+                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
+                                <ion-text class="footer-text-size">{{chat.timestamp | date:'short' }}</ion-text>
+                            </div>
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="chat.uid == (uid$ | async)" align-item-center>
+
+                <ion-col class="left"
+                    [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
+                    size="12">
+                    <div class="imageAvatarLeft">
+                        <ion-label color="light">
+                            <div class="chatDiv"
+                                [ngClass]="{'sharper':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid) && 
+                          ((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid)),
+                          'sharper-top':((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid),
+                          'sharper-bottom':((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid)}">
+                                <p text-wrap padding>{{chat.message}}
+                                </p>
+                            </div>
+
+                            <div class="timediv"
+                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])">
+                                <ion-icon [name]="chat.status" color="rose"></ion-icon>
+                                <ion-text color="rose" class="footer-text-size">{{ chat.timestamp | date:'short' }}
+                                </ion-text>
+                            </div>
+                        </ion-label>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row
+                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
+                <ion-col>
+                </ion-col>
+            </ion-row>
+        </div>
+        <ion-row *ngIf="loader" padding-bottom>
+            <ion-col no-padding class="loading-col">
+                <div class="imageAvatarRight">
+                    <div class="imageAvatarBottomLoader">
+                        <ion-avatar class="avatar">
+                            <div class="imageAvatarBottomIcon">
+                                <ion-icon name="add" expand="icon-only" color="light"> </ion-icon>
+                            </div>
+                            <ion-img src="../../../../assets/chat/chat/chat5.jpg"></ion-img>
+                        </ion-avatar>
+                    </div>
+                    <ion-label>
+                        <div class="chatDivLoader">
+                            <ion-spinner name="dots" color="light"></ion-spinner>
+                        </div>
+                    </ion-label>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <ion-item class="footerItem">
+        <ion-input (ionFocus)="focusFunction($event)" [(ngModel)]="user_input" (keypress)="userTyping($event)"
+            type="text" placeholder="Type your message here..."></ion-input>
+        <ion-icon name="send" expand="icon-only" color="medium" mode="ios" slot="end" (click)=" sendMsg()"
+            (mousedown)="something($event)">
+        </ion-icon>
+    </ion-item>
+</ion-footer>

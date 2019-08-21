@@ -1,0 +1,73 @@
+ion-content {
+  --background: linear-gradient(0deg, rgba(226, 145, 71, 1) 0%, rgba(219, 58, 52, 1) 100%);
+}
+.content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  // background-image: url('../../../../assets/sidemenu.jpeg') no-repeat fixed center;
+  background-size: cover !important;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  .top {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .logo {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .title {
+      font-size: 36px;
+    }
+  }
+  .bottom {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .loginBtn {
+      color: white;
+      font-weight: 500;
+      width: 100%;
+      .link {
+        font-weight: bold;
+        color: (--ion-color-primary);
+      }
+    }
+    .content-list {
+      padding-top: 20px;
+      width: 100%;
+      ion-item {
+        --highlight-color-invalid: var(--ion-color-dark);
+        --color: var(--ion-color-light);
+        --color-activated: var(--ion-color-light);
+        ion-label {
+          font-size: 18px !important;
+        }
+        ion-input {
+          font-size: 22px !important;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .bottom {
+      width: 600px;
+      left: calc(50% - 300px);
+    }
+  }
+}

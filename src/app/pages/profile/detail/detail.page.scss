@@ -1,0 +1,66 @@
+ion-toolbar {
+  margin-bottom: -1px !important;
+}
+
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+.ionSegementSection {
+  background: #a81b1b;
+}
+
+.segment-button-indicator {
+  align-self: center;
+  background-color: var(--indicator-color-checked, var(--color-checked));
+  background: #fff;
+  height: 5px;
+  width: 65px;
+}
+.ion-segment-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userSection {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+
+  img {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .userName {
+    font-size: 18px;
+  }
+
+  .userDetail {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    text-align: center;
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 400;
+    }
+  }
+}
+
+.iconSize {
+  font-size: 22px;
+}

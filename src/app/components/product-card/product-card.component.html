@@ -1,0 +1,19 @@
+<ion-card class="card" [routerLink]="'/product/detail/' + product.uid" routerDirection="forward" no-margin>
+  <ion-badge class="badge">{{product.name}}</ion-badge>
+  <img [lazyLoad]="product.thumbnail" [alt]="product.name">
+  <ion-card-content>
+    <ion-card-title>
+      <ion-row>
+        <ion-col no-padding>
+          <ion-text text-left><span class="price"><strong>{{product.price | number}} </strong><small>{{product.currency}}</small></span>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col text-left no-padding>
+          <h6 text-left class="subtitle">{{product.name}}</h6>
+        </ion-col>
+      </ion-row> -->
+    </ion-card-title>
+  </ion-card-content>
+</ion-card>

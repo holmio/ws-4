@@ -1,5 +1,7 @@
 {
-  "name": "appTest2",
-  "integrations": {},
+  "name": "sidemenu",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
