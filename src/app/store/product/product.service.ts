@@ -141,7 +141,7 @@ export class ProductService {
     let count = 0;
     for (const value of gallery) {
       if (!isUrl(value)) {
-        const filePath: string = `gallery/${productUid}_${count}.jpg`;
+        const filePath: string = `gallery/${this.uuidv4()}.jpg`;
         const fileRef = this.storage.ref(filePath);
         try {
           const file = await this.storageService.uploadContent(value, filePath, fileRef)
