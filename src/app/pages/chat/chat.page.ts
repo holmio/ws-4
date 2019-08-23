@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import { Store, Select } from '@ngxs/store';
-import { GetChatAction, ChatState, Chat, SendMessageAction } from 'src/app/store/chat';
+import { GetChatAction, ChatState, Chat, SendMessageAction, SetChatAction } from 'src/app/store/chat';
 import { Observable } from 'rxjs';
 import { AuthState } from 'src/app/store/auth';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -12,7 +13,7 @@ import { AuthState } from 'src/app/store/auth';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  @ViewChild('IonContent') content: IonContent
+  @ViewChild('IonContent') content: IonContent;
 
   id: string;
   @Select(ChatState.getChat) chat$: Observable<Chat>;
@@ -31,16 +32,24 @@ export class ChatPage implements OnInit {
   show: boolean;
   footerJson: { 'icon': string; 'label': string; }[];
 
+  private isFirstTime: boolean;
+
   constructor(
     private store: Store,
     private activRoute: ActivatedRoute
   ) {
     this.id = this.activRoute.snapshot.params.id;
     this.store.dispatch(new GetChatAction(this.id));
-    console.log(this.id);
   }
-
+  
   ngOnInit() {
+    this.chat$.pipe(take(1)).subscribe((chat) => {
+      if (chat) {
+        this.isFirstTime = false;
+      } else {
+        this.isFirstTime = true;
+      }
+    })
   }
 
   toggleList() {
@@ -51,14 +60,17 @@ export class ChatPage implements OnInit {
 
   sendMsg() {
     if (this.user_input !== '') {
-
-      this.store.dispatch(new SendMessageAction(this.user_input));
+      if (this.isFirstTime) {
+        this.store.dispatch(new SetChatAction(this.user_input));
+      } else {
+        this.store.dispatch(new SendMessageAction(this.user_input));
+      }
 
       this.user_input = '';
       this.scrollDown()
 
     }
-    this.show = false
+    this.show = false;
   }
 
   scrollDown() {

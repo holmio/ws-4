@@ -13,12 +13,11 @@ export interface User {
     uid: string;
     avatar?: string;
     email: string;
-    lastSignInTime?: string;
     phone?: number;
-    localization?: string;
     myProducts?: Product[];
     favorites?: Product[];
     willaya?: string;
+    lastConnection?: number, 
     daira?: string;
   }
   
@@ -42,5 +41,6 @@ export interface User {
   export interface UserShortInfo {
     name?: string;
     avatar?: string;
+    lastConnection?: number, 
     uid: string;
   }

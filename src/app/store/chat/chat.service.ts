@@ -30,23 +30,14 @@ export class ChatService {
     ).valueChanges();
   }
 
-  create(data: Chat): Promise<any> {
+  create(chat: Chat, chatDetail: ChatDetail): Promise<any> {
     const batch = this.afStore.firestore.batch();
-    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${data.uid}`);
-    const chatsDetailColl = this.afStore.firestore.doc(`${APP_CONST.db.chatsDetail}/${data.uid}`);
-    batch.set(chatColl, data);
-    const messageDetail: ChatDetail = {
-      uid: data.uid,
-      productName: data.productName,
-      thumbnail: data.thumbnail,
-      timestamp: data.createdAt,
-      message: data.messages[0].message,
-      members: data.members
-    };
-    batch.set(chatsDetailColl, messageDetail);
+    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${chat.uid}`);
+    const chatsDetailColl = this.afStore.firestore.doc(`${APP_CONST.db.chatsDetail}/${chat.uid}`);
+    batch.set(chatColl, chat);
+    batch.set(chatsDetailColl, chatDetail);
 
     return batch.commit();
-
   }
 
   sendMessage(chatId: string, message: Message): Promise<any> {

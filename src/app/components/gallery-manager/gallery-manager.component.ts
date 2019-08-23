@@ -35,7 +35,7 @@ export class GalleryManagerComponent implements OnInit {
    * @param index number of picture
    */
   deletePicture(index: number) {
-    // If the picture deleted is the thumbnail then we generate a new thumbnail of the second picture of the gallery
+    // If the picture deleted is the avatar then we generate a new avatar of the second picture of the gallery
     if(isUrl(this.gallery[index])) {
       this.changeImagesDeleted.next(this.gallery[index])
     }

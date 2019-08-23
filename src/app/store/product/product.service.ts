@@ -76,7 +76,7 @@ export class ProductService {
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${product.uid}`);
     // Add gallery to the product
     product.gallery = await this.uploadGallery(product.gallery, product.uid);
-    product.thumbnail = product.gallery[0] || '';
+    product.avatar = product.gallery[0] || '';
     if (action === 'set') {
       batch.set(productColl, product);
     } else {

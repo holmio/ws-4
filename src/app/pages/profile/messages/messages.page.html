@@ -7,7 +7,7 @@
             <div class="listSection">
                 <div class="UserimgSection">
                     <ion-avatar class="chatImage" slot="start">
-                        <img [lazyLoad]="chat.thumbnail">
+                        <img [lazyLoad]="chat.product.avatar">
                     </ion-avatar>
                 </div>
                 <div class="usernameSection" padding-start padding>
@@ -22,7 +22,6 @@
                     {{chat.timestamp | date:'short' }}</ion-text>
                 <ion-badge slot="end" class="userBadge" >3</ion-badge>
             </div>
-
         </ion-item>
     </ion-list>
 </ion-content>

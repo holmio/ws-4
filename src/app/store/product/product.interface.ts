@@ -24,7 +24,7 @@ export interface Product {
   isSold?: boolean;
   timestamp: number;
   creationDate?: number;
-  thumbnail?: string;
+  avatar?: string;
   userUid: string;
   uid?: string;
   willaya?: string;
@@ -39,7 +39,7 @@ export interface ShortProduct {
   isEnabled: boolean;
   followers?: Array<string>;
   isSold?: boolean;
-  thumbnail: string;
+  avatar: string;
 }
 
 export interface Gallery {

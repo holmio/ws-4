@@ -17,10 +17,11 @@ export class GetChatFailedAction {
 // SET CHAT
 export class SetChatAction {
   static type = '[Chat] SetChat';
-  constructor(public chat: Chat) { }
+  constructor(public message: string) { }
 }
 export class SetChatSuccessAction {
   static type = '[Chat] SetChatSuccess';
+  constructor(public chat: Chat) { }
 }
 export class SetChatFailedAction {
   static type = '[Chat] SetChatFailed';

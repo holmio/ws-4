@@ -43,7 +43,10 @@ export class AuthState implements NgxsOnInit {
         private afAuth: AngularFireAuth,
     ) {
     }
-
+    // Firebase Server Timestamp
+    get timestamp() {
+        return new Date().getTime();
+    }
     /**
     * Dispatch CheckSession on start
     */
@@ -130,7 +133,7 @@ export class AuthState implements NgxsOnInit {
                 const userInformation: User = {
                     uid: data.userUid,
                     name: data.user.displayName,
-                    lastSignInTime: null,
+                    lastConnection: this.timestamp,
                     avatar: data.user.photoUR,
                     email: data.user.email,
                 };
@@ -159,7 +162,7 @@ export class AuthState implements NgxsOnInit {
             const userInformation: User = {
                 uid: data.userUid,
                 name: action.name,
-                lastSignInTime: null,
+                lastConnection: this.timestamp,
                 avatar: '../../assets/images/default-avatar.png',
                 email: data.user.email,
             };
