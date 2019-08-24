@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 
 import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { map, mergeMap, take, first } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { UserShortInfo } from '../user/user.interface';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import * as _ from 'lodash';
@@ -44,7 +44,7 @@ export class ProductService {
   getMyProducts(uidUser: string): Observable<any> {
     return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.where('userUid', '==', uidUser)).valueChanges()
   }
-  
+
   getFavoriteProductsByUid(uidUser: string): Observable<any> {
     return this.afStore.collection(APP_CONST.db.favoriteProducts, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges()
   }
@@ -132,22 +132,22 @@ export class ProductService {
     batch.delete(productColl);
     batch.delete(productShortColl);
     batch.delete(favoriteProductsColl);
-    await this.deleteGallery(product.gallery)
+    await this.deleteGallery(product.gallery);
     return batch.commit();
   }
 
   private async uploadGallery(gallery: string[], productUid: string): Promise<any> {
-    let galleryUploaded: string[] = [];
+    const galleryUploaded: string[] = [];
     let count = 0;
     for (const value of gallery) {
       if (!isUrl(value)) {
-        const filePath: string = `gallery/${this.uuidv4()}.jpg`;
+        const filePath = `gallery/${this.uuidv4()}.jpg`;
         const fileRef = this.storage.ref(filePath);
         try {
-          const file = await this.storageService.uploadContent(value, filePath, fileRef)
+          const file = await this.storageService.uploadContent(value, filePath, fileRef);
           galleryUploaded.push(file);
         } catch (error) {
-          this.toast.show(`No se ha podido subir la imagen ${error}`, 'warning', '', 5000)
+          this.toast.show(`No se ha podido subir la imagen ${error}`, 'warning', '', 5000);
         }
       } else {
         galleryUploaded.push(value);
@@ -163,14 +163,14 @@ export class ProductService {
       try {
         await fileRef.delete();
       } catch (error) {
-        this.toast.show(`Algo fue mal eliminando la imagen ${error}`, 'warning', '', 5000)
+        this.toast.show(`Algo fue mal eliminando la imagen ${error}`, 'warning', '', 5000);
       }
     }
   }
 
   private uuidv4() {
-    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
