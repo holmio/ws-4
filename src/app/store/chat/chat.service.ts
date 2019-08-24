@@ -48,7 +48,7 @@ export class ChatService {
     return this.productCollectionRef.doc(channel.product.uid).valueChanges().pipe(
       mergeMap((product: Product) =>
         this.userShortInfoCollectionRef.doc(
-          isVisitor ? channel.visitor.uid : channel.owner.uid
+          isVisitor ? channel.owner.uid : channel.visitor.uid
         ).valueChanges()
           .pipe(
             map(
@@ -79,37 +79,29 @@ export class ChatService {
       name: newData.product.name,
     };
 
-    let userDiff;
-    let productDiff;
+    let dataToUpdate;
     if (isVisitor) {
-      userDiff = _.cloneDeep({visitor: this.difference(newUserInfo, oldData.visitor)});
+      dataToUpdate = _.cloneDeep(this.difference(newUserInfo, oldData.owner, 'owner'));
     } else {
-      userDiff = _.cloneDeep({owner: this.difference(newUserInfo, oldData.owner)});
+      dataToUpdate = _.cloneDeep(this.difference(newUserInfo, oldData.visitor, 'visitor'));
     }
     if (!_.isEqual(newProductInfo, oldData.product)) {
-      productDiff = _.cloneDeep({product: this.difference(newProductInfo, oldData.product)});
+      dataToUpdate = _.assign({}, dataToUpdate, this.difference(newProductInfo, oldData.product, 'product'));
     }
 
-    if (!_.isEmpty(userDiff.visitor || userDiff.owner) && !_.isEmpty(productDiff.product)) {
-      return {...userDiff, ...productDiff};
-    } else {
-      if (!_.isEmpty(userDiff.visitor || userDiff.owner)) {
-        return {...userDiff};
-      }
-      if (!_.isEmpty(productDiff.product)) {
-        return {...productDiff};
-      }
+    if (!_.isEmpty(dataToUpdate)) {
+      return {...dataToUpdate};
     }
 
     return;
   }
 
 
-difference(newData, oldData) {
+difference(newData, oldData, parent: string) {
   function changes(newData, oldData) {
     return _.transform(newData, (result, value, key) => {
       if (!_.isEqual(value, oldData[key])) {
-        result[key] = (_.isObject(value) && _.isObject(oldData[key])) ? changes(value, oldData[key]) : value;
+        result[parent + '.' + key] = (_.isObject(value) && _.isObject(oldData[key])) ? changes(value, oldData[key]) : value;
       }
     });
   }

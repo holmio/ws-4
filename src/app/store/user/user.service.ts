@@ -64,12 +64,16 @@ export class UserService {
   }
 
   async updateAvatar(file: string, uid: string): Promise<any> {
-    const filePath: string = `avatar/${uid}.jpg`;
+    const filePath = `avatar/${uid}.jpg`;
     const fileRef = this.storage.ref(filePath);
     const usersColl = this.afStore.firestore.doc(`${APP_CONST.db.users}/${uid}`);
+    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.usersDetail}/${uid}`);
+    const batch = this.afStore.firestore.batch();
     return this.storageService.uploadContent(file, filePath, fileRef).then(async (url) => {
-      await usersColl.update({ avatar: url })
-    })
+      batch.update(usersColl, { avatar: url });
+      batch.update(usertShortColl, { avatar: url });
+      await batch.commit();
+    });
   }
 
 }
