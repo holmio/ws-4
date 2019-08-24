@@ -7,15 +7,21 @@ import {
     SendMessageAction,
     SendMessageSuccessAction,
     SendMessageFailedAction,
-    SetChatAction,
-    SetChatSuccessAction,
-    SetChatFailedAction,
-    GetChatsDetailAction,
-    GetChatsDetailSuccessAction,
-    GetChatsDetailFailedAction,
+    SetChannelAction,
+    SetChannelSuccessAction,
+    SetChannelFailedAction,
+    GetChannelsAction,
+    GetChannelsSuccessAction,
+    GetChannelsFailedAction,
+    GetChannelSuccessAction,
+    GetChannelFailedAction,
+    GetChannelAction,
+    UpdateChannelAction,
+    UpdateChannelSuccessAction,
+    UpdateChannelFailedAction,
 } from './chat.actions';
 import * as _ from 'lodash';
-import { ChatStateModel, Message, Chat, ChatDetail } from './chat.interface';
+import { ChatStateModel, Message, Chat, Channel } from './chat.interface';
 import { ChatService } from './chat.service';
 import { UserState } from '../user';
 import { ProductState } from '../product';
@@ -25,13 +31,14 @@ import { LogoutSuccessAction, LoginFailedAction } from '../auth';
     name: 'chat',
     defaults: {
         chat: null,
-        chatsDetail: [],
+        channel: null,
+        channels: [],
         loaded: false,
     },
 })
 
 export class ChatState {
-    
+
     constructor(
         private store: Store,
         private chatService: ChatService,
@@ -52,8 +59,12 @@ export class ChatState {
         return state.chat || null;
     }
     @Selector()
-    static getChatsDetail(state: ChatStateModel) {
-        return state.chatsDetail || null;
+    static getChannels(state: ChatStateModel) {
+        return state.channels || null;
+    }
+    @Selector()
+    static getChannel(state: ChatStateModel) {
+        return state.channel || null;
     }
     // GET CHAT
 
@@ -93,7 +104,7 @@ export class ChatState {
             uid: user.uid,
         };
 
-        await this.chatService.sendMessage(state.chat.uid, finalMessage).then(data => {
+        await this.chatService.sendMessage(state.channel.uid, finalMessage).then(data => {
             setTimeout(() => {
                 sc.dispatch(new SendMessageSuccessAction());
             }, 10);
@@ -104,32 +115,29 @@ export class ChatState {
         });
     }
 
-    // SET CHAT
+    // SET CHANNEL
 
-    @Action(SetChatAction)
-    async setChat(sc: StateContext<ChatStateModel>, action: SetChatAction) {
+    @Action(SetChannelAction)
+    async setChannel(sc: StateContext<ChatStateModel>, action: SetChannelAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         const product = this.store.selectSnapshot(ProductState.getProduct);
         const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
 
-        const uidChat = user.uid + product.uid;
+        const uidChannel = user.uid + product.uid;
         const finalMessage: Message = {
             message: action.message,
             timestamp: this.timestamp,
             uid: user.uid,
         };
         const chat: Chat = {
-            uid: uidChat,
-            createdAt: this.timestamp,
             messages: [finalMessage],
-            uidUser: product.userUid,
-            uidProduct: product.uid,
         };
-        const chatDetail: ChatDetail = {
-            uid: uidChat,
+        const newChannel: Channel = {
+            uid: uidChannel,
+            createdAt: this.timestamp,
             timestamp: this.timestamp,
-            message: action.message,
+            lastMessage: action.message,
             product: {
                 uid: product.uid,
                 name: product.name,
@@ -152,53 +160,113 @@ export class ChatState {
                 uid: userProduct.uid,
             }
         };
-        await this.chatService.create(chat, chatDetail).then(data => {
+        await this.chatService.createChannel(chat, newChannel).then(data => {
             setTimeout(() => {
-                sc.dispatch(new SetChatSuccessAction(chat));
+                sc.dispatch(new SetChannelSuccessAction(chat, newChannel));
             }, 10);
         }, error => {
             setTimeout(() => {
-                sc.dispatch(new SetChatFailedAction(error));
+                sc.dispatch(new SetChannelFailedAction(error));
             }, 10);
         });
     }
 
-    @Action(SetChatSuccessAction)
-    setChatSuccess(sc: StateContext<ChatStateModel>, action: SetChatSuccessAction) {
+    @Action(SetChannelSuccessAction)
+    setChannelSuccess(sc: StateContext<ChatStateModel>, action: SetChannelSuccessAction) {
         const state = sc.getState();
         sc.setState({
             ...state,
+            channel: action.channel,
             chat: action.chat,
             loaded: true,
         });
     }
 
-    // GET CHATS DETAIL
+    // GET CHANNELS LIST
 
-    @Action(GetChatsDetailAction)
-    async getChatsDetail(sc: StateContext<ChatStateModel>) {
+    @Action(GetChannelsAction)
+    async getChannels(sc: StateContext<ChatStateModel>) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.chatService.getChatsDetail(user.uid).subscribe(data => {
+        await this.chatService.getChannels(user.uid).subscribe(data => {
             setTimeout(() => {
-                sc.dispatch(new GetChatsDetailSuccessAction(data));
+                sc.dispatch(new GetChannelsSuccessAction(data));
             }, 10);
         }, error => {
             setTimeout(() => {
-                sc.dispatch(new GetChatsDetailFailedAction(error));
+                sc.dispatch(new GetChannelsFailedAction(error));
             }, 10);
         });
     }
 
-    @Action(GetChatsDetailSuccessAction)
-    getChatsDetailSuccess(sc: StateContext<ChatStateModel>, action: GetChatsDetailSuccessAction) {
+    @Action(GetChannelsSuccessAction)
+    getChannelsSuccess(sc: StateContext<ChatStateModel>, action: GetChannelsSuccessAction) {
         const state = sc.getState();
         sc.setState({
             ...state,
-            chatsDetail: action.chatsDetail,
+            channels: action.channels,
             loaded: true,
         });
     }
+
+    // GET CHANNEL
+
+    @Action(GetChannelAction)
+    async getChannel(sc: StateContext<ChatStateModel>, action: GetChannelAction) {
+        const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
+        await this.chatService.getChannel(action.uid).subscribe(data => {
+            setTimeout(() => {
+                sc.dispatch(new GetChannelSuccessAction(data));
+            }, 10);
+        }, error => {
+            setTimeout(() => {
+                sc.dispatch(new GetChannelFailedAction(error));
+            }, 10);
+        });
+    }
+
+    @Action(GetChannelSuccessAction)
+    getChannelSuccess(sc: StateContext<ChatStateModel>, action: GetChannelSuccessAction) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            channel: action.channel,
+            loaded: true,
+        });
+        setTimeout(() => {
+            sc.dispatch(new UpdateChannelAction());
+        }, 10);
+    }
+
+
+    // UPDATE CHANNEL
+
+    @Action(UpdateChannelAction)
+    async UpdateChannel(sc: StateContext<ChatStateModel>) {
+        const state = sc.getState();
+        const user = this.store.selectSnapshot(UserState.geUser);
+        const isVisitor = user.uid === state.channel.visitor.uid;
+        await this.chatService.updateChannel(state.channel, isVisitor).subscribe(data => {
+            setTimeout(() => {
+                sc.dispatch(new UpdateChannelSuccessAction());
+            }, 10);
+        }, error => {
+            setTimeout(() => {
+                sc.dispatch(new UpdateChannelFailedAction(error));
+            }, 10);
+        });
+    }
+
+    @Action(UpdateChannelSuccessAction)
+    UpdateChannelSuccess(sc: StateContext<ChatStateModel>, action: UpdateChannelSuccessAction) {
+        const state = sc.getState();
+        setTimeout(() => {
+            // sc.dispatch(new GetChannelAction(state.channel.uid));
+        }, 10);
+    }
+
+    // RESET CHAT
 
     @Action([LogoutSuccessAction, LoginFailedAction])
     resetChatStatus(sc: StateContext<ChatStateModel>) {
@@ -206,7 +274,7 @@ export class ChatState {
         sc.setState({
             ...state,
             chat: null,
-            chatsDetail: [],
+            channels: [],
             loaded: false,
         });
     }

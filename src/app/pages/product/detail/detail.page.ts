@@ -72,7 +72,7 @@ export class DetailPage implements OnInit, OnDestroy {
     ).subscribe((userUid) => {
       this.isLogin = true;
       if (this.isLogin) {
-        this.chatId = userUid+this.id;
+        this.chatId = userUid + this.id;
       }
     });
 

@@ -1,25 +1,25 @@
-<app-header title="[T]Messages"></app-header>
+<app-header title="[T]Mensajes"></app-header>
 
 <ion-content>
     <ion-list padding-top>
-        <ion-item *ngFor="let chat of chatsDetail$ | async" lines="none" [routerLink]="['/chat/'+chat.uid]">
+        <ion-item *ngFor="let channel of channels$ | async" lines="none" (click)="goToChannel(channel)">
             <div class="borderBottomLine"></div>
             <div class="listSection">
                 <div class="UserimgSection">
                     <ion-avatar class="chatImage" slot="start">
-                        <img [lazyLoad]="chat.product.avatar">
+                        <img [lazyLoad]="channel.product.avatar">
                     </ion-avatar>
                 </div>
                 <div class="usernameSection" padding-start padding>
                     <h5>
-                        <b>{{chat.productName}}</b>
+                        <b>{{channel.product.name}}</b>
                     </h5>
-                    <p class="descText" no-margin no-padding>{{chat.message}}</p>
+                    <p class="descText" no-margin no-padding>{{channel.lastMessage}}</p>
                 </div>
             </div>
             <div slot="end" class="lastSection">
                 <ion-text class="sendTime" color="medium">
-                    {{chat.timestamp | date:'short' }}</ion-text>
+                    {{channel.timestamp | date:'short' }}</ion-text>
                 <ion-badge slot="end" class="userBadge" >3</ion-badge>
             </div>
         </ion-item>

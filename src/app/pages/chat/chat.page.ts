@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonContent } from '@ionic/angular';
-import { Store, Select } from '@ngxs/store';
-import { GetChatAction, ChatState, Chat, SendMessageAction, SetChatAction } from 'src/app/store/chat';
-import { Observable } from 'rxjs';
 import { AuthState } from 'src/app/store/auth';
+import { Channel, Chat, ChatState, GetChatAction, SendMessageAction, SetChannelAction, GetChatSuccessAction, GetChannelAction } from 'src/app/store/chat';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { Select, Store, Actions, ofActionSuccessful, ofActionDispatched } from '@ngxs/store';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -16,58 +16,61 @@ export class ChatPage implements OnInit {
   @ViewChild('IonContent') content: IonContent;
 
   id: string;
+  messageInput = '';
+  show: boolean;
+
   @Select(ChatState.getChat) chat$: Observable<Chat>;
+  @Select(ChatState.getChannel) channelInfo$: Observable<Channel>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
-
-  data: {}[];
-
-  paramData: any;
-  userName: any;
-  user_input: string = '';
-  User: string = 'Me';
-  toUser: string = 'HealthBot';
-  start_typing: any;
-  loader: boolean;
-  show: boolean;
-  footerJson: { 'icon': string; 'label': string; }[];
-
-  private isFirstTime: boolean;
+  isFirstTime: boolean;
+  private fromProduct: boolean;
 
   constructor(
+    private actions: Actions,
     private store: Store,
     private activRoute: ActivatedRoute
   ) {
-    this.id = this.activRoute.snapshot.params.id;
-    this.store.dispatch(new GetChatAction(this.id));
+    this.activRoute.queryParams
+      .subscribe(params => {
+        this.id = params.id;
+        this.fromProduct = params.fromProduct === 'true';
+        this.store.dispatch(new GetChatAction(this.id));
+      });
   }
-  
+
   ngOnInit() {
-    this.chat$.pipe(take(1)).subscribe((chat) => {
-      if (chat) {
+    this.actions.pipe(
+      ofActionDispatched(GetChatSuccessAction),
+      take(1)
+    ).subscribe((action) => {
+      if (action.chat) {
         this.isFirstTime = false;
+        if (this.fromProduct) {
+          this.store.dispatch(new GetChannelAction(this.id));
+        }
       } else {
         this.isFirstTime = true;
       }
-    })
+    });
   }
 
   toggleList() {
-    this.show = !this.show
+    this.show = !this.show;
     console.log(this.show);
     this.scrollDown();
   }
 
   sendMsg() {
-    if (this.user_input !== '') {
+    if (this.messageInput !== '') {
       if (this.isFirstTime) {
-        this.store.dispatch(new SetChatAction(this.user_input));
+        this.store.dispatch(new SetChannelAction(this.messageInput));
       } else {
-        this.store.dispatch(new SendMessageAction(this.user_input));
+        this.store.dispatch(new SendMessageAction(this.messageInput));
       }
 
-      this.user_input = '';
-      this.scrollDown()
+      this.messageInput = '';
+      this.scrollDown();
 
     }
     this.show = false;
@@ -75,21 +78,20 @@ export class ChatPage implements OnInit {
 
   scrollDown() {
     setTimeout(() => {
-      this.content.scrollToBottom(50)
+      this.content.scrollToBottom(50);
     }, 200);
   }
   something($event: any) {
-    $event.preventDefault()
-    console.log($event)
+    $event.preventDefault();
+    console.log($event);
   }
   userTyping(event: any) {
-    this.show = false
+    this.show = false;
     console.log(event);
-    this.start_typing = event.target.value;
-    this.scrollDown()
+    this.scrollDown();
   }
   focusFunction(event: any) {
-    this.show = false
-    console.log(event)
+    this.show = false;
+    console.log(event);
   }
 }

@@ -2,24 +2,22 @@
 export interface ChatStateModel {
   chat: Chat;
   loaded: boolean;
-  chatsDetail: ChatDetail[];
+  channel: Channel;
+  channels: Channel[];
 }
 
 export interface Chat {
-  uid: string;
-  uidProduct: string;
-  uidUser: string;
-  createdAt: number;
   messages: Message[];
 }
 
-export interface ChatDetail {
+export interface Channel {
   uid: string;
-  product: Product,
-  visitor: User,
-  owner: User,
+  product: Product;
+  visitor: User;
+  owner: User;
   timestamp: number;
-  message: string;
+  createdAt: number;
+  lastMessage: string;
   members: MembersEntity;
 }
 interface Product {
@@ -30,8 +28,8 @@ interface Product {
 interface User {
   name: string;
   uid: string;
-  avatar: string
-  lastConnection: number
+  avatar: string;
+  lastConnection: number;
 }
 export interface Message {
   uid: string;
