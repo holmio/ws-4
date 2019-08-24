@@ -123,7 +123,7 @@ sendMessage(uid: string, message: Message): Promise < any > {
   const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
   const addMessage = { messages: firestore.FieldValue.arrayUnion(message) };
   batch.update(chatColl, addMessage);
-  batch.update(channelColl, { lastMessage: message.message });
+  batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
   return batch.commit();
 }
 }
