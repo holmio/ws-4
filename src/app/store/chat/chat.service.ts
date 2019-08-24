@@ -24,7 +24,7 @@ export class ChatService {
     return this.chatsCollectionRef.doc<Chat>(chatId).valueChanges();
   }
 
-  getChatsDetail(uid: string) {
+  getChatsDetail(uid: string): Observable<ChatDetail[]> {
     return this.afStore.collection<ChatDetail>(APP_CONST.db.chatsDetail, ref =>
       ref.where(`members.${uid}`, '==', true)
     ).valueChanges();
