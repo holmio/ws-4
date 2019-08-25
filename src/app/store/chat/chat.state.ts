@@ -1,9 +1,6 @@
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 
 import {
-    GetChatAction,
-    GetChatSuccessAction,
-    GetChatFailedAction,
     SendMessageAction,
     SendMessageSuccessAction,
     SendMessageFailedAction,
@@ -30,7 +27,6 @@ import { LogoutSuccessAction, LoginFailedAction } from '../auth';
 @State<ChatStateModel>({
     name: 'chat',
     defaults: {
-        chat: null,
         channel: null,
         channels: [],
         loaded: false,
@@ -55,41 +51,12 @@ export class ChatState {
      * Selectors
      */
     @Selector()
-    static getChat(state: ChatStateModel) {
-        return state.chat || null;
-    }
-    @Selector()
     static getChannels(state: ChatStateModel) {
         return state.channels || null;
     }
     @Selector()
     static getChannel(state: ChatStateModel) {
         return state.channel || null;
-    }
-    // GET CHAT
-
-    @Action(GetChatAction)
-    async getChat(sc: StateContext<ChatStateModel>, action: GetChatAction) {
-        const state = sc.getState();
-        await this.chatService.getChat(action.uid).subscribe(data => {
-            setTimeout(() => {
-                sc.dispatch(new GetChatSuccessAction(data));
-            }, 10);
-        }, error => {
-            setTimeout(() => {
-                sc.dispatch(new GetChatFailedAction(error));
-            }, 10);
-        });
-    }
-
-    @Action(GetChatSuccessAction)
-    getChatSuccess(sc: StateContext<ChatStateModel>, action: GetChatSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            chat: action.chat,
-            loaded: true,
-        });
     }
 
     // SEND MESSAGE
@@ -121,10 +88,7 @@ export class ChatState {
     async setChannel(sc: StateContext<ChatStateModel>, action: SetChannelAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        const product = this.store.selectSnapshot(ProductState.getProduct);
-        const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
 
-        const uidChannel = user.uid + product.uid;
         const finalMessage: Message = {
             message: action.message,
             timestamp: this.timestamp,
@@ -133,36 +97,10 @@ export class ChatState {
         const chat: Chat = {
             messages: [finalMessage],
         };
-        const newChannel: Channel = {
-            uid: uidChannel,
-            createdAt: this.timestamp,
-            timestamp: this.timestamp,
-            lastMessage: action.message,
-            product: {
-                uid: product.uid,
-                name: product.name,
-                avatar: product.avatar,
-            },
-            members: {
-                [user.uid]: true,
-                [userProduct.uid]: true,
-            },
-            visitor: {
-                lastConnection: user.lastConnection,
-                name: user.name,
-                avatar: user.avatar,
-                uid: user.uid,
-            },
-            owner: {
-                lastConnection: userProduct.lastConnection,
-                name: userProduct.name,
-                avatar: userProduct.avatar,
-                uid: userProduct.uid,
-            }
-        };
-        await this.chatService.createChannel(chat, newChannel).then(data => {
+
+        await this.chatService.createChannel(chat, state.channel).then(data => {
             setTimeout(() => {
-                sc.dispatch(new SetChannelSuccessAction(chat, newChannel));
+                sc.dispatch(new SetChannelSuccessAction(state.channel));
             }, 10);
         }, error => {
             setTimeout(() => {
@@ -174,12 +112,8 @@ export class ChatState {
     @Action(SetChannelSuccessAction)
     setChannelSuccess(sc: StateContext<ChatStateModel>, action: SetChannelSuccessAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            channel: action.channel,
-            chat: action.chat,
-            loaded: true,
-        });
+        sc.dispatch(new GetChannelAction(action.channel.uid));
+
     }
 
     // GET CHANNELS LIST
@@ -215,10 +149,52 @@ export class ChatState {
     async getChannel(sc: StateContext<ChatStateModel>, action: GetChannelAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.chatService.getChannel(action.uid).subscribe(data => {
-            setTimeout(() => {
-                sc.dispatch(new GetChannelSuccessAction(data));
-            }, 10);
+        const product = this.store.selectSnapshot(ProductState.getProduct);
+        const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
+
+        await this.chatService.getChannel(action.uid).subscribe(channel => {
+            if (channel) {
+                setTimeout(() => {
+                    sc.dispatch(new GetChannelSuccessAction(channel));
+                }, 10);
+            } else {
+                const uidChannel = user.uid + product.uid;
+                const newChannel: Channel = {
+                    uid: uidChannel,
+                    createdAt: this.timestamp,
+                    timestamp: this.timestamp,
+                    lastMessage: '',
+                    product: {
+                        uid: product.uid,
+                        name: product.name,
+                        avatar: product.avatar,
+                    },
+                    members: {
+                        [user.uid]: true,
+                        [userProduct.uid]: true,
+                    },
+                    visitor: {
+                        lastConnection: user.lastConnection,
+                        name: user.name,
+                        avatar: user.avatar,
+                        uid: user.uid,
+                    },
+                    owner: {
+                        lastConnection: userProduct.lastConnection,
+                        name: userProduct.name,
+                        avatar: userProduct.avatar,
+                        uid: userProduct.uid,
+                    }
+                };
+                sc.setState({
+                    ...state,
+                    channel: newChannel,
+                    loaded: true,
+                });
+                setTimeout(() => {
+                    sc.dispatch(new GetChannelFailedAction(false));
+                }, 10);
+            }
         }, error => {
             setTimeout(() => {
                 sc.dispatch(new GetChannelFailedAction(error));
@@ -234,9 +210,6 @@ export class ChatState {
             channel: action.channel,
             loaded: true,
         });
-        setTimeout(() => {
-            sc.dispatch(new UpdateChannelAction());
-        }, 10);
     }
 
 
@@ -273,7 +246,7 @@ export class ChatState {
         const state = sc.getState();
         sc.setState({
             ...state,
-            chat: null,
+            channel: null,
             channels: [],
             loaded: false,
         });

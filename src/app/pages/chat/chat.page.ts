@@ -1,10 +1,14 @@
+import { Actions, ofActionDispatched, Select, Store } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from 'src/app/store/auth';
-import { Channel, Chat, ChatState, GetChatAction, SendMessageAction, SetChannelAction, GetChatSuccessAction, GetChannelAction } from 'src/app/store/chat';
+import {
+  Channel, Chat, ChatState, GetChannelAction, GetChannelSuccessAction,
+  SendMessageAction, SetChannelAction, UpdateChannelAction, GetChannelFailedAction
+} from 'src/app/store/chat';
+import { ChatService } from 'src/app/store/chat/chat.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { Select, Store, Actions, ofActionSuccessful, ofActionDispatched } from '@ngxs/store';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -19,7 +23,7 @@ export class ChatPage implements OnInit {
   messageInput = '';
   show: boolean;
 
-  @Select(ChatState.getChat) chat$: Observable<Chat>;
+  chat$: Observable<Chat>;
   @Select(ChatState.getChannel) channelInfo$: Observable<Channel>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
@@ -28,6 +32,7 @@ export class ChatPage implements OnInit {
 
   constructor(
     private actions: Actions,
+    private chatService: ChatService,
     private store: Store,
     private activRoute: ActivatedRoute
   ) {
@@ -35,21 +40,27 @@ export class ChatPage implements OnInit {
       .subscribe(params => {
         this.id = params.id;
         this.fromProduct = params.fromProduct === 'true';
-        this.store.dispatch(new GetChatAction(this.id));
+        if (this.fromProduct) {
+          this.store.dispatch(new GetChannelAction(this.id));
+        }
+        this.chat$ = this.chatService.getChat(this.id);
       });
   }
 
   ngOnInit() {
     this.actions.pipe(
-      ofActionDispatched(GetChatSuccessAction),
+      ofActionDispatched(GetChannelSuccessAction),
       take(1)
     ).subscribe((action) => {
-      if (action.chat) {
+      if (action.channel) {
         this.isFirstTime = false;
-        if (this.fromProduct) {
-          this.store.dispatch(new GetChannelAction(this.id));
-        }
-      } else {
+        this.store.dispatch(new UpdateChannelAction());
+      }
+    });
+    this.actions.pipe(
+      ofActionDispatched(GetChannelFailedAction),
+    ).subscribe((action) => {
+      if (!action.error) {
         this.isFirstTime = true;
       }
     });

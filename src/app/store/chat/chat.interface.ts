@@ -1,6 +1,5 @@
 
 export interface ChatStateModel {
-  chat: Chat;
   loaded: boolean;
   channel: Channel;
   channels: Channel[];

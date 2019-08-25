@@ -1,19 +1,5 @@
 import { Chat, Message, Channel } from './chat.interface';
 
-// GET CHAT
-export class GetChatAction {
-  static type = '[Chat] GetChat';
-  constructor(public uid: string) { }
-}
-export class GetChatSuccessAction {
-  static type = '[Chat] GetChatSuccess';
-  constructor(public chat: Chat) { }
-}
-export class GetChatFailedAction {
-  static type = '[Chat] GetChatFailed';
-  constructor(public error: any) { }
-}
-
 // SEND MESSAGE
 export class SendMessageAction {
   static type = '[Chat] SendMessage';
@@ -48,7 +34,7 @@ export class SetChannelAction {
 }
 export class SetChannelSuccessAction {
   static type = '[Chat] SetChannelSuccess';
-  constructor(public chat: Chat, public channel: Channel) { }
+  constructor(public channel: Channel) { }
 }
 export class SetChannelFailedAction {
   static type = '[Chat] SetChannelFailed';
