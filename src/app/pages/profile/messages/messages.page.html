@@ -19,7 +19,7 @@
             </div>
             <div slot="end" class="lastSection">
                 <ion-text class="sendTime" color="medium">
-                    {{channel.timestamp | date:'short' }}</ion-text>
+                    {{channel.timestamp | amDateFormat:'D MMMM, HH:mm' }}</ion-text>
                 <ion-badge slot="end" class="userBadge" >3</ion-badge>
             </div>
         </ion-item>

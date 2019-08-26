@@ -1,35 +1,28 @@
-<app-header [title]="(channelInfo$ | async)?.product.name">
+<app-header [title]="
+    (uid$ | async) == (channelInfo$ | async).visitor.uid ?
+    (channelInfo$ | async)?.visitor.name :
+    (channelInfo$ | async)?.owner.name">
 </app-header>
 
 <ion-content #IonContent>
     <div center text-center>
-        <!-- SHOW VISITOR -->
-        <div *ngIf="(channelInfo$ | async)?.createdAt && (uid$ | async) == (channelInfo$ | async).owner.uid">
-            <ion-item>
-                <ion-thumbnail slot="end">
-                    <img [lazyLoad]="(channelInfo$ | async)?.visitor.avatar" />
-                </ion-thumbnail>
-                <ion-label>{{(channelInfo$ | async)?.visitor.name}}</ion-label>
-            </ion-item>
-        </div>
-        <!-- SHOW OWNER -->
-        <div *ngIf="(channelInfo$ | async)?.createdAt && (uid$ | async) == (channelInfo$ | async).visitor.uid">
-            <ion-item>
-                <ion-avatar slot="end">
-                    <img [lazyLoad]="(channelInfo$ | async)?.owner.avatar" />
-                </ion-avatar>
-                <ion-label>
-                    <h4>{{(channelInfo$ | async)?.owner.name}}</h4>
-                    <p>Conectado hace {{(channelInfo$ | async)?.owner.lastConnection | date:'medium'}}</p>
-                </ion-label>
-            </ion-item>
-        </div>
+        <ion-item>
+            <ion-avatar slot="end">
+                <img [lazyLoad]="(channelInfo$ | async)?.product.avatar" />
+            </ion-avatar>
+            <ion-label>
+                <h4>{{(channelInfo$ | async)?.product.name}}</h4>
+            </ion-label>
+        </ion-item>
+    </div>
+    <div center text-center class="ion-padding-vertical">
+        <ion-chip>
+            <ion-label color="primary">Conectado {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
+            </ion-label>
+        </ion-chip>
     </div>
     <ion-list>
         <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">
-            <ion-chip>
-                <ion-label color="secondary">{{chat.timestamp | date:'longDate' }}</ion-label>
-            </ion-chip>
             <ion-row *ngIf="chat.uid != (uid$ | async)">
                 <ion-col class="right"
                     [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
@@ -46,7 +39,8 @@
                             </div>
                             <div class="timedivRight"
                                 *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
-                                <ion-text class="footer-text-size">{{chat.timestamp | date:'shortTime' }}</ion-text>
+                                <ion-text class="footer-text-size">{{ chat.timestamp | amDateFormat:'HH:mm ' }}
+                                </ion-text>
                             </div>
                         </ion-label>
                     </div>
@@ -72,7 +66,8 @@
                             <div class="timediv"
                                 *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])">
                                 <ion-icon [name]="chat.status" color="rose"></ion-icon>
-                                <ion-text color="rose" class="footer-text-size">{{ chat.timestamp | date:'shortTime' }}
+                                <ion-text color="rose" class="footer-text-size">
+                                    {{ chat.timestamp | amDateFormat:'HH:mm ' }}
                                 </ion-text>
                             </div>
                         </ion-label>
@@ -84,6 +79,11 @@
                 <ion-col>
                 </ion-col>
             </ion-row>
+            <div center text-center *ngIf="diffDates(i)">
+                <ion-chip>
+                    <ion-label color="secondary">{{chat.timestamp | amCalendar}}</ion-label>
+                </ion-chip>
+            </div>
         </div>
     </ion-list>
 </ion-content>

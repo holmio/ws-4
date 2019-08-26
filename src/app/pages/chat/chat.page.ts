@@ -6,17 +6,19 @@ import {
   SendMessageAction, SetChannelAction, UpdateChannelAction, GetChannelFailedAction
 } from 'src/app/store/chat';
 import { ChatService } from 'src/app/store/chat/chat.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { IonContent } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, OnDestroy {
   @ViewChild('IonContent') content: IonContent;
 
   id: string;
@@ -29,12 +31,13 @@ export class ChatPage implements OnInit {
 
   isFirstTime: boolean;
   private fromProduct: boolean;
-
+  private messages = [];
+  private distroy$ = new Subject();
   constructor(
     private actions: Actions,
     private chatService: ChatService,
     private store: Store,
-    private activRoute: ActivatedRoute
+    private activRoute: ActivatedRoute,
   ) {
     this.activRoute.queryParams
       .subscribe(params => {
@@ -64,6 +67,14 @@ export class ChatPage implements OnInit {
         this.isFirstTime = true;
       }
     });
+
+    this.chat$.pipe(takeUntil(this.distroy$)).subscribe((chat: Chat) => {
+      this.messages = _.cloneDeep(chat.messages);
+    });
+  }
+
+  ngOnDestroy(): void {
+
   }
 
   toggleList() {
@@ -104,5 +115,12 @@ export class ChatPage implements OnInit {
   focusFunction(event: any) {
     this.show = false;
     console.log(event);
+  }
+  diffDates(index) {
+    if (index === 0) return true;
+    // To calculate the time difference of two dates
+    const d1 = new Date(this.messages[index].timestamp).getTime() / (1000 * 3600 * 24);
+    const d2 = new Date(this.messages[index - 1].timestamp).getTime() / (1000 * 3600 * 24);
+    return Math.floor(d1) !== Math.floor(d2);
   }
 }
