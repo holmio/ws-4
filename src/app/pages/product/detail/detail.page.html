@@ -28,7 +28,7 @@
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>
     </ion-slides>
-    <small class="ion-padding-horizontal">[T]Actualizado: {{(product$ | async)?.timestamp | date }}</small>
+    <small class="ion-padding-horizontal">[T]Actualizado: {{(product$ | async)?.creationDate | amTimeAgo }}</small>
     <ion-grid>
         <ion-row>
             <ion-col>

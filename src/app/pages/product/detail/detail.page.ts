@@ -29,7 +29,6 @@ import {
 } from 'src/app/store/product';
 import { ROUTE } from 'src/app/util/app.routes.const';
 import { UserShortInfo } from 'src/app/store/user';
-
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
