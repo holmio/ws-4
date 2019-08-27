@@ -97,7 +97,7 @@ export class ChatService {
   }
 
 
-difference(newData, oldData, parent: string) {
+private difference(newData, oldData, parent: string) {
   function changes(newData, oldData) {
     return _.transform(newData, (result, value, key) => {
       if (!_.isEqual(value, oldData[key])) {

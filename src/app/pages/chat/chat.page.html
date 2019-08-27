@@ -1,7 +1,7 @@
 <app-header [title]="
     (uid$ | async) == (channelInfo$ | async).visitor.uid ?
-    (channelInfo$ | async)?.visitor.name :
-    (channelInfo$ | async)?.owner.name">
+    (channelInfo$ | async)?.owner.name :
+    (channelInfo$ | async)?.visitor.name">
 </app-header>
 
 <ion-content #IonContent>
