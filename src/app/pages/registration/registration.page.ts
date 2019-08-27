@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { RegisterWithEmailAndPasswordAction } from 'src/app/store/auth';
+import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
+import { RegisterWithEmailAndPasswordAction, RegisterSuccessAction } from 'src/app/store/auth';
+import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-registration',
@@ -11,7 +13,7 @@ import { RegisterWithEmailAndPasswordAction } from 'src/app/store/auth';
 export class RegistrationPage implements OnInit {
 
   registerForm: FormGroup;
-  
+
   constructor(
     private store: Store,
     private formBuilder: FormBuilder,

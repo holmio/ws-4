@@ -123,7 +123,7 @@ export class AuthState implements NgxsOnInit {
             // If the user is new, we create a new account
             if (data.additionalUserInfo.isNewUser) {
                 const userInformation: User = {
-                    uid: data.userUid,
+                    uid: data.user.uid,
                     name: data.user.displayName,
                     lastConnection: timestamp(),
                     avatar: data.user.photoUR,
@@ -152,7 +152,7 @@ export class AuthState implements NgxsOnInit {
         await this.auth.createUserWithEmailAndPassword(action.email, action.password).then(data => {
             console.log(data);
             const userInformation: User = {
-                uid: data.userUid,
+                uid: data.user.uid,
                 name: action.name,
                 lastConnection: timestamp(),
                 avatar: '../../assets/images/default-avatar.png',
