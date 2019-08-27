@@ -4,7 +4,7 @@ import {
     Selector,
     State,
     StateContext
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import {
@@ -15,15 +15,15 @@ import {
     LoginWithFacebookAction,
     LogoutAction,
     LogoutSuccessAction,
-    RegisternFailedAction,
+    RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-    } from './auth.actions';
+} from './auth.actions';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { NgZone } from '@angular/core';
 import { take, tap } from 'rxjs/operators';
 import { User } from '../user/user.interface';
 import { UserInfo } from 'firebase';
+import { timestamp } from 'src/app/util/common';
 
 export interface AuthStateModel {
     uid: string;
@@ -37,20 +37,6 @@ export interface AuthStateModel {
     },
 })
 export class AuthState implements NgxsOnInit {
-
-    constructor(
-        private auth: AuthService,
-        private afAuth: AngularFireAuth,
-    ) {
-    }
-
-    /**
-    * Dispatch CheckSession on start
-    */
-    ngxsOnInit(sc: StateContext<AuthStateModel>) {
-        sc.dispatch(new CheckSessionAction());
-    }
-
     /**
      * Selectors
      */
@@ -59,6 +45,15 @@ export class AuthState implements NgxsOnInit {
         return state.uid || null;
     }
 
+    constructor(
+        private auth: AuthService,
+        private afAuth: AngularFireAuth,
+    ) {
+    }
+
+    ngxsOnInit(sc: StateContext<AuthStateModel>) {
+        sc.dispatch(new CheckSessionAction());
+    }
 
     @Action(CheckSessionAction)
     checkSession(sc: StateContext<AuthStateModel>) {
@@ -130,7 +125,7 @@ export class AuthState implements NgxsOnInit {
                 const userInformation: User = {
                     uid: data.userUid,
                     name: data.user.displayName,
-                    lastSignInTime: null,
+                    lastConnection: timestamp(),
                     avatar: data.user.photoUR,
                     email: data.user.email,
                 };
@@ -159,7 +154,7 @@ export class AuthState implements NgxsOnInit {
             const userInformation: User = {
                 uid: data.userUid,
                 name: action.name,
-                lastSignInTime: null,
+                lastConnection: timestamp(),
                 avatar: '../../assets/images/default-avatar.png',
                 email: data.user.email,
             };
@@ -168,7 +163,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                sc.dispatch(new RegisternFailedAction(error));
+                sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });
     }
@@ -186,7 +181,7 @@ export class AuthState implements NgxsOnInit {
             sc.dispatch(new SetUserAction(action.user));
         }, 10);
     }
-    @Action([LoginFailedAction, LogoutSuccessAction, RegisternFailedAction])
+    @Action([LoginFailedAction, LogoutSuccessAction, RegisterFailedAction])
     resetAuthState(sc: StateContext<AuthStateModel>) {
         sc.setState({
             uid: null,

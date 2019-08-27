@@ -1,13 +1,14 @@
-import { CommonModule } from "@angular/common";
-import { NgModule, ModuleWithProviders } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { TranslateModule } from "@ngx-translate/core";
-import { IonicModule } from "@ionic/angular";
+import { CommonModule } from '@angular/common';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
 import { HeaderModule } from '../components/header/header.module';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { RouterModule } from '@angular/router';
 import { LoadingModule } from '../components/loading/loading.module';
 import { GalleryManagerComponent } from '../components/gallery-manager/gallery-manager.component';
+import { MomentModule } from 'ngx-moment';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { GalleryManagerComponent } from '../components/gallery-manager/gallery-m
     HeaderModule,
     LazyLoadImageModule,
     RouterModule,
+    MomentModule,
     LoadingModule,
   ],
   exports: [
@@ -33,6 +35,7 @@ import { GalleryManagerComponent } from '../components/gallery-manager/gallery-m
     HeaderModule,
     LazyLoadImageModule,
     RouterModule,
+    MomentModule,
     LoadingModule,
     GalleryManagerComponent,
   ]

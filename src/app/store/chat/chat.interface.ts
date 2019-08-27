@@ -1,30 +1,34 @@
-import { Product } from '../product';
 
 export interface ChatStateModel {
-  chat: Chat;
   loaded: boolean;
-  chatsDetail: ChatDetail[];
+  channel: Channel;
+  channels: Channel[];
 }
 
 export interface Chat {
-  uid: string;
-  uidProduct: string;
-  productName: string;
-  uidUser: string;
-  userAvatar: string;
-  createdAt: number;
-  messages?: Message[];
-  thumbnail?: string;
-  members: MembersEntity;
+  messages: Message[];
 }
 
-export interface ChatDetail {
+export interface Channel {
   uid: string;
-  thumbnail: string;
-  productName: string;
+  product: Product;
+  visitor: User;
+  owner: User;
   timestamp: number;
-  message: string;
+  createdAt: number;
+  lastMessage: string;
   members: MembersEntity;
+}
+interface Product {
+  name: string;
+  avatar: string;
+  uid: string;
+}
+interface User {
+  name: string;
+  uid: string;
+  avatar: string;
+  lastConnection: number;
 }
 export interface Message {
   uid: string;
@@ -32,6 +36,6 @@ export interface Message {
   message: string;
 }
 
-export interface MembersEntity {
+interface MembersEntity {
   [key: string]: boolean;
 }

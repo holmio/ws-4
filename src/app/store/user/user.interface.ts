@@ -9,38 +9,38 @@ export interface UserStateModel {
 }
 
 export interface User {
-    name: string;
-    uid: string;
-    avatar?: string;
-    email: string;
-    lastSignInTime?: string;
-    phone?: number;
-    localization?: string;
-    myProducts?: Product[];
-    favorites?: Product[];
-    willaya?: string;
-    daira?: string;
-  }
-  
-  export interface ProductsUser {
-    uid: string,
-    isSold: boolean,
-    price: number,
-    avatar: string,
-    currency: string,
-  }
+  name: string;
+  uid: string;
+  avatar?: string;
+  email: string;
+  phone?: number;
+  myProducts?: Product[];
+  favorites?: Product[];
+  willaya?: string;
+  lastConnection?: number;
+  daira?: string;
+}
 
-  export interface LoginWithEmailAndPassword {
-    email: string;
-    password: string;
-  }
+export interface ProductsUser {
+  uid: string;
+  isSold: boolean;
+  price: number;
+  avatar: string;
+  currency: string;
+}
 
-  export interface AuthStateModel {
-    user?: UserInfo;
-  }
+export interface LoginWithEmailAndPassword {
+  email: string;
+  password: string;
+}
 
-  export interface UserShortInfo {
-    name?: string;
-    avatar?: string;
-    uid: string;
-  }
+export interface AuthStateModel {
+  user?: UserInfo;
+}
+
+export interface UserShortInfo {
+  name?: string;
+  avatar?: string;
+  lastConnection?: number;
+  uid: string;
+}

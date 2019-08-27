@@ -42,7 +42,7 @@ export class RegisterSuccessAction {
   static type = '[Auth] RegisterSuccess';
   constructor(public user: User) {}
 }
-export class RegisternFailedAction {
+export class RegisterFailedAction {
   static type = '[Auth] RegisterFailed';
   constructor(public error: any) {}
 }

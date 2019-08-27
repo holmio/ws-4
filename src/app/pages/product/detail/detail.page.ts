@@ -29,7 +29,6 @@ import {
 } from 'src/app/store/product';
 import { ROUTE } from 'src/app/util/app.routes.const';
 import { UserShortInfo } from 'src/app/store/user';
-
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
@@ -72,7 +71,7 @@ export class DetailPage implements OnInit, OnDestroy {
     ).subscribe((userUid) => {
       this.isLogin = true;
       if (this.isLogin) {
-        this.chatId = userUid+this.id;
+        this.chatId = userUid + this.id;
       }
     });
 

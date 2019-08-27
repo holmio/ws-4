@@ -41,7 +41,6 @@ export class EditPage implements OnInit, OnDestroy {
       this.myGroup = this.formBuilder.group({
         name: [user.name || '', Validators.required],
         phone: [user.phone || '', Validators.required],
-        localization: [user.localization || '', Validators.required],
         willaya: [user.willaya || '', Validators.required],
         daira: [{ value: user.daira || '', disabled: !user.willaya}, Validators.required],
       });

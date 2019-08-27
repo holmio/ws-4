@@ -1,34 +1,35 @@
-<app-header>
+<app-header color="transparent">
     <ion-buttons header-right-action slot="end">
         <ng-container *ngIf="!(isUserProduct$ | async)">
-            <ion-button *ngIf="!(isFavorite$ | async)" (click)="addFavorite()">
+            <ion-button color="light" *ngIf="!(isFavorite$ | async)" (click)="addFavorite()">
                 <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart-empty"></ion-icon>
             </ion-button>
-            <ion-button *ngIf="(isFavorite$ | async)" (click)="removeFavorite()">
+            <ion-button color="light" *ngIf="(isFavorite$ | async)" (click)="removeFavorite()">
                 <ion-icon mode="ios" slot="end" size="large" slot="start" name="heart"></ion-icon>
             </ion-button>
-            <ion-button [routerLink]="'/chat/' + chatId" routerDirection="forward">
+            <ion-button color="light" [routerLink]="['/chat/' + chatId]" routerDirection="forward"  [queryParams]="{fromProduct: 'true', id: chatId}">
                 <ion-icon mode="ios" size="large" name="chatbubbles"></ion-icon>
             </ion-button>
         </ng-container>
         <ng-container *ngIf="(isUserProduct$ | async)">
-            <ion-button [routerLink]="'/product/edit/' + id" routerDirection="forward">
+            <ion-button color="light" [routerLink]="'/product/edit/' + id" routerDirection="forward">
                 <ion-icon mode="ios" size="large" name="create"></ion-icon>
             </ion-button>
-            <ion-button (click)="delete()">
+            <ion-button color="light" (click)="delete()">
                 <ion-icon mode="ios" size="large" name="trash"></ion-icon>
             </ion-button>
         </ng-container>
     </ion-buttons>
 </app-header>
 
-<ion-content *ngIf="(loading$ | async)" class="ion-padding-bottom">
+<ion-content fullscreen *ngIf="(loading$ | async)" class="ion-padding-bottom">
+    <div class="shadow"></div>
     <ion-slides mode="md" pager="md" [options]="slideOpts" *ngIf="(product$ | async)?.gallery">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>
     </ion-slides>
-    <small class="ion-padding-horizontal">[T]Actualizado: {{(product$ | async)?.timestamp | date }}</small>
+    <small class="ion-padding-horizontal">[T]Publicdo {{(product$ | async)?.createdAt | amTimeAgo }}</small>
     <ion-grid>
         <ion-row>
             <ion-col>

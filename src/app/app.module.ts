@@ -2,6 +2,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.modue';
 import { AuthModule } from './store/auth';
+import { ChatModule } from './store/chat';
 import { ProductModule } from './store/product';
 import { ProductsModule } from './store/products';
 import { UserModule } from './store/user';
@@ -25,7 +26,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { intersectionObserverPreset, LazyLoadImageModule } from 'ng-lazyload-image';
-import { ChatModule } from './store/chat';
+import { MomentModule } from 'ngx-moment';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -62,6 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProductsModule,
     ChatModule,
     AppRoutingModule,
+    MomentModule,
   ],
   providers: [
     StatusBar,

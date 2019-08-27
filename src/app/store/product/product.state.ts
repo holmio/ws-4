@@ -24,6 +24,7 @@ import { ProductService } from './product.service';
 import { UserState } from '../user';
 import * as _ from 'lodash';
 import { UserService } from '../user/user.service';
+import { timestamp } from 'src/app/util/common';
 
 @State<ProductStateModel>({
     name: 'product',
@@ -45,12 +46,6 @@ export class ProductState {
     ) {
 
     }
-
-    // Firebase Server Timestamp
-    get timestamp() {
-        return new Date().getTime();
-    }
-
     /**
      * Selectors
      */
@@ -134,7 +129,7 @@ export class ProductState {
             ...state,
             loaded: false,
         });
-        action.product.timestamp = this.timestamp;
+        action.product.timestamp = timestamp();
         // Necessary to get permission to edit table products
         action.product.userUid = state.product.userUid;
         action.product.uid = state.product.uid;
@@ -231,8 +226,8 @@ export class ProductState {
         });
         // select the snapshot state from users
         const user = this.store.selectSnapshot(UserState.geUser);
-        action.product.timestamp = this.timestamp;
-        action.product.creationDate = this.timestamp;
+        action.product.timestamp = timestamp();
+        action.product.createdAt = timestamp();
         action.product.isSold = false;
         action.product.isEnabled = true;
         action.product.userUid = user.uid;

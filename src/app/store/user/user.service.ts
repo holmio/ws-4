@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { User, UserShortInfo } from './user.interface';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { mergeMap, map } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { APP_CONST } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
@@ -64,12 +62,16 @@ export class UserService {
   }
 
   async updateAvatar(file: string, uid: string): Promise<any> {
-    const filePath: string = `avatar/${uid}.jpg`;
+    const filePath = `avatar/${uid}.jpg`;
     const fileRef = this.storage.ref(filePath);
     const usersColl = this.afStore.firestore.doc(`${APP_CONST.db.users}/${uid}`);
+    const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.usersDetail}/${uid}`);
+    const batch = this.afStore.firestore.batch();
     return this.storageService.uploadContent(file, filePath, fileRef).then(async (url) => {
-      await usersColl.update({ avatar: url })
-    })
+      batch.update(usersColl, { avatar: url });
+      batch.update(usertShortColl, { avatar: url });
+      await batch.commit();
+    });
   }
 
 }
