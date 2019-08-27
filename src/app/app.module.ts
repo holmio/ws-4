@@ -20,6 +20,7 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -56,6 +57,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    MomentModule,
     SharedModule.forRoot(),
     AuthModule,
     UserModule,
@@ -63,7 +65,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProductsModule,
     ChatModule,
     AppRoutingModule,
-    MomentModule,
   ],
   providers: [
     StatusBar,
@@ -71,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Camera,
     Facebook,
     ImagePicker,
+    FirebaseMessaging,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

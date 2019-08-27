@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { LogoutAction } from './store/auth';
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit {
     private store: Store,
     private menu: MenuController,
     private translate: TranslateService,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private fMessaging: FirebaseMessaging,
   ) {
     this.initializeApp();
     // this language will be used as a fallback when a translation isn't found in the current language
@@ -42,6 +44,9 @@ export class AppComponent implements OnInit {
       this.statusBar.backgroundColorByHexString('#DB3A34');
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.fMessaging.requestPermission().then((data) => console.log('Permission ', data));
+      this.fMessaging.getToken().then((data) => console.log('Token ', data));
+      this.fMessaging.onMessage().subscribe((data) => console.log('Message ', data));
     });
   }
 
