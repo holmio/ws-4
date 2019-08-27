@@ -23,6 +23,7 @@ import { ChatService } from './chat.service';
 import { UserState } from '../user';
 import { ProductState } from '../product';
 import { LogoutSuccessAction, LoginFailedAction } from '../auth';
+import { timestamp } from 'src/app/util/common';
 
 @State<ChatStateModel>({
     name: 'chat',
@@ -40,11 +41,6 @@ export class ChatState {
         private chatService: ChatService,
     ) {
 
-    }
-
-    // Firebase Server Timestamp
-    get timestamp() {
-        return new Date().getTime();
     }
 
     /**
@@ -67,7 +63,7 @@ export class ChatState {
         const user = this.store.selectSnapshot(UserState.geUser);
         const finalMessage: Message = {
             message: action.message,
-            timestamp: this.timestamp,
+            timestamp: timestamp(),
             uid: user.uid,
         };
 
@@ -91,7 +87,7 @@ export class ChatState {
 
         const finalMessage: Message = {
             message: action.message,
-            timestamp: this.timestamp,
+            timestamp: timestamp(),
             uid: user.uid,
         };
         const chat: Chat = {
@@ -161,8 +157,8 @@ export class ChatState {
                 const uidChannel = user.uid + product.uid;
                 const newChannel: Channel = {
                     uid: uidChannel,
-                    createdAt: this.timestamp,
-                    timestamp: this.timestamp,
+                    createdAt: timestamp(),
+                    timestamp: timestamp(),
                     lastMessage: '',
                     product: {
                         uid: product.uid,

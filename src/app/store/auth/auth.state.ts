@@ -4,7 +4,7 @@ import {
     Selector,
     State,
     StateContext
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './auth.service';
 import {
@@ -18,12 +18,12 @@ import {
     RegisternFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-    } from './auth.actions';
+} from './auth.actions';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { NgZone } from '@angular/core';
 import { take, tap } from 'rxjs/operators';
 import { User } from '../user/user.interface';
 import { UserInfo } from 'firebase';
+import { timestamp } from 'src/app/util/common';
 
 export interface AuthStateModel {
     uid: string;
@@ -37,23 +37,6 @@ export interface AuthStateModel {
     },
 })
 export class AuthState implements NgxsOnInit {
-
-    constructor(
-        private auth: AuthService,
-        private afAuth: AngularFireAuth,
-    ) {
-    }
-    // Firebase Server Timestamp
-    get timestamp() {
-        return new Date().getTime();
-    }
-    /**
-    * Dispatch CheckSession on start
-    */
-    ngxsOnInit(sc: StateContext<AuthStateModel>) {
-        sc.dispatch(new CheckSessionAction());
-    }
-
     /**
      * Selectors
      */
@@ -61,6 +44,18 @@ export class AuthState implements NgxsOnInit {
     static getUid(state: AuthStateModel) {
         return state.uid || null;
     }
+
+    constructor(
+        private auth: AuthService,
+        private afAuth: AngularFireAuth,
+    ) {
+    }
+
+    ngxsOnInit(sc: StateContext<AuthStateModel>) {
+        sc.dispatch(new CheckSessionAction());
+    }
+
+
 
 
     @Action(CheckSessionAction)
@@ -133,7 +128,7 @@ export class AuthState implements NgxsOnInit {
                 const userInformation: User = {
                     uid: data.userUid,
                     name: data.user.displayName,
-                    lastConnection: this.timestamp,
+                    lastConnection: timestamp(),
                     avatar: data.user.photoUR,
                     email: data.user.email,
                 };
@@ -162,7 +157,7 @@ export class AuthState implements NgxsOnInit {
             const userInformation: User = {
                 uid: data.userUid,
                 name: action.name,
-                lastConnection: this.timestamp,
+                lastConnection: timestamp(),
                 avatar: '../../assets/images/default-avatar.png',
                 email: data.user.email,
             };

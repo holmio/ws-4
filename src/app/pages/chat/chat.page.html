@@ -17,12 +17,17 @@
     </div>
     <div center text-center class="ion-padding-vertical">
         <ion-chip>
-            <ion-label color="primary">Conectado {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
+            <ion-label color="primary">[T]Conectado {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
             </ion-label>
         </ion-chip>
     </div>
     <ion-list>
         <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">
+            <div center text-center *ngIf="diffDates(i)">
+                <ion-chip>
+                    <ion-label color="secondary">{{chat.timestamp | amCalendar}}</ion-label>
+                </ion-chip>
+            </div>
             <ion-row *ngIf="chat.uid != (uid$ | async)">
                 <ion-col class="right"
                     [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
@@ -39,7 +44,7 @@
                             </div>
                             <div class="timedivRight"
                                 *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
-                                <ion-text class="footer-text-size">{{ chat.timestamp | amDateFormat:'HH:mm ' }}
+                                <ion-text class="footer-text-size">{{ chat.timestamp | amDateFormat:'HH:mm' }}
                                 </ion-text>
                             </div>
                         </ion-label>
@@ -48,7 +53,6 @@
             </ion-row>
 
             <ion-row *ngIf="chat.uid == (uid$ | async)" align-item-center>
-
                 <ion-col class="left"
                     [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
                     size="12">
@@ -79,11 +83,6 @@
                 <ion-col>
                 </ion-col>
             </ion-row>
-            <div center text-center *ngIf="diffDates(i)">
-                <ion-chip>
-                    <ion-label color="secondary">{{chat.timestamp | amCalendar}}</ion-label>
-                </ion-chip>
-            </div>
         </div>
     </ion-list>
 </ion-content>

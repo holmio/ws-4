@@ -24,7 +24,6 @@ import {
 } from '@ngxs/store';
 import { ProductService } from '../product/product.service';
 import { mergeMap, map } from 'rxjs/operators';
-import { Product } from '../product';
 
 @State<UserStateModel>({
     name: 'user',
@@ -176,12 +175,12 @@ export class UserState {
     async getMyProducts(sc: StateContext<UserStateModel>) {
         const state = sc.getState();
         const myProducts$ = this.productService.getMyProducts(state.user.uid);
-        const favorites$ = this.productService.getFavoriteProductsByUid(state.user.uid)
+        const favorites$ = this.productService.getFavoriteProductsByUid(state.user.uid);
         await myProducts$.pipe(
             mergeMap((myProducts) =>
                 favorites$.pipe(
                     map(
-                        (favorites) => Object.assign({}, { favorites: favorites, myProducts: myProducts })
+                        (favorites) => Object.assign({}, { favorites, myProducts })
                     )
                 )
             ),

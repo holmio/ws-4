@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { Platform } from '@ionic/angular';
 import { auth } from 'firebase/app';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
 import AuthProvider = firebase.auth.AuthProvider;
-import { Platform } from '@ionic/angular';
-import { switchMap, map, first } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
 
 @Injectable({

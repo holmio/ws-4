@@ -23,7 +23,7 @@ export interface Product {
   isEnabled: boolean;
   isSold?: boolean;
   timestamp: number;
-  creationDate?: number;
+  createdAt?: number;
   avatar?: string;
   userUid: string;
   uid?: string;

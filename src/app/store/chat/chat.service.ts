@@ -26,7 +26,6 @@ export class ChatService {
     this.channelsCollectionRef = this.afStore.collection<Channel>(APP_CONST.db.channels);
     this.productCollectionRef = this.afStore.collection<Product>(APP_CONST.db.productsDetail);
     this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.usersDetail);
-
   }
 
   getChat(uid: string): Observable<Chat> {
@@ -52,7 +51,7 @@ export class ChatService {
         ).valueChanges()
           .pipe(
             map(
-              (user) => Object.assign({}, { product, user })
+              (user: UserShortInfo) => Object.assign({}, { product, user })
             ),
             tap((data) => {
               const newData = this.compareData(data, channel, isVisitor);
@@ -67,7 +66,7 @@ export class ChatService {
     );
   }
 
-  private compareData(newData, oldData: Channel, isVisitor: boolean) {
+  private compareData(newData: { product: Product; user: UserShortInfo; }, oldData: Channel, isVisitor: boolean) {
     const newUserInfo: UserShortInfo = {
       avatar: newData.user.avatar,
       lastConnection: newData.user.lastConnection,
@@ -79,7 +78,7 @@ export class ChatService {
       name: newData.product.name,
     };
 
-    let dataToUpdate;
+    let dataToUpdate: Partial<Channel>;
     if (isVisitor) {
       dataToUpdate = _.cloneDeep(this.difference(newUserInfo, oldData.owner, 'owner'));
     } else {
@@ -90,40 +89,40 @@ export class ChatService {
     }
 
     if (!_.isEmpty(dataToUpdate)) {
-      return {...dataToUpdate};
+      return { ...dataToUpdate };
     }
 
     return;
   }
 
 
-private difference(newData, oldData, parent: string) {
-  function changes(newData, oldData) {
-    return _.transform(newData, (result, value, key) => {
-      if (!_.isEqual(value, oldData[key])) {
-        result[parent + '.' + key] = (_.isObject(value) && _.isObject(oldData[key])) ? changes(value, oldData[key]) : value;
-      }
-    });
+  private difference(newData, oldData, parentObj: string) {
+    function changes(newData, oldData) {
+      return _.transform(newData, (result, value, key) => {
+        if (!_.isEqual(value, oldData[key])) {
+          result[parentObj + '.' + key] = (_.isObject(value) && _.isObject(oldData[key])) ? changes(value, oldData[key]) : value;
+        }
+      });
+    }
+    return changes(newData, oldData);
   }
-  return changes(newData, oldData);
-}
 
-createChannel(chat: Chat, newChannel: Channel): Promise < any > {
-  const batch = this.afStore.firestore.batch();
-  const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${newChannel.uid}`);
-  const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${newChannel.uid}`);
-  batch.set(chatColl, chat);
-  batch.set(channelColl, newChannel);
-  return batch.commit();
-}
+  createChannel(chat: Chat, newChannel: Channel): Promise<any> {
+    const batch = this.afStore.firestore.batch();
+    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${newChannel.uid}`);
+    const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${newChannel.uid}`);
+    batch.set(chatColl, chat);
+    batch.set(channelColl, newChannel);
+    return batch.commit();
+  }
 
-sendMessage(uid: string, message: Message): Promise < any > {
-  const batch = this.afStore.firestore.batch();
-  const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${uid}`);
-  const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
-  const addMessage = { messages: firestore.FieldValue.arrayUnion(message) };
-  batch.update(chatColl, addMessage);
-  batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
-  return batch.commit();
-}
+  sendMessage(uid: string, message: Message): Promise<any> {
+    const batch = this.afStore.firestore.batch();
+    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${uid}`);
+    const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
+    const addMessage = { messages: firestore.FieldValue.arrayUnion(message) };
+    batch.update(chatColl, addMessage);
+    batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
+    return batch.commit();
+  }
 }

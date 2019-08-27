@@ -29,7 +29,7 @@
             <img class="swiper-lazy" [lazyLoad]="image">
         </ion-slide>
     </ion-slides>
-    <small class="ion-padding-horizontal">[T]Publicdo {{(product$ | async)?.creationDate | amTimeAgo }}</small>
+    <small class="ion-padding-horizontal">[T]Publicdo {{(product$ | async)?.createdAt | amTimeAgo }}</small>
     <ion-grid>
         <ion-row>
             <ion-col>

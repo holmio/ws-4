@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { User, UserShortInfo } from './user.interface';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { mergeMap, map } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { APP_CONST } from 'src/app/util/app.constants';
 import * as _ from 'lodash';

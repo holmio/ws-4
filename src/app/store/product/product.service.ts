@@ -42,11 +42,11 @@ export class ProductService {
   }
 
   getMyProducts(uidUser: string): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.where('userUid', '==', uidUser)).valueChanges()
+    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.where('userUid', '==', uidUser)).valueChanges();
   }
 
   getFavoriteProductsByUid(uidUser: string): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.favoriteProducts, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges()
+    return this.afStore.collection(APP_CONST.db.favoriteProducts, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges();
   }
 
   async updateProduct(product: Product, imagesToDelete: string[]): Promise<any> {
@@ -86,7 +86,7 @@ export class ProductService {
     delete product.followers;
     delete product.gallery;
     delete product.description;
-    delete product.creationDate;
+    delete product.createdAt;
     if (action === 'set') {
       batch.set(productShortColl, product);
     } else {
