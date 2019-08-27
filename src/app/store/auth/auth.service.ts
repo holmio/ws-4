@@ -1,7 +1,6 @@
-import { User } from '../user/user.interface';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Platform } from '@ionic/angular';
 import { auth } from 'firebase/app';
@@ -15,8 +14,6 @@ import AuthProvider = firebase.auth.AuthProvider;
   providedIn: 'root'
 })
 export class AuthService {
-  private user: firebase.User;
-  private userCollectionRef: AngularFirestoreCollection<any>;
   user$: Observable<any>;
 
   constructor(
@@ -25,7 +22,6 @@ export class AuthService {
     private fb: Facebook,
     private platform: Platform,
   ) {
-    this.userCollectionRef = this.afStore.collection<User>('users');
     this.user$ = this.afAuth.authState.pipe(
       map(user => user.uid)
     );

@@ -15,7 +15,7 @@ import {
     LoginWithFacebookAction,
     LogoutAction,
     LogoutSuccessAction,
-    RegisternFailedAction,
+    RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
 } from './auth.actions';
@@ -54,9 +54,6 @@ export class AuthState implements NgxsOnInit {
     ngxsOnInit(sc: StateContext<AuthStateModel>) {
         sc.dispatch(new CheckSessionAction());
     }
-
-
-
 
     @Action(CheckSessionAction)
     checkSession(sc: StateContext<AuthStateModel>) {
@@ -166,7 +163,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                sc.dispatch(new RegisternFailedAction(error));
+                sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });
     }
@@ -184,7 +181,7 @@ export class AuthState implements NgxsOnInit {
             sc.dispatch(new SetUserAction(action.user));
         }, 10);
     }
-    @Action([LoginFailedAction, LogoutSuccessAction, RegisternFailedAction])
+    @Action([LoginFailedAction, LogoutSuccessAction, RegisterFailedAction])
     resetAuthState(sc: StateContext<AuthStateModel>) {
         sc.setState({
             uid: null,
