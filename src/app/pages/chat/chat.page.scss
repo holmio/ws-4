@@ -285,68 +285,7 @@ ion-toolbar,ion-footer{
      height: fit-content;
    }
    
-   .clubbed {
-     .imageAvatarRight {
-       .chatDiv {
-         .corner-parent-right{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           left: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-right{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: 15px 12px 0 0px #9164ac7a;
-           }
-         }
-         .corner-parent-right-image{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           left: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-right-image{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: 15px 12px 0 0px var(--ion-color-tertiary-contrast);
-           }
-         }
-       }
-     }
-     .imageAvatarLeft {
-       .chatDiv {
-         .corner-parent-left{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           right: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-left{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: -15px 12px 0 0px -15px 12px 0 0px #b9a3e8;
-           }
-         }
-          
-       }
-     }
-   }
+   
    .input-box{
      color: var(--ion-color-dark-shade);
    }

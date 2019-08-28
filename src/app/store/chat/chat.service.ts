@@ -118,7 +118,7 @@ export class ChatService {
     const batch = this.afStore.firestore.batch();
     const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
     batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
-    const messageColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}/${APP_CONST.db.messages}`);
+    const messageColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`).collection(APP_CONST.db.messages).doc();
     batch.set(messageColl, message);
     return batch.commit();
   }
