@@ -5,10 +5,6 @@ export interface ChatStateModel {
   channels: Channel[];
 }
 
-export interface Chat {
-  messages: Message[];
-}
-
 export interface Channel {
   uid: string;
   product: Product;

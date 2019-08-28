@@ -16,12 +16,12 @@
       </div>
         <ion-item color="transparent">
           <ion-label position="floating">[T]Email</ion-label>
-          <ion-input type="email" formControlName="email" inputmode="email" required>
+          <ion-input maxlength="50" type="email" inputmode="email" formControlName="email" required>
           </ion-input>
         </ion-item>
         <ion-item color="transparent">
           <ion-label position="floating">[T]Password</ion-label>
-          <ion-input type="password" formControlName="password" inputmode="password" required>
+          <ion-input minLength="6" maxlength="50" type="password" formControlName="password" inputmode="password" required>
           </ion-input>
         </ion-item>
         <div class="sub-text-4">

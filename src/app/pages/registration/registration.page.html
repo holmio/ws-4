@@ -12,15 +12,15 @@
         <form [formGroup]="registerForm" (submit)="onSubmit()">
           <ion-item color="transparent">
             <ion-label position="floating">[T]Full Name</ion-label>
-            <ion-input type="text" formControlName="name" padding-start></ion-input>
+            <ion-input maxlength="30" type="text" formControlName="name" padding-start></ion-input>
           </ion-item>
           <ion-item color="transparent">
             <ion-label position="floating">[T]Email</ion-label>
-            <ion-input type="email" formControlName="email" padding-start inputmode="email" required></ion-input>
+            <ion-input maxlength="50" type="email" formControlName="email" padding-start inputmode="email" required></ion-input>
           </ion-item>
           <ion-item color="transparent">
             <ion-label position="floating">[T]Password</ion-label>
-            <ion-input type="password" formControlName="password" padding-start inputmode="password" required></ion-input>
+            <ion-input minlength="6" maxlength="50" type="password" formControlName="password" padding-start inputmode="password" required></ion-input>
           </ion-item>
           <div class="button" class="ion-padding-top">
             <ion-button fill="outline" color="light" size="large" [disabled]="!registerForm.valid" type="submit" expand="block">[T]Register</ion-button>

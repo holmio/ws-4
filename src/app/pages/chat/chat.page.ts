@@ -2,8 +2,8 @@ import { Actions, ofActionDispatched, Select, Store } from '@ngxs/store';
 import { ActivatedRoute } from '@angular/router';
 import { AuthState } from 'src/app/store/auth';
 import {
-  Channel, Chat, ChatState, GetChannelAction, GetChannelSuccessAction,
-  SendMessageAction, SetChannelAction, UpdateChannelAction, GetChannelFailedAction
+  Channel, ChatState, GetChannelAction, GetChannelSuccessAction,
+  SendMessageAction, SetChannelAction, UpdateChannelAction, GetChannelFailedAction, Message
 } from 'src/app/store/chat';
 import { ChatService } from 'src/app/store/chat/chat.service';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
@@ -25,7 +25,7 @@ export class ChatPage implements OnInit, OnDestroy {
   messageInput = '';
   show: boolean;
 
-  chat$: Observable<Chat>;
+  messages$: Observable<Message[]>;
   @Select(ChatState.getChannel) channelInfo$: Observable<Channel>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
@@ -46,7 +46,7 @@ export class ChatPage implements OnInit, OnDestroy {
         if (this.fromProduct) {
           this.store.dispatch(new GetChannelAction(this.id));
         }
-        this.chat$ = this.chatService.getChat(this.id);
+        this.messages$ = this.chatService.getMessages(this.id);
       });
   }
 
@@ -68,8 +68,8 @@ export class ChatPage implements OnInit, OnDestroy {
       }
     });
 
-    this.chat$.pipe(takeUntil(this.distroy$)).subscribe((chat: Chat) => {
-      this.messages = _.cloneDeep(chat.messages);
+    this.messages$.pipe(takeUntil(this.distroy$)).subscribe((messages: Message[]) => {
+      this.messages = _.cloneDeep(messages);
     });
   }
 

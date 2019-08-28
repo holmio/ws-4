@@ -124,8 +124,8 @@ ion-toolbar,ion-footer{
      position: relative;
      background: var(--ion-color-medium-contrast);
      border-radius: 10px;
-      margin: 0px 0 3px 0px;
-     max-width: 62vw;
+      margin: 0px 0 3px 5px;
+     max-width: 70vw;
      width: auto;
      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
      display: flex;
@@ -151,7 +151,7 @@ ion-toolbar,ion-footer{
      p{
        padding: 5px 10px;
        text-align: left;
-       font-size: 0.8em;
+       font-size: 16px;
      }
       
    }
@@ -195,8 +195,8 @@ ion-toolbar,ion-footer{
      position: relative;
      background:  var(--ion-color-tertiary);
      border-radius: 10px;
-      margin: 0px 0px 3px 0px;
-     max-width: 62vw;
+      margin: 0px 5px 3px 0px;
+     max-width: 70vw;
      width: auto;
      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
      display: flex;
@@ -207,7 +207,7 @@ ion-toolbar,ion-footer{
      p{
        padding: 5px 10px;
        text-align: left;
-       font-size: 0.9em;
+       font-size: 16px;
      }
      .ChatproifilePic{
      width: 28px;
@@ -285,68 +285,7 @@ ion-toolbar,ion-footer{
      height: fit-content;
    }
    
-   .clubbed {
-     .imageAvatarRight {
-       .chatDiv {
-         .corner-parent-right{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           left: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-right{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: 15px 12px 0 0px #9164ac7a;
-           }
-         }
-         .corner-parent-right-image{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           left: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-right-image{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: 15px 12px 0 0px var(--ion-color-tertiary-contrast);
-           }
-         }
-       }
-     }
-     .imageAvatarLeft {
-       .chatDiv {
-         .corner-parent-left{
-           height: 30px;
-           width: 30px;
-           background: transparent;
-           position: absolute;
-           right: -30px;
-           bottom: 0;
-           overflow: hidden;
-           border-radius: 0;
-           .corner-child-left{
-             width: 30px;
-             height: 30px;
-             border-radius: 15px;
-             background: transparent;
-             box-shadow: -15px 12px 0 0px -15px 12px 0 0px #b9a3e8;
-           }
-         }
-          
-       }
-     }
-   }
+   
    .input-box{
      color: var(--ion-color-dark-shade);
    }

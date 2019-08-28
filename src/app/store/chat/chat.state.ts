@@ -18,7 +18,7 @@ import {
     UpdateChannelFailedAction,
 } from './chat.actions';
 import * as _ from 'lodash';
-import { ChatStateModel, Message, Chat, Channel } from './chat.interface';
+import { ChatStateModel, Message, Channel } from './chat.interface';
 import { ChatService } from './chat.service';
 import { UserState } from '../user';
 import { ProductState } from '../product';
@@ -85,16 +85,13 @@ export class ChatState {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
 
-        const finalMessage: Message = {
+        const message: Message = {
             message: action.message,
             timestamp: timestamp(),
             uid: user.uid,
         };
-        const chat: Chat = {
-            messages: [finalMessage],
-        };
 
-        await this.chatService.createChannel(chat, state.channel).then(data => {
+        await this.chatService.createChannel(message, state.channel).then(data => {
             setTimeout(() => {
                 sc.dispatch(new SetChannelSuccessAction(state.channel));
             }, 10);
@@ -109,7 +106,6 @@ export class ChatState {
     setChannelSuccess(sc: StateContext<ChatStateModel>, action: SetChannelSuccessAction) {
         const state = sc.getState();
         sc.dispatch(new GetChannelAction(action.channel.uid));
-
     }
 
     // GET CHANNELS LIST

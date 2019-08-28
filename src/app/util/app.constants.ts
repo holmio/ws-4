@@ -6,7 +6,7 @@ export const APP_CONST = {
         products: 'products',
         usersDetail: 'userShortInfo',
         favoriteProducts: 'favoriteProducts',
-        chats: 'chats',
+        messages: 'messages',
         channels: 'channels',
     },
     categories: [

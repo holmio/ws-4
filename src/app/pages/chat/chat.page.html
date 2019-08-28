@@ -1,5 +1,5 @@
 <app-header [title]="
-    (uid$ | async) == (channelInfo$ | async).visitor.uid ?
+    (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
     (channelInfo$ | async)?.owner.name :
     (channelInfo$ | async)?.visitor.name">
 </app-header>
@@ -22,29 +22,22 @@
         </ion-chip>
     </div>
     <ion-list>
-        <div *ngFor="let chat of (chat$ | async)?.messages; let i = index; ">
+        <div *ngFor="let message of (messages$ | async); let i = index; ">
             <div center text-center *ngIf="diffDates(i)">
                 <ion-chip>
-                    <ion-label color="secondary">{{chat.timestamp | amCalendar}}</ion-label>
+                    <ion-label color="secondary">{{message.timestamp | amCalendar}}</ion-label>
                 </ion-chip>
             </div>
-            <ion-row *ngIf="chat.uid != (uid$ | async)">
-                <ion-col class="right"
-                    [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
-                    size="12">
+            <ion-row *ngIf="message.uid != (uid$ | async)">
+                <ion-col class="right" size="12">
                     <div class="imageAvatarRight">
                         <ion-label color="light">
-                            <div class="chatDiv"
-                                [ngClass]="{'sharper':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid) && 
-                          ((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid)),
-                          'sharper-top':((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid),
-                          'sharper-bottom':((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid)}">
+                            <div class="chatDiv">
 
-                                <p text-wrap padding>{{chat.message}}</p>
+                                <p text-wrap padding>{{message.message}}</p>
                             </div>
-                            <div class="timedivRight"
-                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
-                                <ion-text class="footer-text-size">{{ chat.timestamp | amDateFormat:'HH:mm' }}
+                            <div class="timedivRight">
+                                <ion-text class="footer-text-size">{{ message.timestamp | amDateFormat:'HH:mm' }}
                                 </ion-text>
                             </div>
                         </ion-label>
@@ -52,35 +45,23 @@
                 </ion-col>
             </ion-row>
 
-            <ion-row *ngIf="chat.uid == (uid$ | async)" align-item-center>
-                <ion-col class="left"
-                    [ngClass]="{'clubbed':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])}"
-                    size="12">
+            <ion-row *ngIf="message.uid == (uid$ | async)" align-item-center>
+                <ion-col class="left" size="12">
                     <div class="imageAvatarLeft">
                         <ion-label color="light">
-                            <div class="chatDiv"
-                                [ngClass]="{'sharper':(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid) && 
-                          ((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid)),
-                          'sharper-top':((chat$ | async)?.messages[i-1] && (chat$ | async)?.messages[i-1].uid == chat.uid),
-                          'sharper-bottom':((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid == chat.uid)}">
-                                <p text-wrap padding>{{chat.message}}
+                            <div class="chatDiv">
+                                <p text-wrap padding>{{message.message}}
                                 </p>
                             </div>
 
-                            <div class="timediv"
-                                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid)|| !(chat$ | async)?.messages[i+1])">
-                                <ion-icon [name]="chat.status" color="rose"></ion-icon>
+                            <div class="timediv">
+                                <ion-icon [name]="message.status" color="rose"></ion-icon>
                                 <ion-text color="rose" class="footer-text-size">
-                                    {{ chat.timestamp | amDateFormat:'HH:mm ' }}
+                                    {{ message.timestamp | amDateFormat:'HH:mm ' }}
                                 </ion-text>
                             </div>
                         </ion-label>
                     </div>
-                </ion-col>
-            </ion-row>
-            <ion-row
-                *ngIf="(((chat$ | async)?.messages[i+1] && (chat$ | async)?.messages[i+1].uid != chat.uid) || !(chat$ | async)?.messages[i+1])">
-                <ion-col>
                 </ion-col>
             </ion-row>
         </div>
@@ -88,8 +69,8 @@
 </ion-content>
 <ion-footer>
     <ion-item class="footerItem">
-        <ion-input (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" (keypress)="userTyping($event)"
-            type="text" placeholder="Type your message here..."></ion-input>
+        <ion-input max="500" (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" (keypress)="userTyping($event)"
+            type="text" placeholder="[T]Type your message here..." max=""></ion-input>
         <ion-icon name="send" expand="icon-only" color="medium" mode="ios" slot="end" (click)=" sendMsg()"
             (mousedown)="something($event)">
         </ion-icon>
