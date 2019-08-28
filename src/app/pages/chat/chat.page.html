@@ -69,8 +69,8 @@
 </ion-content>
 <ion-footer>
     <ion-item class="footerItem">
-        <ion-input (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" (keypress)="userTyping($event)"
-            type="text" placeholder="Type your message here..."></ion-input>
+        <ion-input max="500" (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" (keypress)="userTyping($event)"
+            type="text" placeholder="[T]Type your message here..." max=""></ion-input>
         <ion-icon name="send" expand="icon-only" color="medium" mode="ios" slot="end" (click)=" sendMsg()"
             (mousedown)="something($event)">
         </ion-icon>
