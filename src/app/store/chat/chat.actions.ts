@@ -1,4 +1,4 @@
-import { Chat, Message, Channel } from './chat.interface';
+import { Channel } from './chat.interface';
 
 // SEND MESSAGE
 export class SendMessageAction {

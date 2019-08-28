@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { APP_CONST } from 'src/app/util/app.constants';
 import * as _ from 'lodash';
-import { firestore } from 'firebase/app';
-import { Chat, Message, Channel } from './chat.interface';
+import { Message, Channel } from './chat.interface';
 import { Observable } from 'rxjs';
 import { take, mergeMap, map, tap } from 'rxjs/operators';
 import { Product } from '../product';
@@ -14,7 +13,7 @@ import { UserShortInfo } from '../user';
 })
 export class ChatService {
 
-  private chatsCollectionRef: AngularFirestoreCollection<any>;
+  private messagesCollectionRef: AngularFirestoreCollection<any>;
   private channelsCollectionRef: AngularFirestoreCollection<any>;
   private productCollectionRef: AngularFirestoreCollection<Product>;
   private userShortInfoCollectionRef: AngularFirestoreCollection<any>;
@@ -22,14 +21,13 @@ export class ChatService {
   constructor(
     private afStore: AngularFirestore,
   ) {
-    this.chatsCollectionRef = this.afStore.collection<Chat>(APP_CONST.db.chats);
     this.channelsCollectionRef = this.afStore.collection<Channel>(APP_CONST.db.channels);
     this.productCollectionRef = this.afStore.collection<Product>(APP_CONST.db.productsDetail);
     this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.usersDetail);
   }
 
-  getChat(uid: string): Observable<Chat> {
-    return this.chatsCollectionRef.doc<Chat>(uid).valueChanges();
+  getMessages(uid: string): Observable<Message[]> {
+    return this.channelsCollectionRef.doc<Channel>(uid).collection<Message>(APP_CONST.db.messages).valueChanges();
   }
 
 
@@ -107,22 +105,21 @@ export class ChatService {
     return changes(newData, oldData);
   }
 
-  createChannel(chat: Chat, newChannel: Channel): Promise<any> {
+  createChannel(message: Message, newChannel: Channel): Promise<any> {
     const batch = this.afStore.firestore.batch();
-    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${newChannel.uid}`);
     const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${newChannel.uid}`);
-    batch.set(chatColl, chat);
     batch.set(channelColl, newChannel);
+    const messageColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${newChannel.uid}`).collection(APP_CONST.db.messages).doc();
+    batch.set(messageColl, message);
     return batch.commit();
   }
 
   sendMessage(uid: string, message: Message): Promise<any> {
     const batch = this.afStore.firestore.batch();
-    const chatColl = this.afStore.firestore.doc(`${APP_CONST.db.chats}/${uid}`);
     const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
-    const addMessage = { messages: firestore.FieldValue.arrayUnion(message) };
-    batch.update(chatColl, addMessage);
     batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
+    const messageColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}/${APP_CONST.db.messages}`);
+    batch.set(messageColl, message);
     return batch.commit();
   }
 }
