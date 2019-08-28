@@ -27,7 +27,8 @@ export class ChatService {
   }
 
   getMessages(uid: string): Observable<Message[]> {
-    return this.channelsCollectionRef.doc<Channel>(uid).collection<Message>(APP_CONST.db.messages).valueChanges();
+    return this.afStore.collection<Channel>(APP_CONST.db.channels).doc(uid).collection<Message>(APP_CONST.db.messages, ref =>
+      ref.orderBy('timestamp', 'asc')).valueChanges();
   }
 
 
