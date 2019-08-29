@@ -19,8 +19,15 @@
             </div>
             <div slot="end" class="lastSection">
                 <ion-text class="sendTime" color="medium">
-                    {{channel.timestamp | amDateFormat:'D MMMM, HH:mm' }}</ion-text>
-                <ion-badge slot="end" class="userBadge" >3</ion-badge>
+                    {{channel.timestamp | amDateFormat:'D MMMM, HH:mm' }}
+                </ion-text>
+                <ion-avatar>
+                    <img [lazyLoad]="
+                        (uid$ | async) == channel.visitor.uid ?
+                        channel.owner.avatar : channel.visitor.avatar" />
+                </ion-avatar>
+                
+                <!-- <ion-badge slot="end" class="userBadge" >3</ion-badge> -->
             </div>
         </ion-item>
     </ion-list>

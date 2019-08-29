@@ -1,3 +1,13 @@
+app-header {
+  ::ng-deep ion-header {
+    ion-avatar {
+      width: 34px;
+      height: auto;
+      margin-top: 12px;
+      margin-right: 12px;
+    }
+  }
+}
 
 ion-toolbar,ion-footer{
     --background: var(--ion-color-rose);

@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'product/detail/:id', loadChildren: './pages/product/detail/detail.module#DetailPageModule' },
   
   { path: 'chat/:id', loadChildren: './pages/chat/chat.module#ChatPageModule', canActivate: [AuthGuard]},
+  { path: 'user-detail', loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule' },
 ];
 
 @NgModule({

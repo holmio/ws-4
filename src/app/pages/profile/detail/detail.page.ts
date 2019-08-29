@@ -8,7 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { Product } from 'src/app/store/product';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-detail',
@@ -25,7 +24,6 @@ export class DetailPage implements OnInit, OnDestroy {
   private sourceType: any;
   constructor(
     private platform: Platform,
-    private actions: Actions,
     private camera: Camera,
     private actionSheetCtrl: ActionSheetController,
     private toastService: ToastService,
@@ -38,7 +36,6 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    
   }
 
   takePicture() {

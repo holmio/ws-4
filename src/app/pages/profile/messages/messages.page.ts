@@ -3,6 +3,7 @@ import { Store, Select } from '@ngxs/store';
 import { ChatState, Channel, GetChannelsAction, GetChannelSuccessAction } from 'src/app/store/chat';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthState } from 'src/app/store/auth';
 
 @Component({
   selector: 'app-messages',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class MessagesPage implements OnInit {
 
   @Select(ChatState.getChannels) channels$: Observable<Channel>;
+  @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
   constructor(
     private store: Store,
