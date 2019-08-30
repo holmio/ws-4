@@ -2,7 +2,10 @@
     (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
     (channelInfo$ | async)?.owner.name :
     (channelInfo$ | async)?.visitor.name">
-    <ion-avatar header-right-action slot="end">
+    <ion-avatar header-right-action slot="end" [routerLink]="'/user-detail/'+
+        (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
+        (channelInfo$ | async)?.owner.uid :
+        (channelInfo$ | async)?.visitor.uid" routerDirection="forward">
         <img [lazyLoad]="
         (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
         (channelInfo$ | async)?.owner.avatar :

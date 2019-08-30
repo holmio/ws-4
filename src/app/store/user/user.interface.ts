@@ -5,9 +5,14 @@ export interface UserStateModel {
   user: User;
   myProducts: Product[];
   favoriteProducts: Product[];
+  visitedUser: VisitedUser;
   loaded: boolean;
 }
-
+export interface VisitedUser {
+  user: User;
+  products: Product[];
+  favorites: Product[];
+}
 export interface User {
   name: string;
   uid: string;

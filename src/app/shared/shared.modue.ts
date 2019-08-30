@@ -9,10 +9,11 @@ import { RouterModule } from '@angular/router';
 import { LoadingModule } from '../components/loading/loading.module';
 import { GalleryManagerComponent } from '../components/gallery-manager/gallery-manager.component';
 import { MomentModule } from 'ngx-moment';
+import { ProductCardComponent } from '../components/product-card/product-card.component';
 
 
 @NgModule({
-  declarations: [GalleryManagerComponent],
+  declarations: [GalleryManagerComponent, ProductCardComponent],
   entryComponents: [],
   imports: [
     CommonModule,
@@ -38,6 +39,7 @@ import { MomentModule } from 'ngx-moment';
     MomentModule,
     LoadingModule,
     GalleryManagerComponent,
+    ProductCardComponent,
   ]
 })
 export class SharedModule {

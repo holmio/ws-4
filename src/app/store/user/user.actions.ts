@@ -57,3 +57,17 @@ export class UpdateAvatarUserFailedAction {
 export class GetMyProductsAction {
   static type = '[Products] GetMyProducts and Favorites';
 }
+
+// GET
+export class GetVisitedUserAction {
+  static type = '[User] GetVisitedUser';
+  constructor(public uid: string) {}
+}
+export class GetVisitedUserSuccessAction {
+  static type = '[User] GetVisitedUserSuccess';
+  constructor(public user: User) {}
+}
+export class GetVisitedUserFailedAction {
+  static type = '[User] GetVisitedUserFailed';
+  constructor(public error: any) {}
+}
