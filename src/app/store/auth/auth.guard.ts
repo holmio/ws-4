@@ -11,20 +11,17 @@ import { ROUTE } from 'src/app/util/app.routes.const';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  @Select(AuthState.getUid) uid$: Observable<string | undefined>;
-
   constructor(
     private router: Router,
-  ) {}
+    private store: Store
+  ) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.uid$.pipe(
-      map(u => {
-        if (!u) {
-          this.router.navigate([ROUTE.login]);
-        }
-        return true;
-      })
-    );
+    const uid = this.store.selectSnapshot(AuthState.getUid);
+    if (!uid) {
+      this.router.navigate([ROUTE.login]);
+      return false;
+    }
+    return true;
   }
 }
