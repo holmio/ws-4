@@ -45,7 +45,7 @@ export class ProductService {
     return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.where('userUid', '==', uidUser)).valueChanges();
   }
 
-  getFavoriteProductsByUid(uidUser: string): Observable<any> {
+  getFavorites(uidUser: string): Observable<any> {
     return this.afStore.collection(APP_CONST.db.favoriteProducts, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges();
   }
 

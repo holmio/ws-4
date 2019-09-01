@@ -12,6 +12,7 @@ import {
     UpdateUserFailedAction,
     UpdateUserSuccessAction,
     GetMyProductsAction,
+    GetVisitedUserAction,
 } from './user.actions';
 import { UserService } from './user.service';
 import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
@@ -23,12 +24,13 @@ import {
     StateContext
 } from '@ngxs/store';
 import { ProductService } from '../product/product.service';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, take } from 'rxjs/operators';
 
 @State<UserStateModel>({
     name: 'user',
     defaults: {
         user: null,
+        visitedUser: null,
         myProducts: [],
         favoriteProducts: [],
         loaded: false,
@@ -56,6 +58,10 @@ export class UserState {
     @Selector()
     static getFavoriteProducts(state: UserStateModel) {
         return state.favoriteProducts;
+    }
+    @Selector()
+    static getVisitedUser(state: UserStateModel) {
+        return state.visitedUser;
     }
 
     @Action(GetUserAction)
@@ -175,7 +181,7 @@ export class UserState {
     async getMyProducts(sc: StateContext<UserStateModel>) {
         const state = sc.getState();
         const myProducts$ = this.productService.getMyProducts(state.user.uid);
-        const favorites$ = this.productService.getFavoriteProductsByUid(state.user.uid);
+        const favorites$ = this.productService.getFavorites(state.user.uid);
         await myProducts$.pipe(
             mergeMap((myProducts) =>
                 favorites$.pipe(
@@ -196,10 +202,37 @@ export class UserState {
         });
     }
 
+    @Action(GetVisitedUserAction)
+    async getVisitedUser(sc: StateContext<UserStateModel>, action: GetVisitedUserAction) {
+        const state = sc.getState();
+        const user$ = this.userService.getUser(action.uid).pipe(take(1));
+        const myProducts$ = this.productService.getMyProducts(action.uid).pipe(take(1));
+        const favorites$ = this.productService.getFavorites(action.uid).pipe(take(1));
+        await user$.pipe(
+            mergeMap((user) =>
+                favorites$.pipe(
+                    mergeMap((favorites) =>
+                        myProducts$.pipe(
+                            map(
+                                (products) => {
+                                    sc.setState({
+                                        ...state,
+                                        visitedUser: {user, products, favorites},
+                                        loaded: true,
+                                    });
+                                })
+                            )
+                        )
+                )
+            ),
+        );
+    }
+
     @Action([GetUserFailedAction, LogoutSuccessAction])
     resetUserState(sc: StateContext<UserStateModel>) {
         sc.setState({
             user: null,
+            visitedUser: null,
             myProducts: [],
             favoriteProducts: [],
             loaded: true

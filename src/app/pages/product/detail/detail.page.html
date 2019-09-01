@@ -61,7 +61,7 @@
         </ion-row>
         <ion-row *ngIf="!(isUserProduct$ | async)">
             <ion-col>
-                <ion-item lines="none">
+                <ion-item lines="none" [routerLink]="'/user-detail/'+(ownerOfProduct$ | async)?.uid" routerDirection="forward">
                     <ion-avatar slot="start">
                         <img [lazyLoad]="(ownerOfProduct$ | async)?.avatar" />
                     </ion-avatar>

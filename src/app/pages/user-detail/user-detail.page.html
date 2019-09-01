@@ -1,16 +1,19 @@
-<app-header [title]="(user$ | async)?.name">
-  <ion-buttons header-right-action routerLink="/profile/edit" routerDirection="forward" slot="end" padding-end>
-    <ion-icon name="settings" size="large"></ion-icon>
-  </ion-buttons>
+<app-header>
   <ion-toolbar color="primary">
-    <div class="userSection" padding-horizontal>
-      <img (click)="presentSheet()" [lazyLoad]="(user$ | async)?.avatar" />
-      <div class="userDetail">
-        <ion-label class="phone">
-          {{ (user$ | async)?.phone }}
-        </ion-label>
-      </div>
-    </div>
+    <ion-item lines="none" color="primary" padding-horizontal>
+      <ion-avatar slot="start">
+        <img [lazyLoad]="(visitedUser$ | async)?.user.avatar">
+      </ion-avatar>
+      <ion-label>
+        <h1>{{(visitedUser$ | async)?.user.name}}</h1>
+        <h2>
+          <ion-icon name="podium"></ion-icon> Ventas: 8, Compras: 2
+        </h2>
+        <h2>
+          <ion-icon name="pin"></ion-icon> {{(visitedUser$ | async)?.user.willaya}}, {{(visitedUser$ | async)?.user.daira}}
+        </h2>
+      </ion-label>
+    </ion-item>
   </ion-toolbar>
   <ion-toolbar color="primary">
     <ion-segment [(ngModel)]="selectSegment">
@@ -22,10 +25,6 @@
         <ion-badge color="primary" mode="md">{{(favorites$ | async)?.length}}</ion-badge>
         <ion-label>[T]Favoritos</ion-label>
       </ion-segment-button>
-      <!-- <ion-segment-button value="messages" color="light">
-        <ion-badge color="primary" mode="md">0</ion-badge>
-        <ion-label>[T]Mensajes</ion-label>
-      </ion-segment-button> -->
     </ion-segment>
   </ion-toolbar>
 </app-header>
@@ -33,14 +32,14 @@
 <ion-content fullscreen>
   <ion-grid *ngIf="selectSegment == 'products'">
     <ion-row>
-      <ion-col size="6" *ngFor="let product of (products$ | async)">
+      <ion-col size="6" *ngFor="let product of (visitedUser$ | async)?.products">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
     </ion-row>
   </ion-grid>
   <ion-grid *ngIf="selectSegment == 'favorites'">
     <ion-row>
-      <ion-col size="6" *ngFor="let product of (favorites$ | async)">
+      <ion-col size="6" *ngFor="let product of (visitedUser$ | async)?.favorites">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
     </ion-row>
