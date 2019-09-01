@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { NavController } from '@ionic/angular';
-import { Action, Select, Selector, State, StateContext, Store } from '@ngxs/store';
+import { Action, Select, Selector, State, StateContext, Store, Actions, ofAction } from '@ngxs/store';
 
 import { AuthState, AuthStateModel, LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import {
@@ -17,7 +16,8 @@ import {
     DeleteProductAction,
     DeleteProductSuccessAction,
     DeleteProductFailedAction,
-    GetUserProductAction
+    GetUserProductAction,
+    DistroyProductAction
 } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
@@ -25,6 +25,7 @@ import { UserState } from '../user';
 import * as _ from 'lodash';
 import { UserService } from '../user/user.service';
 import { timestamp } from 'src/app/util/common';
+import { takeUntil } from 'rxjs/operators';
 
 @State<ProductStateModel>({
     name: 'product',
@@ -42,6 +43,7 @@ export class ProductState {
     constructor(
         private productService: ProductService,
         private userService: UserService,
+        private actions$: Actions,
         private store: Store,
     ) {
 
@@ -77,27 +79,28 @@ export class ProductState {
     // GET PRODUCT
 
     @Action(GetProductAction)
-    async getProduct(sc: StateContext<ProductStateModel>, action: GetProductAction) {
+    getProduct(sc: StateContext<ProductStateModel>, action: GetProductAction) {
         const state = sc.getState();
         sc.setState({
             ...state,
             loaded: false,
         });
-        await this.productService.getProduct(action.uid).subscribe(data => {
-            setTimeout(() => {
-                sc.dispatch(new GetProductSuccessAction(data));
-            }, 10);
-        }, error => {
-            setTimeout(() => {
-                sc.dispatch(new GetProductFailedAction(error));
-            }, 10);
-        });
+        return this.productService.getProduct(action.uid)
+            .pipe(takeUntil(this.actions$.pipe(ofAction(DistroyProductAction))))
+            .subscribe(data => {
+                setTimeout(() => {
+                    sc.dispatch(new GetProductSuccessAction(data));
+                }, 10);
+            }, error => {
+                setTimeout(() => {
+                    sc.dispatch(new GetProductFailedAction(error));
+                }, 10);
+            });
     }
 
     @Action(GetProductSuccessAction)
     getProductSuccess(sc: StateContext<ProductStateModel>, action: GetProductSuccessAction) {
         const state = sc.getState();
-        const user = this.store.selectSnapshot(UserState.geUser);
         sc.setState({
             ...state,
             product: action.product,
@@ -108,9 +111,9 @@ export class ProductState {
     // GET USER INFO
 
     @Action(GetUserProductAction)
-    async getUserInfo(sc: StateContext<ProductStateModel>) {
+    getUserInfo(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
-        await this.userService.getShortUserInfo(state.product.userUid).subscribe(data => {
+        return this.userService.getShortUserInfo(state.product.userUid).subscribe(data => {
             sc.setState({
                 ...state,
                 userInfo: data,

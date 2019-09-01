@@ -111,10 +111,10 @@ export class ChatState {
     // GET CHANNELS LIST
 
     @Action(GetChannelsAction)
-    async getChannels(sc: StateContext<ChatStateModel>) {
+    getChannels(sc: StateContext<ChatStateModel>) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.chatService.getChannels(user.uid).subscribe(data => {
+        return this.chatService.getChannels(user.uid).subscribe(data => {
             setTimeout(() => {
                 sc.dispatch(new GetChannelsSuccessAction(data));
             }, 10);
@@ -138,13 +138,13 @@ export class ChatState {
     // GET CHANNEL
 
     @Action(GetChannelAction)
-    async getChannel(sc: StateContext<ChatStateModel>, action: GetChannelAction) {
+    getChannel(sc: StateContext<ChatStateModel>, action: GetChannelAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         const product = this.store.selectSnapshot(ProductState.getProduct);
         const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
 
-        await this.chatService.getChannel(action.uid).subscribe(channel => {
+        return this.chatService.getChannel(action.uid).subscribe(channel => {
             if (channel) {
                 setTimeout(() => {
                     sc.dispatch(new GetChannelSuccessAction(channel));
@@ -208,11 +208,11 @@ export class ChatState {
     // UPDATE CHANNEL
 
     @Action(UpdateChannelAction)
-    async UpdateChannel(sc: StateContext<ChatStateModel>) {
+    UpdateChannel(sc: StateContext<ChatStateModel>) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         const isVisitor = user.uid === state.channel.visitor.uid;
-        await this.chatService.updateChannel(state.channel, isVisitor).subscribe(data => {
+        return this.chatService.updateChannel(state.channel, isVisitor).subscribe(data => {
             setTimeout(() => {
                 sc.dispatch(new UpdateChannelSuccessAction());
             }, 10);

@@ -25,7 +25,7 @@ import {
   DeleteProductSuccessAction,
   GetUserProductAction,
   GetProductSuccessAction,
-  UpdateProductSuccessAction
+  DistroyProductAction
 } from 'src/app/store/product';
 import { ROUTE } from 'src/app/util/app.routes.const';
 import { UserShortInfo } from 'src/app/store/user';
@@ -84,14 +84,6 @@ export class DetailPage implements OnInit, OnDestroy {
     });
 
     this.actions.pipe(
-      ofActionSuccessful(UpdateProductSuccessAction),
-    ).subscribe(() => {
-      setTimeout(() => {
-        this.store.dispatch(new GetProductAction(this.id));
-      }, 500);
-    });
-
-    this.actions.pipe(
       ofActionSuccessful(DeleteProductSuccessAction),
       take(1)
     ).subscribe(() => {
@@ -102,6 +94,7 @@ export class DetailPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+    this.store.dispatch(new DistroyProductAction());
   }
 
   addFavorite() {

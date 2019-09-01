@@ -78,3 +78,6 @@ export class RemoveFavoriteFailedAction {
 export class GetUserProductAction {
   static type = '[Product] GetUserProduct';
 }
+export class DistroyProductAction {
+  static type = '[Product] DistroyProduct';
+}

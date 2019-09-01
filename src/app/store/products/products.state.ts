@@ -34,10 +34,10 @@ export class ProductsState {
     // GET PRODUCTS
 
     @Action(GetProductsAction)
-    async getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
+    getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        await this.productService.getProducts(user && user.uid).subscribe((data) => {
+        return this.productService.getProducts(user && user.uid).subscribe((data) => {
             setTimeout(() => {
                 sc.dispatch(new GetProductsSuccessAction(data));
             }, 10);

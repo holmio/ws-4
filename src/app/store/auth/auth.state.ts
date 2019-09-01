@@ -93,7 +93,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(LogoutAction)
     async logout(sc: StateContext<AuthStateModel>) {
-        return this.afAuth.auth.signOut().then(() => {
+        await this.afAuth.auth.signOut().then(() => {
             setTimeout(() => {
                 sc.dispatch(new LogoutSuccessAction());
             }, 10);

@@ -71,7 +71,7 @@ export class UserState {
             ...state,
             loaded: false,
         });
-        this.userService.getUser(action.uid).subscribe((user: User) => {
+        return this.userService.getUser(action.uid).subscribe((user: User) => {
             setTimeout(() => {
                 sc.dispatch(new GetUserSuccessAction(user));
             }, 10);
@@ -92,13 +92,13 @@ export class UserState {
     }
 
     @Action(UpdateAvatarUserAction)
-    updateAvatarUserData(sc: StateContext<UserStateModel>, action: UpdateAvatarUserAction) {
+    async updateAvatarUserData(sc: StateContext<UserStateModel>, action: UpdateAvatarUserAction) {
         const state = sc.getState();
         sc.setState({
             ...state,
             loaded: false,
         });
-        this.userService.updateAvatar(action.file, state.user.uid).then(() => {
+        await this.userService.updateAvatar(action.file, state.user.uid).then(() => {
             setTimeout(() => {
                 sc.dispatch(new UpdateAvatarUserSuccessAction());
             }, 10);
@@ -119,13 +119,13 @@ export class UserState {
     }
 
     @Action(UpdateUserAction)
-    updateUserData(sc: StateContext<UserStateModel>, action: UpdateUserAction) {
+    async updateUserData(sc: StateContext<UserStateModel>, action: UpdateUserAction) {
         const state = sc.getState();
         sc.setState({
             ...state,
             loaded: false,
         });
-        this.userService.updateUser(state.user.uid, action.user).then(() => {
+        await this.userService.updateUser(state.user.uid, action.user).then(() => {
             setTimeout(() => {
                 sc.dispatch(new UpdateUserSuccessAction());
             }, 10);
@@ -145,7 +145,7 @@ export class UserState {
     }
 
     @Action(SetUserAction)
-    setUserData(sc: StateContext<UserStateModel>, action: SetUserAction) {
+    async setUserData(sc: StateContext<UserStateModel>, action: SetUserAction) {
         const uid = action.user.uid;
         const state = sc.getState();
         sc.setState({
@@ -153,7 +153,7 @@ export class UserState {
             loaded: false,
         });
         console.log(action.user);
-        this.userService.setUser(uid, action.user).then((data) => {
+        await this.userService.setUser(uid, action.user).then((data) => {
             setTimeout(() => {
                 sc.dispatch(new SetUserSuccessAction(action.user));
             }, 10);
@@ -178,11 +178,11 @@ export class UserState {
     }
 
     @Action(GetMyProductsAction)
-    async getMyProducts(sc: StateContext<UserStateModel>) {
+    getMyProducts(sc: StateContext<UserStateModel>) {
         const state = sc.getState();
         const myProducts$ = this.productService.getMyProducts(state.user.uid);
         const favorites$ = this.productService.getFavorites(state.user.uid);
-        await myProducts$.pipe(
+        return myProducts$.pipe(
             mergeMap((myProducts) =>
                 favorites$.pipe(
                     map(
@@ -203,12 +203,12 @@ export class UserState {
     }
 
     @Action(GetVisitedUserAction)
-    async getVisitedUser(sc: StateContext<UserStateModel>, action: GetVisitedUserAction) {
+    getVisitedUser(sc: StateContext<UserStateModel>, action: GetVisitedUserAction) {
         const state = sc.getState();
         const user$ = this.userService.getUser(action.uid).pipe(take(1));
         const myProducts$ = this.productService.getMyProducts(action.uid).pipe(take(1));
         const favorites$ = this.productService.getFavorites(action.uid).pipe(take(1));
-        await user$.pipe(
+        return user$.pipe(
             mergeMap((user) =>
                 favorites$.pipe(
                     mergeMap((favorites) =>
@@ -217,12 +217,12 @@ export class UserState {
                                 (products) => {
                                     sc.setState({
                                         ...state,
-                                        visitedUser: {user, products, favorites},
+                                        visitedUser: { user, products, favorites },
                                         loaded: true,
                                     });
                                 })
-                            )
                         )
+                    )
                 )
             ),
         );
