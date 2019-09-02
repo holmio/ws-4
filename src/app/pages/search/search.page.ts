@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { SearchService } from 'src/app/store/search/search.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonSearchbar } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { Product } from 'src/app/store/product';
+import { Store, Select } from '@ngxs/store';
+import { SearchState, GetSearchAction } from 'src/app/store/search';
 
 @Component({
   selector: 'app-search',
@@ -8,12 +12,30 @@ import { SearchService } from 'src/app/store/search/search.service';
 })
 export class SearchPage implements OnInit {
 
+  @Select(SearchState.getSearchedProducts) products$: Observable<Product[]>;
+
+  @ViewChild('ionSearch') ionSearch: IonSearchbar;
   constructor(
-    private searchService: SearchService,
+    private store: Store,
   ) { }
 
   ngOnInit() {
-    this.searchService.getProducts('cyRDeDhQI4NqOeFItCD3HnOAQTI3').subscribe(arg => console.log(arg));
+  }
+
+  ionViewDidEnter() {
+    setTimeout(() => {
+      this.ionSearch.setFocus();
+    }, 500);
+  }
+
+  handleChange(name: string) {
+    if (name.length > 3) {
+      this.store.dispatch(new GetSearchAction({name}));
+    }
+  }
+
+  handleClear() {
+    this.store.dispatch(new GetSearchAction({name: ''}));
   }
 
 }

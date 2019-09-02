@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { firestore } from 'firebase/app';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -31,10 +31,15 @@ export class SearchService {
   }
 
   getProducts(uidUser: string, name = ''): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.productsDetail, ref =>
-      ref.orderBy('name').startAt('Cast').endAt('Cast\uf8ff')).valueChanges().pipe(
-      map(actions => actions.filter((data: Product) => data.userUid !== uidUser))
-    );
+    console.log(name);
+    if (name.length > 3) {
+      return this.afStore.collection(APP_CONST.db.productsDetail, ref =>
+        ref.orderBy('name').startAt(name).endAt(name + '\uf8ff')).valueChanges().pipe(
+        map(actions => actions.filter((data: Product) => data.userUid !== uidUser),
+        take(1))
+      );
+    }
+    return of([]);
   }
 
 }

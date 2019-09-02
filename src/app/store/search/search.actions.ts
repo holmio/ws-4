@@ -1,14 +1,16 @@
-import { Product } from '../product/product.interface';
+import { Product } from '../product';
+import { Filter } from './search.interface';
 
 // GETTING PRODUCT
-export class GetProductsAction {
-  static type = '[Products] GetProducts';
+export class GetSearchAction {
+  static type = '[Search] GetSearch';
+  constructor(public filter: Filter) { }
 }
-export class GetProductsSuccessAction {
-  static type = '[Products] GetProductsSuccess';
+export class GetSearchSuccessAction {
+  static type = '[Search] GetSearchSuccess';
   constructor(public products: Product[]) { }
 }
-export class GetProductsFailedAction {
-  static type = '[Products] GetProductsFailed';
+export class GetSearchFailedAction {
+  static type = '[Search] GetSearchFailed';
   constructor(public error: any) { }
 }

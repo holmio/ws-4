@@ -28,6 +28,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { intersectionObserverPreset, LazyLoadImageModule } from 'ng-lazyload-image';
 import { MomentModule } from 'ngx-moment';
+import { SearchModule } from './store/search';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -64,6 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProductModule,
     ProductsModule,
     ChatModule,
+    SearchModule,
     AppRoutingModule,
   ],
   providers: [

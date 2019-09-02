@@ -12,5 +12,5 @@ import { SearchState } from './search.state';
     ]),
   ],
 })
-export class ProductsModule {
+export class SearchModule {
 }
