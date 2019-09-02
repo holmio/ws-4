@@ -30,22 +30,11 @@ export class SearchService {
     this.userShortInfoCollectionRef = this.afStore.collection<UserShortInfo>(APP_CONST.db.usersDetail);
   }
 
-  getProduct(uid: string): Observable<any> {
-    return this.productCollectionRef.doc(uid).valueChanges();
-  }
-
-  getProducts(uidUser = ''): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
+  getProducts(uidUser: string, name = ''): Observable<any> {
+    return this.afStore.collection(APP_CONST.db.productsDetail, ref =>
+      ref.orderBy('name').startAt('Cast').endAt('Cast\uf8ff')).valueChanges().pipe(
       map(actions => actions.filter((data: Product) => data.userUid !== uidUser))
     );
-  }
-
-  getMyProducts(uidUser: string): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.where('userUid', '==', uidUser)).valueChanges();
-  }
-
-  getFavorites(uidUser: string): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.favoriteProducts, ref => ref.where('followers', 'array-contains', uidUser)).valueChanges();
   }
 
 }

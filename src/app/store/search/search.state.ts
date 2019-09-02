@@ -26,5 +26,4 @@ export class SearchState {
         return state.products || null;
     }
 
-    
 }
