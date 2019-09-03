@@ -7,4 +7,5 @@ export interface SearchStateModel {
 }
 export interface Filter {
   name: string;
+  category: string;
 }

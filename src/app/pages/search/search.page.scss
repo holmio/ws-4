@@ -13,3 +13,14 @@
     width: 200px;
   }
 }
+.categories {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  height: 76px;
+  ion-chip {
+    display: inline-block;
+    width: 125px;
+    height: 75px;
+  }
+}

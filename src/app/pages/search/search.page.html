@@ -2,9 +2,18 @@
   <ion-searchbar header-right-action #ionSearch (ionChange)="handleChange($event.detail.value)"
     (ionClear)="handleClear()" debounce="500" placeholder="[T]Busca un product" clearIcon="close" mode="ios" animated>
   </ion-searchbar>
+  <!-- <ion-icon header-right-action slot="end" name="close-circle" size="large" class="ion-padding-end"></ion-icon> -->
 </app-header>
 
 <ion-content>
+  <div class="categories ion-margin-vertical ion-margin-start">
+    <ion-chip *ngFor="let category of categories; let i=index" (click)="getCategory(category.value)">
+      <ion-avatar>
+        <img [lazyLoad]="'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y'">
+      </ion-avatar>
+      <ion-label>{{category.nameEs}}</ion-label>
+    </ion-chip>
+  </div>
   <ion-grid>
     <ion-row>
       <ion-col size="6" *ngFor="let product of products$ | async">

@@ -43,7 +43,7 @@ export class SearchState {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         sc.setState({...state, loading: true});
-        return this.searchService.getProducts(user && user.uid, action.filter.name).subscribe((products) => {
+        return this.searchService.getProducts(user && user.uid, action.filter).subscribe((products) => {
             setTimeout(() => {
                 sc.dispatch(new GetSearchSuccessAction(products));
             }, 100);
