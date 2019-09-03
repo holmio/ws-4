@@ -1,19 +1,24 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-    <ion-searchbar #ionSearch (ionChange)="handleChange($event.detail.value)" (ionClear)="handleClear()" debounce="500"
-      placeholder="[T]Busca un product" clearIcon="close" mode="ios" animated></ion-searchbar>
-  </ion-toolbar>
-</ion-header>
+<app-header>
+  <ion-searchbar header-right-action #ionSearch (ionChange)="handleChange($event.detail.value)"
+    (ionClear)="handleClear()" debounce="500" placeholder="[T]Busca un product" clearIcon="close" mode="ios" animated>
+  </ion-searchbar>
+</app-header>
 
 <ion-content>
-    <ion-grid>
-        <ion-row>
-            <ion-col size="6" *ngFor="let product of products$ | async">
-                <app-product-card [product]="product"></app-product-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let product of products$ | async">
+        <app-product-card [product]="product"></app-product-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="firstSearchDone && (products$ | async)?.length === 0 && !(loading$ | async)">
+      <div class="not-found ion-text-center">
+        <ion-icon name="sad" color="medium"></ion-icon>
+        <ion-text color="medium">
+          <h1>Not Found</h1>
+        </ion-text>
+      </div>
+    </ion-row>
+  </ion-grid>
+  <ion-spinner class="spinner-loading" *ngIf="(loading$ | async)" name="crescent"></ion-spinner>
 </ion-content>

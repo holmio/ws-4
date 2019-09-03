@@ -1,6 +1,6 @@
 <ion-header no-border>
-  <ion-toolbar [color]="color">
-    <ion-buttons *ngIf="showBackButton" slot="start">
+  <ion-toolbar [color]="color" *ngIf="showBackButton">
+    <ion-buttons slot="start">
       <ion-back-button color="light" defaultHref="home"></ion-back-button>
     </ion-buttons>
     <ion-title>{{title}}</ion-title>

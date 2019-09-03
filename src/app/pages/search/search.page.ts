@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSearchbar } from '@ionic/angular';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/store/product';
-import { Store, Select } from '@ngxs/store';
-import { SearchState, GetSearchAction } from 'src/app/store/search';
+import { GetSearchAction, SearchState } from 'src/app/store/search';
 
 @Component({
   selector: 'app-search',
@@ -13,11 +13,12 @@ import { SearchState, GetSearchAction } from 'src/app/store/search';
 export class SearchPage implements OnInit {
 
   @Select(SearchState.getSearchedProducts) products$: Observable<Product[]>;
-
+  @Select(SearchState.getLoading) loading$: Observable<boolean>;
+  firstSearchDone = false;
   @ViewChild('ionSearch') ionSearch: IonSearchbar;
   constructor(
     private store: Store,
-  ) { }
+  ) {}
 
   ngOnInit() {
   }
@@ -30,6 +31,7 @@ export class SearchPage implements OnInit {
 
   handleChange(name: string) {
     if (name.length > 3) {
+      this.firstSearchDone = true;
       this.store.dispatch(new GetSearchAction({name}));
     }
   }

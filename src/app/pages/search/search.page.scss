@@ -1,0 +1,15 @@
+.spinner-loading {
+  margin: 30vh 50vw 0;
+  transform: translateX(-50%);
+  width: 65px;
+  height: 65px;
+}
+
+.not-found {
+  transform: translateX(-50%);
+  margin: 30vh 50vw 0;
+  ion-icon {
+    height: 100px;
+    width: 200px;
+  }
+}
