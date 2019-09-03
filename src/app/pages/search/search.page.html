@@ -15,7 +15,7 @@
     </ion-chip>
   </div>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="!(loading$ | async)">
       <ion-col size="6" *ngFor="let product of products$ | async">
         <app-product-card [product]="product"></app-product-card>
       </ion-col>
