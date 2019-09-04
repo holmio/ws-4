@@ -1,12 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Select, Store, Actions, ofActionSuccessful } from '@ngxs/store';
-import { ProductState, Product, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
+import {
+  Actions,
+  ofActionSuccessful,
+  Select,
+  Store
+  } from '@ngxs/store';
+import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  Product,
+  ProductState,
+  UpdateProductAction,
+  UpdateProductSuccessAction
+  } from 'src/app/store/product';
 import { APP_CONST } from 'src/app/util/app.constants';
-import * as _ from 'lodash';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit',
@@ -61,7 +71,7 @@ export class EditPage implements OnInit, OnDestroy {
         category: [product.category || '', Validators.required],
         isEnabled: [product.isEnabled || false, Validators.required],
         willaya: [product.willaya || '', Validators.required],
-        daira: [{ value: product.daira || '', disabled: !product.willaya}, Validators.required],
+        daira: [{value: product.daira || '', disabled: !product.willaya}, Validators.required],
         isSold: [product.isSold || false, Validators.required],
       });
     });
@@ -101,12 +111,16 @@ export class EditPage implements OnInit, OnDestroy {
     this.imagesToDelete.push(image);
   }
 
+  handleGallery(images: string[]) {
+    this.gallery = images;
+  }
+
   private getDaira(willaya: string) {
     if (!willaya) {
       return;
     }
     this.dairas = [];
-    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
+    this.dairas = [..._.find(this.willayas, {value: willaya})['dairas']];
   }
 
   private getDirtyValues(form: any) {

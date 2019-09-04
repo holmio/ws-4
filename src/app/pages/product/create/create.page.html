@@ -41,7 +41,7 @@
                     </ion-row>
                     <ion-item>
                         <ion-label position="floating">[T]Descripción</ion-label>
-                        <ion-textarea maxlength="1000" formControlName="description" required></ion-textarea>
+                        <ion-textarea maxlength="1000" formControlName="description" required rows="4"></ion-textarea>
                     </ion-item>
                     <ion-item>
                         <ion-label position="floating">[T]Lugar donde lo vendes</ion-label>
@@ -58,7 +58,7 @@
                                 {{daira.nameEs}}</ion-select-option>
                         </ion-select>
                     </ion-item>
-                    <div class="ion-padding-horizontal">
+                    <div class="ion-padding-horizontal ion-padding-vertical">
                         <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid"
                             expand="block">[T]Crear
                         </ion-button>

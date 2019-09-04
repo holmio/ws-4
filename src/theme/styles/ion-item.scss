@@ -1,12 +1,13 @@
-ion-item{
-    --highlight-color-valid: var(--ion-color-success);
-    --highlight-color-invalid: var(--ion-color-danger);
-    --inner-border-width: 0px 0px 0px 0px;
-    --border-width: 0 0 1px 0;
-    ion-label {
-        font-size: 17px !important;
-    }
-    ion-input, ion-select {
-        font-size: 18px !important;
-    }
+ion-item {
+  --highlight-color-valid: var(--ion-color-success);
+  --highlight-color-invalid: var(--ion-color-danger);
+  --inner-border-width: 0px 0px 0px 0px;
+  --border-width: 0 0 1px 0;
+  ion-label {
+    font-size: 16px !important;
+  }
+  ion-input,
+  ion-select {
+    font-size: 18px !important;
+  }
 }
