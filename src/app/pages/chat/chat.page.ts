@@ -1,17 +1,34 @@
-import { Actions, ofActionDispatched, Select, Store } from '@ngxs/store';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IonContent } from '@ionic/angular';
+import {
+  Actions,
+  ofActionDispatched,
+  Select,
+  Store
+  } from '@ngxs/store';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { Observable, Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { AuthState } from 'src/app/store/auth';
 import {
-  Channel, ChatState, GetChannelAction, GetChannelSuccessAction,
-  SendMessageAction, SetChannelAction, UpdateChannelAction, GetChannelFailedAction, Message
-} from 'src/app/store/chat';
+  Channel,
+  ChatState,
+  GetChannelAction,
+  GetChannelFailedAction,
+  GetChannelSuccessAction,
+  Message,
+  SendMessageAction,
+  SetChannelAction,
+  UpdateChannelAction
+  } from 'src/app/store/chat';
 import { ChatService } from 'src/app/store/chat/chat.service';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { IonContent } from '@ionic/angular';
-import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chat',
@@ -68,6 +85,10 @@ export class ChatPage implements OnInit, OnDestroy {
       }
     });
 
+    this.messages$.pipe(
+      filter((data) => !!data),
+      take(1)
+    ).subscribe(() => this.scrollDown());
     this.messages$.pipe(takeUntil(this.distroy$)).subscribe((messages: Message[]) => {
       this.messages = _.cloneDeep(messages);
     });
@@ -75,12 +96,6 @@ export class ChatPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
-  }
-
-  toggleList() {
-    this.show = !this.show;
-    console.log(this.show);
-    this.scrollDown();
   }
 
   sendMsg() {
@@ -107,17 +122,15 @@ export class ChatPage implements OnInit, OnDestroy {
     $event.preventDefault();
     console.log($event);
   }
-  userTyping(event: any) {
-    this.show = false;
-    console.log(event);
-    this.scrollDown();
-  }
+
   focusFunction(event: any) {
     this.show = false;
     console.log(event);
   }
   diffDates(index) {
-    if (index === 0) return true;
+    if (index === 0) {
+      return true;
+    }
     // To calculate the time difference of two dates
     const d1 = new Date(this.messages[index].timestamp).getTime() / (1000 * 3600 * 24);
     const d2 = new Date(this.messages[index - 1].timestamp).getTime() / (1000 * 3600 * 24);

@@ -65,7 +65,6 @@
                             </div>
 
                             <div class="timediv">
-                                <ion-icon [name]="message.status" color="rose"></ion-icon>
                                 <ion-text color="rose" class="footer-text-size">
                                     {{ message.timestamp | amDateFormat:'HH:mm ' }}
                                 </ion-text>
@@ -79,8 +78,8 @@
 </ion-content>
 <ion-footer>
     <ion-item class="footerItem">
-        <ion-input max="500" (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput"
-            (keypress)="userTyping($event)" type="text" placeholder="[T]Type your message here..." max=""></ion-input>
+        <ion-input max="500" (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" type="text"
+            placeholder="[T]Type your message here..." max=""></ion-input>
         <ion-icon name="send" expand="icon-only" color="medium" mode="ios" slot="end" (click)=" sendMsg()"
             (mousedown)="something($event)">
         </ion-icon>

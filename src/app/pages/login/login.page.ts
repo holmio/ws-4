@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoginWithEmailAndPasswordAction, LoginWithFacebookAction, LoginSuccessAction } from 'src/app/store/auth';
-import { Store, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Subject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { take } from 'rxjs/operators';
+import { LoginSuccessAction, LoginWithEmailAndPasswordAction, LoginWithFacebookAction } from 'src/app/store/auth';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +13,7 @@ import { takeUntil, take } from 'rxjs/operators';
 export class LoginPage implements OnInit, OnDestroy {
 
   loginForm: FormGroup;
-  private destroy$ = new Subject<boolean>();
-  
+
   constructor(
     private store: Store,
     private formBuilder: FormBuilder,
@@ -38,15 +36,15 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  get formValue() {
+    return this.loginForm.controls;
+  }
 
   loginWithEmailAndPassword() {
-    this.store.dispatch(new LoginWithEmailAndPasswordAction(this.f.email.value, this.f.password.value));
+    this.store.dispatch(new LoginWithEmailAndPasswordAction(this.formValue.email.value, this.formValue.password.value));
   }
 
   loginWithFacebook() {

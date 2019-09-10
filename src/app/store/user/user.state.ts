@@ -1,3 +1,14 @@
+import { UserService } from './user.service';
+import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
+import { ProductService } from '../product/product.service';
+import { User, UserStateModel } from '../user/user.interface';
+import {
+    Action,
+    Selector,
+    State,
+    StateContext
+    } from '@ngxs/store';
+import { map, mergeMap, take } from 'rxjs/operators';
 import {
     GetUserAction,
     GetUserFailedAction,
@@ -11,20 +22,9 @@ import {
     UpdateUserAction,
     UpdateUserFailedAction,
     UpdateUserSuccessAction,
-    GetMyProductsAction,
+    GetMyProductsAndFavoritesAction,
     GetVisitedUserAction,
 } from './user.actions';
-import { UserService } from './user.service';
-import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
-import { User, UserStateModel } from '../user/user.interface';
-import {
-    Action,
-    Selector,
-    State,
-    StateContext
-} from '@ngxs/store';
-import { ProductService } from '../product/product.service';
-import { mergeMap, map, take } from 'rxjs/operators';
 
 @State<UserStateModel>({
     name: 'user',
@@ -67,13 +67,10 @@ export class UserState {
     @Action(GetUserAction)
     getUserData(sc: StateContext<UserStateModel>, action: GetUserAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
         return this.userService.getUser(action.uid).subscribe((user: User) => {
-            setTimeout(() => {
+            setTimeout(async () => {
                 sc.dispatch(new GetUserSuccessAction(user));
+                await this.userService.updateLastConnectionUser(user.uid);
             }, 10);
         }, error => {
             setTimeout(() => {
@@ -177,7 +174,7 @@ export class UserState {
         }, 10);
     }
 
-    @Action(GetMyProductsAction)
+    @Action(GetMyProductsAndFavoritesAction)
     getMyProducts(sc: StateContext<UserStateModel>) {
         const state = sc.getState();
         const myProducts$ = this.productService.getMyProducts(state.user.uid);
@@ -186,7 +183,7 @@ export class UserState {
             mergeMap((myProducts) =>
                 favorites$.pipe(
                     map(
-                        (favorites) => Object.assign({}, { favorites, myProducts })
+                        (favorites) => Object.assign({}, {favorites, myProducts})
                     )
                 )
             ),
@@ -217,7 +214,7 @@ export class UserState {
                                 (products) => {
                                     sc.setState({
                                         ...state,
-                                        visitedUser: { user, products, favorites },
+                                        visitedUser: {user, products, favorites},
                                         loaded: true,
                                     });
                                 })

@@ -1,8 +1,8 @@
+import { UserState } from './user.state';
 import { NgModule } from '@angular/core';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { NgxsModule } from '@ngxs/store';
 
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { UserState } from './user.state';
 
 @NgModule({
   imports: [

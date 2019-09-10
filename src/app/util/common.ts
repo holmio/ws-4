@@ -1,8 +1,8 @@
-export function parseCategoryList(categories: string[]): Object {
+export function parseCategoryList(categories: string[]): object {
     let categoriesObject = {};
     categories.forEach(item => {
-        categoriesObject = Object.assign({ [item]: true }, categoriesObject);
-    })
+        categoriesObject = Object.assign({[item]: true}, categoriesObject);
+    });
     return categoriesObject;
 }
 

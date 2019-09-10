@@ -1,12 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Select, Store, Actions, ofActionDispatched, ofAction, ofActionSuccessful } from '@ngxs/store';
-import { ProductsState, GetProductsAction, GetProductsSuccessAction } from 'src/app/store/products';
-import { ShortProduct } from 'src/app/store/product/product.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonRefresher } from '@ionic/angular';
+import {
+  Actions,
+  ofAction,
+  ofActionDispatched,
+  ofActionSuccessful,
+  Select,
+  Store
+  } from '@ngxs/store';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LogoutSuccessAction, LoginFailedAction } from 'src/app/store/auth';
-import { GetUserSuccessAction, GetUserFailedAction } from 'src/app/store/user';
+import { LoginFailedAction, LogoutSuccessAction } from 'src/app/store/auth';
+import { ShortProduct } from 'src/app/store/product/product.interface';
+import { GetProductsAction, ProductsState } from 'src/app/store/products';
+import { GetUserFailedAction, GetUserSuccessAction } from 'src/app/store/user';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +23,6 @@ import { GetUserSuccessAction, GetUserFailedAction } from 'src/app/store/user';
 export class HomePage implements OnInit, OnDestroy {
 
   @Select(ProductsState.getAllProducts) products$: Observable<ShortProduct[]>;
-  ionRefresh: IonRefresher;
   private destroy$ = new Subject<boolean>();
   constructor(
     private store: Store,
@@ -25,14 +31,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.actions.pipe(
-      ofActionDispatched(GetProductsSuccessAction),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      if (this.ionRefresh) {
-        this.ionRefresh.complete();
-      }
-    });
     this.actions.pipe(
       ofActionSuccessful(GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction),
       takeUntil(this.destroy$)

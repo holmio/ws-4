@@ -1,9 +1,15 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+  } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { Platform, ActionSheetController } from '@ionic/angular';
-import { ToastService } from 'src/app/services/toast/toast.services';
+import { ActionSheetController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from 'src/app/services/toast/toast.services';
 import { isUrl } from 'src/app/util/common';
 
 @Component({
@@ -26,18 +32,14 @@ export class GalleryManagerComponent implements OnInit {
     private toastService: ToastService,
     private translate: TranslateService,
     private imagePicker: ImagePicker,
-  ) { }
+  ) {}
 
   ngOnInit() {}
 
-    /**
-   * Method to delete the picture selected
-   * @param index number of picture
-   */
   deletePicture(index: number) {
     // If the picture deleted is the avatar then we generate a new avatar of the second picture of the gallery
-    if(isUrl(this.gallery[index])) {
-      this.changeImagesDeleted.next(this.gallery[index])
+    if (isUrl(this.gallery[index])) {
+      this.changeImagesDeleted.next(this.gallery[index]);
     }
     this.gallery.splice(index, 1);
   }
@@ -86,7 +88,7 @@ export class GalleryManagerComponent implements OnInit {
       };
 
       this.imagePicker.getPictures(configCamera).then((pictures) => {
-        for (const picture of  pictures) {
+        for (const picture of pictures) {
           const base64Image = 'data:image/jpeg;base64,' + picture;
           this.gallery.push(base64Image);
         }

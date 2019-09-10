@@ -1,11 +1,12 @@
+import { User, UserShortInfo } from './user.interface';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { User, UserShortInfo } from './user.interface';
-import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { APP_CONST } from 'src/app/util/app.constants';
-import * as _ from 'lodash';
+import { timestamp } from 'src/app/util/common';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,10 @@ export class UserService {
 
   getShortUserInfo(uid: string): Observable<any> {
     return this.userShortInfoCollectionRef.doc(uid).valueChanges();
+  }
+
+  updateLastConnectionUser(uid: string): Promise<any> {
+    return this.userShortInfoCollectionRef.doc(uid).update({lastConnection: timestamp()});
   }
 
   setUser(uid: string, user: User): Promise<any> {
@@ -61,6 +66,10 @@ export class UserService {
     return batch.commit();
   }
 
+  updateTokenDevice(uid: string, token: string) {
+    return this.userShortInfoCollectionRef.doc(uid).update({tokenDevice: token});
+  }
+
   async updateAvatar(file: string, uid: string): Promise<any> {
     const filePath = `avatar/${uid}.jpg`;
     const fileRef = this.storage.ref(filePath);
@@ -68,8 +77,8 @@ export class UserService {
     const usertShortColl = this.afStore.firestore.doc(`${APP_CONST.db.usersDetail}/${uid}`);
     const batch = this.afStore.firestore.batch();
     return this.storageService.uploadContent(file, filePath, fileRef).then(async (url) => {
-      batch.update(usersColl, { avatar: url });
-      batch.update(usertShortColl, { avatar: url });
+      batch.update(usersColl, {avatar: url});
+      batch.update(usertShortColl, {avatar: url});
       await batch.commit();
     });
   }

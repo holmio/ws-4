@@ -1,5 +1,5 @@
-import { UserInfo } from 'firebase';
 import { Product } from '../product';
+import { UserInfo } from 'firebase';
 
 export interface UserStateModel {
   user: User;
@@ -47,5 +47,6 @@ export interface UserShortInfo {
   name?: string;
   avatar?: string;
   lastConnection?: number;
+  tokenDevice?: string;
   uid: string;
 }

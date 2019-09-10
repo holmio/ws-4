@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from 'src/app/store/user/user.interface';
-import { Select, Store, Actions } from '@ngxs/store';
-import { UserState, UpdateAvatarUserAction, GetMyProductsAction } from 'src/app/store/user';
-import { Observable } from 'rxjs';
-import { Platform, ActionSheetController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { ActionSheetController, Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { Product } from 'src/app/store/product';
+import { GetMyProductsAndFavoritesAction, UpdateAvatarUserAction, UserState } from 'src/app/store/user';
+import { User } from 'src/app/store/user/user.interface';
 
 @Component({
   selector: 'app-detail',
@@ -29,10 +29,10 @@ export class DetailPage implements OnInit, OnDestroy {
     private toastService: ToastService,
     private translate: TranslateService,
     private store: Store,
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.store.dispatch(new GetMyProductsAction());
+    this.store.dispatch(new GetMyProductsAndFavoritesAction());
   }
 
   ngOnDestroy(): void {

@@ -1,13 +1,4 @@
 import {
-    Action,
-    NgxsOnInit,
-    Selector,
-    State,
-    StateContext
-} from '@ngxs/store';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AuthService } from './auth.service';
-import {
     CheckSessionAction,
     LoginFailedAction,
     LoginSuccessAction,
@@ -18,11 +9,20 @@ import {
     RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-} from './auth.actions';
+    } from './auth.actions';
+import { AuthService } from './auth.service';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { take, tap } from 'rxjs/operators';
 import { User } from '../user/user.interface';
+import { AngularFireAuth } from '@angular/fire/auth';
+import {
+    Action,
+    NgxsOnInit,
+    Selector,
+    State,
+    StateContext
+    } from '@ngxs/store';
 import { UserInfo } from 'firebase';
+import { take, tap } from 'rxjs/operators';
 import { timestamp } from 'src/app/util/common';
 
 export interface AuthStateModel {
@@ -61,6 +61,7 @@ export class AuthState implements NgxsOnInit {
             take(1),
             tap((user: UserInfo) => {
                 if (user) {
+                    console.log(user);
                     console.log(`CheckSession: ${user.displayName} is logged in`);
                     setTimeout(() => {
                         sc.dispatch(new LoginSuccessAction(user.uid));

@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { APP_CONST } from 'src/app/util/app.constants';
-import { SetProductAction, Product, SetProductSuccessAction } from 'src/app/store/product';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import * as _ from 'lodash';
-import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
+import { Product, SetProductAction, SetProductSuccessAction } from 'src/app/store/product';
+import { APP_CONST } from 'src/app/util/app.constants';
 
 @Component({
   selector: 'app-create',
@@ -32,9 +33,10 @@ export class CreatePage implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
+    private toastService: ToastService,
     private actions: Actions,
     private navController: NavController,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
@@ -42,7 +44,7 @@ export class CreatePage implements OnInit, OnDestroy {
       price: ['', Validators.required],
       description: ['', Validators.required],
       willaya: ['', Validators.required],
-      daira: [{ value: '', disabled: true}, Validators.required],
+      daira: [{value: '', disabled: true}, Validators.required],
       currency: ['DZD', Validators.required],
       category: ['', Validators.required],
     });
@@ -66,7 +68,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      // return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
+      return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],
@@ -75,10 +77,10 @@ export class CreatePage implements OnInit, OnDestroy {
     this.store.dispatch(new SetProductAction(productInfo));
   }
 
-  onChangeWillaya(event) {
-    const willayaSelected = event.target.value;
+  onChangeWillaya(willaya: string) {
+    const willayaSelected = willaya;
     this.getDaira(willayaSelected);
-    this.myGroup.controls['daira'].enable();
+    this.myGroup.controls.daira.enable();
   }
 
   private getDaira(willaya: string) {
@@ -86,9 +88,9 @@ export class CreatePage implements OnInit, OnDestroy {
       return;
     }
     this.dairas = [];
-    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
+    this.dairas = [..._.find(this.willayas, {value: willaya}).dairas];
   }
 
-  
+
 
 }

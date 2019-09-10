@@ -1,13 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, Select, Actions, ofActionDispatched, ofActionSuccessful } from '@ngxs/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { User } from 'src/app/store/user/user.interface';
-import { UserState, UpdateUserAction, UpdateUserSuccessAction } from 'src/app/store/user';
-import { take, filter, takeUntil } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
-import { APP_CONST } from 'src/app/util/app.constants';
+import {
+  Actions,
+  ofActionDispatched,
+  ofActionSuccessful,
+  Select,
+  Store
+  } from '@ngxs/store';
 import * as _ from 'lodash';
+import { Observable, Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
+import { UpdateUserAction, UpdateUserSuccessAction, UserState } from 'src/app/store/user';
+import { User } from 'src/app/store/user/user.interface';
+import { APP_CONST } from 'src/app/util/app.constants';
 
 @Component({
   selector: 'app-edit',
@@ -28,7 +34,7 @@ export class EditPage implements OnInit, OnDestroy {
     private actions: Actions,
     private navController: NavController,
     private formBuilder: FormBuilder,
-  ) { }
+  ) {}
 
 
 
@@ -42,7 +48,7 @@ export class EditPage implements OnInit, OnDestroy {
         name: [user.name || '', Validators.required],
         phone: [user.phone || '', Validators.required],
         willaya: [user.willaya || '', Validators.required],
-        daira: [{ value: user.daira || '', disabled: !user.willaya}, Validators.required],
+        daira: [{value: user.daira || '', disabled: !user.willaya}, Validators.required],
       });
     });
 
@@ -66,7 +72,7 @@ export class EditPage implements OnInit, OnDestroy {
   onChangeWillaya(event) {
     const willayaSelected = event.target.value;
     this.getDaira(willayaSelected);
-    this.myGroup.controls['daira'].enable();
+    this.myGroup.controls.daira.enable();
     console.log(this.dairas);
   }
 
@@ -75,7 +81,7 @@ export class EditPage implements OnInit, OnDestroy {
       return;
     }
     this.dairas = [];
-    this.dairas = [..._.find(this.willayas, { value: willaya })['dairas']];
+    this.dairas = [..._.find(this.willayas, {value: willaya}).dairas];
   }
 
 }

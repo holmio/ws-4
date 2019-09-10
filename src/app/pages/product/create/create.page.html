@@ -46,7 +46,7 @@
                     <ion-item>
                         <ion-label position="floating">[T]Lugar donde lo vendes</ion-label>
                         <ion-select formControlName="willaya" cancelText="Ocultar" interface="action-sheet"
-                            (ionChange)="onChangeWillaya($event)">
+                            (ionChange)="onChangeWillaya($event.target.value)">
                             <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
                                 {{willaya.nameEs}}</ion-select-option>
                         </ion-select>

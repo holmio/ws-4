@@ -1,12 +1,17 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { APP_CONST } from 'src/app/util/app.constants';
-import * as _ from 'lodash';
-import { Message, Channel } from './chat.interface';
-import { Observable } from 'rxjs';
-import { take, mergeMap, map, tap } from 'rxjs/operators';
+import { Channel, Message } from './chat.interface';
 import { Product } from '../product';
 import { UserShortInfo } from '../user';
+import { Injectable } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import {
+  map,
+  mergeMap,
+  take,
+  tap
+  } from 'rxjs/operators';
+import { APP_CONST } from 'src/app/util/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +55,7 @@ export class ChatService {
         ).valueChanges()
           .pipe(
             map(
-              (user: UserShortInfo) => Object.assign({}, { product, user })
+              (user: UserShortInfo) => Object.assign({}, {product, user})
             ),
             tap((data) => {
               const newData = this.compareData(data, channel, isVisitor);
@@ -65,7 +70,7 @@ export class ChatService {
     );
   }
 
-  private compareData(newData: { product: Product; user: UserShortInfo; }, oldData: Channel, isVisitor: boolean) {
+  private compareData(newData: {product: Product; user: UserShortInfo}, oldData: Channel, isVisitor: boolean) {
     const newUserInfo: UserShortInfo = {
       avatar: newData.user.avatar,
       lastConnection: newData.user.lastConnection,
@@ -88,15 +93,16 @@ export class ChatService {
     }
 
     if (!_.isEmpty(dataToUpdate)) {
-      return { ...dataToUpdate };
+      return {...dataToUpdate};
     }
 
     return;
   }
 
 
-  private difference(newData, oldData, parentObj: string) {
-    function changes(newData, oldData) {
+  private difference(newData: any, oldData: any, parentObj: string) {
+    // tslint:disable-next-line: no-shadowed-variable
+    function changes(newData: any, oldData: any) {
       return _.transform(newData, (result, value, key) => {
         if (!_.isEqual(value, oldData[key])) {
           result[parentObj + '.' + key] = (_.isObject(value) && _.isObject(oldData[key])) ? changes(value, oldData[key]) : value;
@@ -118,7 +124,7 @@ export class ChatService {
   sendMessage(uid: string, message: Message): Promise<any> {
     const batch = this.afStore.firestore.batch();
     const channelColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`);
-    batch.update(channelColl, { lastMessage: message.message, timestamp: message.timestamp });
+    batch.update(channelColl, {lastMessage: message.message, timestamp: message.timestamp});
     const messageColl = this.afStore.firestore.doc(`${APP_CONST.db.channels}/${uid}`).collection(APP_CONST.db.messages).doc();
     batch.set(messageColl, message);
     return batch.commit();

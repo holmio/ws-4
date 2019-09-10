@@ -54,7 +54,7 @@ export class UpdateAvatarUserFailedAction {
   constructor(public error: any) {}
 }
 
-export class GetMyProductsAction {
+export class GetMyProductsAndFavoritesAction {
   static type = '[Products] GetMyProducts and Favorites';
 }
 

@@ -1,50 +1,12 @@
 // http://ionicframework.com/docs/theming/
-@import '~@ionic/angular/css/core.css';
-@import '~@ionic/angular/css/normalize.css';
-@import '~@ionic/angular/css/structure.css';
-@import '~@ionic/angular/css/typography.css';
-@import '~@ionic/angular/css/display.css';
-@import '~@ionic/angular/css/padding.css';
-@import '~@ionic/angular/css/float-elements.css';
-@import '~@ionic/angular/css/text-alignment.css';
-@import '~@ionic/angular/css/text-transformation.css';
-@import '~@ionic/angular/css/flex-utils.css';
-@import 'theme/styles/core.scss';
-
-:root[mode=ios],
-:root[mode=md] {
-  --ion-font-family:  'Cairo', sans-serif !important;
-  font-family:  'Cairo', sans-serif !important;
-}
-
-.searchbar-input{
-    border-radius: 25px !important;
-    height: 30px !important; 
-
-}
-.searchbar-search-icon.sc-ion-searchbar-md {
-       left: 90% !important;
-           top: 6px;
-  }
-  .searchbar-clear-button.sc-ion-searchbar-md {
-    left: 13px !important;
-    right: 0 !important;
-  }
-  .searchbar-search-icon.sc-ion-searchbar-ios {
-    color: white !important;
-     height: 87% !important;
-}
-
-.category-sheet {
-  .action-sheet-title {
-    margin-bottom: 60px;
-    font-size: 32px;
-    .action-sheet-sub-title {
-      font-size: 18px;
-    }
-  }
-}
-
-.sc-ion-searchbar-ios-h{
-  padding-bottom: 0 !important;
-}
+@import "~@ionic/angular/css/core.css";
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+@import "theme/styles/core.scss";

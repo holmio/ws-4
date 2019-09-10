@@ -13,4 +13,4 @@ export const ROUTE = {
         chatList: 'profile/mensajes',
         edit: 'profile/edit/:id'
     }
-}
+};

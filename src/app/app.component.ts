@@ -1,17 +1,23 @@
+import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
+import { User, UserState } from './store/user';
+import { UserService } from './store/user/user.service';
 import { Component, OnInit } from '@angular/core';
-
-import { Platform, MenuController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Observable } from 'rxjs';
+import { MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Store, Select } from '@ngxs/store';
-import { UserState, User } from './store/user';
-import { Router } from '@angular/router';
-import { LogoutAction } from './store/auth';
+import {
+  Actions,
+  ofActionSuccessful,
+  Select,
+  Store
+  } from '@ngxs/store';
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -30,11 +36,13 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     private statusBar: StatusBar,
     private fMessaging: FirebaseMessaging,
+    private actions: Actions,
+    private userService: UserService,
   ) {
     this.initializeApp();
     // this language will be used as a fallback when a translation isn't found in the current language
     this.translate.setDefaultLang('es');
-    // the lang to use, if the lang isn't available, it will use the current loader to get them 
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
     this.translate.use('es');
     moment.locale('es');
   }
@@ -44,9 +52,10 @@ export class AppComponent implements OnInit {
       this.statusBar.backgroundColorByHexString('#DB3A34');
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.fMessaging.requestPermission().then((data) => console.log('Permission ', data));
-      this.fMessaging.getToken().then((data) => console.log('Token ', data));
-      this.fMessaging.onMessage().subscribe((data) => console.log('Message ', data));
+      if (this.platform.is('cordova')) {
+        this.fMessaging.getToken().then((data) => console.log('Token ', data));
+        this.fMessaging.onMessage().subscribe((data) => console.log('Message ', data));
+      }
     });
   }
 
@@ -61,6 +70,22 @@ export class AppComponent implements OnInit {
         sameElse: 'L'
       },
     });
+
+    if (this.platform.is('cordova')) {
+      this.actions.pipe(
+        ofActionSuccessful(LogoutSuccessAction),
+      ).subscribe(async () => {
+        await this.fMessaging.revokeToken();
+      });
+
+      this.actions.pipe(
+        ofActionSuccessful(LoginSuccessAction),
+      ).subscribe(async (action) => {
+        this.fMessaging.requestPermission();
+        const token = await this.fMessaging.getToken();
+        await this.userService.updateTokenDevice(action.uid, token);
+      });
+    }
   }
 
   goToPage(url: string) {

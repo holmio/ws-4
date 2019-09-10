@@ -1,25 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Actions, ofActionDispatched, ofActionCompleted } from '@ngxs/store';
-import {
-  LoginWithEmailAndPasswordAction,
-  LoginWithFacebookAction,
-  RegisterWithEmailAndPasswordAction
-  } from 'src/app/store/auth';
+import { Actions, ofActionCompleted, ofActionDispatched } from '@ngxs/store';
+import { LoginWithEmailAndPasswordAction, LoginWithFacebookAction, RegisterWithEmailAndPasswordAction } from 'src/app/store/auth';
+import { GetChannelAction } from 'src/app/store/chat';
+import { GetProductsAction } from 'src/app/store/products';
 import {
   GetProductAction,
   SetProductAction,
   DeleteProductAction,
   UpdateProductAction,
-  } from 'src/app/store/product';
-import { GetProductsAction } from 'src/app/store/products';
+} from 'src/app/store/product';
 import {
   GetUserAction,
   SetUserAction,
   UpdateAvatarUserAction,
   UpdateUserAction,
-  } from 'src/app/store/user';
-import { GetChannelAction } from 'src/app/store/chat';
+} from 'src/app/store/user';
 
 @Component({
   selector: 'app-loading',
@@ -34,7 +30,7 @@ export class LoadingComponent implements OnInit {
     private loadingController: LoadingController,
     private actions: Actions,
 
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.actions.pipe(
@@ -111,7 +107,7 @@ export class LoadingComponent implements OnInit {
     if (!this.spinner) {
       return;
     }
-    
+
     this.count = 0;
     this.spinner.then(spinner => spinner.dismiss());
     this.spinner = undefined;

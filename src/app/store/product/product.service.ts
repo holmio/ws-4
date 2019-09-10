@@ -1,17 +1,17 @@
-import { Observable } from 'rxjs';
-import { firestore } from 'firebase/app';
+import { Product } from './product.interface';
+import { UserShortInfo } from '../user/user.interface';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-
-import { Product } from './product.interface';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { map, take } from 'rxjs/operators';
-import { UserShortInfo } from '../user/user.interface';
-import { StorageService } from 'src/app/services/firestore/filestorage.service';
+import { firestore } from 'firebase/app';
 import * as _ from 'lodash';
-import { isUrl } from 'src/app/util/common';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { APP_CONST } from 'src/app/util/app.constants';
+import { isUrl } from 'src/app/util/common';
+
 
 @Injectable({
   providedIn: 'root'
@@ -109,7 +109,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = { followers: firestore.FieldValue.arrayUnion(uidUser) };
+    const addFollower = {followers: firestore.FieldValue.arrayUnion(uidUser)};
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();
@@ -118,7 +118,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = { followers: firestore.FieldValue.arrayRemove(uidUser) };
+    const addFollower = {followers: firestore.FieldValue.arrayRemove(uidUser)};
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();
@@ -170,6 +170,7 @@ export class ProductService {
 
   private uuidv4() {
     return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      // tslint:disable-next-line: no-bitwise
       const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });

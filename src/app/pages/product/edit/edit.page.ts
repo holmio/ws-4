@@ -104,7 +104,7 @@ export class EditPage implements OnInit, OnDestroy {
   onChangeWillaya(event) {
     const willayaSelected = event.target.value;
     this.getDaira(willayaSelected);
-    this.myGroup.controls['daira'].enable();
+    this.myGroup.controls.daira.enable();
   }
 
   handleImagesDeleted(image: string) {
@@ -120,7 +120,7 @@ export class EditPage implements OnInit, OnDestroy {
       return;
     }
     this.dairas = [];
-    this.dairas = [..._.find(this.willayas, {value: willaya})['dairas']];
+    this.dairas = [..._.find(this.willayas, {value: willaya}).dairas];
   }
 
   private getDirtyValues(form: any) {
