@@ -1,7 +1,9 @@
 import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
 import { User, UserState } from './store/user';
 import { UserService } from './store/user/user.service';
-import { Component, OnInit } from '@angular/core';
+import { APP_CONST } from './util/app.constants';
+import { ROUTE } from './util/app.routes.const';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -38,6 +40,7 @@ export class AppComponent implements OnInit {
     private fMessaging: FirebaseMessaging,
     private actions: Actions,
     private userService: UserService,
+    private zone: NgZone,
   ) {
     this.initializeApp();
     // this language will be used as a fallback when a translation isn't found in the current language
@@ -54,7 +57,13 @@ export class AppComponent implements OnInit {
       this.splashScreen.hide();
       if (this.platform.is('cordova')) {
         this.fMessaging.getToken().then((data) => console.log('Token ', data));
-        this.fMessaging.onMessage().subscribe((data) => console.log('Message ', data));
+        this.fMessaging.onMessage().subscribe((data) => {
+          console.log('Message ', data);
+          this.zone.run(() => {
+            this.router.navigateByUrl(`${ROUTE.chat}/${data.gcm.tag}`,
+            {queryParams: {fromProduct: 'true', id: data.gcm.tag}});
+          });
+        });
       }
     });
   }
