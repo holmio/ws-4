@@ -60,8 +60,8 @@ export class AppComponent implements OnInit {
         this.fMessaging.onMessage().subscribe((data) => {
           console.log('Message ', data);
           this.zone.run(() => {
-            this.router.navigateByUrl(`${ROUTE.chat}/${data.gcm.tag}`,
-            {queryParams: {fromProduct: 'true', id: data.gcm.tag}});
+            this.router.navigate([ROUTE.chat, data.gcm.tag],
+            {queryParams: {fromProduct: 'false', id: data.gcm.tag}});
           });
         });
       }

@@ -89,6 +89,7 @@ export class ChatPage implements OnInit, OnDestroy {
       filter((data) => !!data),
       take(1)
     ).subscribe(() => this.scrollDown());
+
     this.messages$.pipe(takeUntil(this.distroy$)).subscribe((messages: Message[]) => {
       this.messages = _.cloneDeep(messages);
     });
