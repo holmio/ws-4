@@ -32,13 +32,11 @@ exports.sendNotification = functions.firestore.document('/channels/{channelUid}/
             const userPromise = await db.collection('userShortInfo').doc(channelInfo.owner.uid).get();
             const userInfo: any = userPromise.data();
             options.collapseKey = channelInfo.product.uid + channelInfo.owner.uid;
-            console.log('Owner', userInfo)
             token = userInfo.tokenDevice;
         } else {
             const userPromise = await db.collection('userShortInfo').doc(channelInfo.visitor.uid).get();
             const userInfo: any = userPromise.data();
             options.collapseKey = channelInfo.product.uid + channelInfo.visitor.uid;
-            console.log('Visitor', userInfo)
             token = userInfo.tokenDevice;
         }
         if (token) {

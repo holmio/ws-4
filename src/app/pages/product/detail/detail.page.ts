@@ -1,34 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import {
   Actions,
+  ofActionSuccessful,
   Select,
-  Store,
-  ofActionSuccessful
-} from '@ngxs/store';
+  Store
+  } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import {
-  filter,
-  takeUntil,
-  take,
-} from 'rxjs/operators';
 import { ModalSlidersComponent } from 'src/app/components/modal-sliders/modal-sliders.component';
 import { AuthState } from 'src/app/store/auth';
 import {
   AddFavoriteAction,
   DeleteProductAction,
+  DeleteProductSuccessAction,
+  DistroyProductAction,
   GetProductAction,
+  GetProductSuccessAction,
+  GetUserProductAction,
   Product,
   ProductState,
-  RemoveFavoriteAction,
-  DeleteProductSuccessAction,
-  GetUserProductAction,
-  GetProductSuccessAction,
-  DistroyProductAction
-} from 'src/app/store/product';
-import { ROUTE } from 'src/app/util/app.routes.const';
+  RemoveFavoriteAction
+  } from 'src/app/store/product';
 import { UserShortInfo } from 'src/app/store/user';
+import { ROUTE } from 'src/app/util/app.routes.const';
+import {
+  filter,
+  takeUntil,
+  take,
+} from 'rxjs/operators';
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',

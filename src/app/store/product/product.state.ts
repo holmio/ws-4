@@ -1,31 +1,51 @@
-import { Observable } from 'rxjs';
-
-import { Action, Select, Selector, State, StateContext, Store, Actions, ofAction } from '@ngxs/store';
-
-import { AuthState, AuthStateModel, LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import {
-    GetProductAction, GetProductFailedAction, GetProductSuccessAction, SetProductAction,
-    SetProductFailedAction, SetProductSuccessAction, UpdateProductAction, UpdateProductFailedAction,
-    UpdateProductSuccessAction,
     AddFavoriteAction,
-    AddFavoriteSuccessAction,
     AddFavoriteFailedAction,
-    RemoveFavoriteAction,
-    RemoveFavoriteSuccessAction,
-    RemoveFavoriteFailedAction,
+    AddFavoriteSuccessAction,
     DeleteProductAction,
-    DeleteProductSuccessAction,
     DeleteProductFailedAction,
+    DeleteProductSuccessAction,
+    DistroyProductAction,
+    GetProductAction,
+    GetProductFailedAction,
+    GetProductSuccessAction,
     GetUserProductAction,
-    DistroyProductAction
-} from './product.actions';
+    RemoveFavoriteAction,
+    RemoveFavoriteFailedAction,
+    RemoveFavoriteSuccessAction,
+    SetProductAction,
+    SetProductFailedAction,
+    SetProductSuccessAction,
+    UpdateProductAction,
+    UpdateProductFailedAction,
+    UpdateProductSuccessAction
+    } from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
+import {
+    AuthState,
+    AuthStateModel,
+    LoginSuccessAction,
+    LogoutSuccessAction
+    } from '../auth';
 import { UserState } from '../user';
-import * as _ from 'lodash';
 import { UserService } from '../user/user.service';
-import { timestamp } from 'src/app/util/common';
+import {
+    Action,
+    Actions,
+    ofAction,
+    Select,
+    Selector,
+    State,
+    StateContext,
+    Store
+    } from '@ngxs/store';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { timestamp } from 'src/app/util/common';
+
+
 
 @State<ProductStateModel>({
     name: 'product',
@@ -255,13 +275,23 @@ export class ProductState {
         });
     }
 
-    @Action([LogoutSuccessAction, LoginSuccessAction, GetProductSuccessAction])
+    @Action([LoginSuccessAction, GetProductSuccessAction])
     checkFavoriteProductState(sc: StateContext<ProductStateModel>) {
-        const user = this.store.selectSnapshot(UserState.geUser);
+        const userUid = this.store.selectSnapshot(AuthState.getUid);
         const state = sc.getState();
         sc.setState({
             ...state,
-            isFavorite: (user && state.product && !!_.includes(state.product.followers, user.uid)) || false,
+            isFavorite: userUid && (state.product && !!_.includes(state.product.followers, userUid)) || false,
+            loaded: true
+        });
+    }
+
+    @Action([LogoutSuccessAction])
+    resetFavoriteProductState(sc: StateContext<ProductStateModel>) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            isFavorite: null,
             loaded: true
         });
     }

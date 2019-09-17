@@ -37,24 +37,24 @@
     <ion-grid>
         <ion-row>
             <ion-col>
-                <div>
-                    <ion-chip class="ion-no-margin" color="medium" mode="ios" outline="true">
-                        <ion-icon name="pin"></ion-icon>
-                        <ion-label>{{(product$ | async)?.willaya}}, {{(product$ | async)?.daira}}</ion-label>
-                    </ion-chip>
+                <div class="price">
+                    <h2 color="primary"><b>{{(product$ | async)?.price | number}} 
+                        <small>{{(product$ | async)?.currency}}</small></b></h2>
                 </div>
             </ion-col>
             <ion-col class="ion-text-end">
-                <div>
-                    <h2 color="primary" class="ion-no-margin">{{(product$ | async)?.price | number}}
-                        <small>{{(product$ | async)?.currency}}</small></h2>
+                <div class="localization">
+                    <ion-chip class="ion-margin-top" color="medium" mode="ios" outline="false">
+                        <ion-icon name="pin"></ion-icon>
+                        <ion-label>{{(product$ | async)?.willaya}}, {{(product$ | async)?.daira}}</ion-label>
+                    </ion-chip>
                 </div>
             </ion-col>
         </ion-row>
         <ion-row>
             <ion-col>
                 <div>
-                    <h2>{{(product$ | async)?.name}}</h2>
+                    <h2 class="ion-no-margin">{{(product$ | async)?.name}}</h2>
                 </div>
             </ion-col>
         </ion-row>
@@ -67,7 +67,7 @@
             </ion-col>
         </ion-row>
         <ion-row *ngIf="!(isUserProduct$ | async)" class="profile">
-            <ion-col>
+            <ion-col class="ion-no-padding">
                 <ion-item [routerLink]="'/user-detail/'+(ownerOfProduct$ | async)?.uid" routerDirection="forward">
                     <ion-avatar slot="start">
                         <img [lazyLoad]="(ownerOfProduct$ | async)?.avatar" />
@@ -78,8 +78,3 @@
         </ion-row>
     </ion-grid>
 </ion-content>
-<!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button routerLink="/product/create" routerDirection="forward">
-        <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-</ion-fab> -->

@@ -12,6 +12,11 @@ ion-content {
       .localization {
         text-transform: capitalize;
       }
+      .price {
+        small {
+          font-size: 60%;
+        }
+      }
       &.profile {
         ion-item {
           --border-width: 0;

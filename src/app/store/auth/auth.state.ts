@@ -119,6 +119,8 @@ export class AuthState implements NgxsOnInit {
      *********************************/
     @Action(LoginWithFacebookAction)
     async loginWithFacebook(sc: StateContext<AuthStateModel>) {
+        const state = sc.getState();
+
         await this.auth.signInWithFacebook().then(data => {
             console.log(data);
             // If the user is new, we create a new account
@@ -135,6 +137,12 @@ export class AuthState implements NgxsOnInit {
                 }, 10);
             } else {
                 setTimeout(() => {
+                    // TODO: bug when I want to get favorites, look like uid is not stored in LoginSuccessAction
+                    sc.setState({
+                        ...state,
+                        uid: data.user.uid,
+                        loaded: true,
+                    });
                     sc.dispatch(new LoginSuccessAction(data.user.uid));
                 }, 10);
             }
