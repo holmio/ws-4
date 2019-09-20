@@ -43,6 +43,7 @@ import {
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
 
 
@@ -63,6 +64,7 @@ export class ProductState {
     constructor(
         private productService: ProductService,
         private userService: UserService,
+        private toast: ToastService,
         private actions$: Actions,
         private store: Store,
     ) {
@@ -113,6 +115,7 @@ export class ProductState {
                 }, 10);
             }, error => {
                 setTimeout(() => {
+                    this.toast.show('[T]Algo salio mal al obtener la informacion', 'danger');
                     sc.dispatch(new GetProductFailedAction(error));
                 }, 10);
             });
@@ -162,6 +165,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al actualizar el producto', 'danger');
                 sc.dispatch(new UpdateProductFailedAction(error));
             }, 10);
         });
@@ -182,6 +186,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al eliminar el producto', 'danger');
                 sc.dispatch(new DeleteProductFailedAction(error));
             }, 10);
         });
@@ -212,6 +217,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al anadir el producto a favoritos', 'danger');
                 sc.dispatch(new AddFavoriteFailedAction(error));
             }, 10);
         });
@@ -261,6 +267,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al crear el producto', 'danger');
                 sc.dispatch(new SetProductFailedAction(error));
             }, 10);
         });

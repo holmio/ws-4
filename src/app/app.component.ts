@@ -1,4 +1,5 @@
 import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
+import { NetworkState } from './store/network/network.state';
 import { User, UserState } from './store/user';
 import { UserService } from './store/user/user.service';
 import { APP_CONST } from './util/app.constants';
@@ -28,6 +29,7 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   @Select(UserState.geUser) user$: Observable<User>;
+  @Select(NetworkState.geNetworkStatus) networkStatus$: Observable<boolean>;
 
   constructor(
     private platform: Platform,

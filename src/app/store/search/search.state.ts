@@ -10,6 +10,7 @@ import {
     Store
     } from '@ngxs/store';
 import * as _ from 'lodash';
+import { ToastService } from 'src/app/services/toast/toast.services';
 
 @State<SearchStateModel>({
     name: 'search',
@@ -22,6 +23,7 @@ import * as _ from 'lodash';
 
 export class SearchState {
     constructor(
+        private toast: ToastService,
         private searchService: SearchService,
         private store: Store,
     ) {
@@ -49,6 +51,7 @@ export class SearchState {
             }, 100);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al buscar', 'danger');
                 sc.dispatch(new GetSearchFailedAction(error));
             }, 10);
         });

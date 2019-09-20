@@ -9,6 +9,7 @@ import {
     StateContext
     } from '@ngxs/store';
 import { map, mergeMap, take } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
 import {
     GetUserAction,
     GetUserFailedAction,
@@ -40,6 +41,7 @@ export class UserState {
 
     constructor(
         private productService: ProductService,
+        private toast: ToastService,
         private userService: UserService,
     ) {
     }
@@ -74,6 +76,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al obtener tus datos', 'danger');
                 sc.dispatch(new GetUserFailedAction(error));
             }, 10);
         });
@@ -101,6 +104,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al cambiar tu foto', 'danger');
                 sc.dispatch(new UpdateAvatarUserFailedAction(error));
             }, 10);
         });
@@ -112,7 +116,6 @@ export class UserState {
             ...state,
             loaded: true,
         });
-        console.log('BIEEEEN FOTOOOOOO', state.user);
     }
 
     @Action(UpdateUserAction)
@@ -128,6 +131,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal al actualizar tus datos', 'danger');
                 sc.dispatch(new UpdateUserFailedAction(error));
             }, 10);
         });

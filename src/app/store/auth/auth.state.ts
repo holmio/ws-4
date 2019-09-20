@@ -23,6 +23,7 @@ import {
     } from '@ngxs/store';
 import { UserInfo } from 'firebase';
 import { take, tap } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
 
 export interface AuthStateModel {
@@ -47,6 +48,7 @@ export class AuthState implements NgxsOnInit {
 
     constructor(
         private auth: AuthService,
+        private toast: ToastService,
         private afAuth: AngularFireAuth,
     ) {
     }
@@ -72,7 +74,6 @@ export class AuthState implements NgxsOnInit {
                         sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
                     }, 10);
                 }
-                console.log('CheckSession: no user found');
             }));
     }
 
@@ -87,6 +88,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Email o Password son incorrectos', 'danger');
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -148,6 +150,7 @@ export class AuthState implements NgxsOnInit {
             }
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]El usuario de facebook esta fallando', 'danger');
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -172,6 +175,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]No puedes registrarte con estos datos', 'danger');
                 sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });

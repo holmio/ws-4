@@ -1,4 +1,18 @@
-import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
+import { Channel, ChatStateModel, Message } from './chat.interface';
+import { ChatService } from './chat.service';
+import { LoginFailedAction, LogoutSuccessAction } from '../auth';
+import { ProductState } from '../product';
+import { UserState } from '../user';
+import {
+    Action,
+    Selector,
+    State,
+    StateContext,
+    Store
+    } from '@ngxs/store';
+import * as _ from 'lodash';
+import { ToastService } from 'src/app/services/toast/toast.services';
+import { timestamp } from 'src/app/util/common';
 
 import {
     SendMessageAction,
@@ -17,13 +31,6 @@ import {
     UpdateChannelSuccessAction,
     UpdateChannelFailedAction,
 } from './chat.actions';
-import * as _ from 'lodash';
-import { ChatStateModel, Message, Channel } from './chat.interface';
-import { ChatService } from './chat.service';
-import { UserState } from '../user';
-import { ProductState } from '../product';
-import { LogoutSuccessAction, LoginFailedAction } from '../auth';
-import { timestamp } from 'src/app/util/common';
 
 @State<ChatStateModel>({
     name: 'chat',
@@ -38,6 +45,7 @@ export class ChatState {
 
     constructor(
         private store: Store,
+        private toast: ToastService,
         private chatService: ChatService,
     ) {
 
@@ -73,6 +81,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]No se puede enviar el mensaje, intentalo otra vez', 'danger');
                 sc.dispatch(new SendMessageFailedAction(error));
             }, 10);
         });
@@ -97,6 +106,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal creando el chat', 'danger');
                 sc.dispatch(new SetChannelFailedAction(error));
             }, 10);
         });
@@ -120,6 +130,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal con los chats', 'danger');
                 sc.dispatch(new GetChannelsFailedAction(error));
             }, 10);
         });
@@ -189,6 +200,7 @@ export class ChatState {
             }
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal con este chat', 'danger');
                 sc.dispatch(new GetChannelFailedAction(error));
             }, 10);
         });
@@ -218,17 +230,10 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
+                this.toast.show('[T]Algo salio mal actualizando el chat', 'danger');
                 sc.dispatch(new UpdateChannelFailedAction(error));
             }, 10);
         });
-    }
-
-    @Action(UpdateChannelSuccessAction)
-    UpdateChannelSuccess(sc: StateContext<ChatStateModel>, action: UpdateChannelSuccessAction) {
-        const state = sc.getState();
-        setTimeout(() => {
-            // sc.dispatch(new GetChannelAction(state.channel.uid));
-        }, 10);
     }
 
     // RESET CHAT

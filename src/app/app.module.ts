@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.modue';
 import { AuthModule } from './store/auth';
 import { ChatModule } from './store/chat';
+import { NetworkModule } from './store/network';
 import { ProductModule } from './store/product';
 import { ProductsModule } from './store/products';
 import { SearchModule } from './store/search';
@@ -20,6 +21,7 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { Network } from '@ionic-native/network/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -61,6 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MomentModule,
     SharedModule.forRoot(),
     AuthModule,
+    NetworkModule,
     UserModule,
     ProductModule,
     ProductsModule,
@@ -73,6 +76,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SplashScreen,
     Camera,
     Facebook,
+    Network,
     ImagePicker,
     FirebaseMessaging,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}

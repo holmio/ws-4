@@ -55,6 +55,7 @@
       </ion-content>
     </ion-menu>
     <app-loading></app-loading>
+    <div *ngIf="!(networkStatus$ | async)">No estas connectado</div>
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
