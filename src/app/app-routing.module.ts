@@ -27,6 +27,8 @@ const routes: Routes = [
 
   {path: 'chat/:id', loadChildren: './pages/chat/chat.module#ChatPageModule', canActivate: [AuthGuard]},
   {path: 'user-detail/:id', loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule'},
+  {path: 'reset-password', loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'},
+  {path: 'reset-password/:code', loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'},
 ];
 
 @NgModule({

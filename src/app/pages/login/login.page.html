@@ -4,7 +4,7 @@
   <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
     <div class="main">
       <div class="sub-text-1">
-        [T]Login instantly with
+        [T]Entra con
       </div>
       <div class="social">
         <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
@@ -12,7 +12,7 @@
         </ion-button>
       </div>
       <div class="sub-text-2">
-        [T]OR
+        [T]O
       </div>
       <ion-item color="transparent">
         <ion-label position="floating">[T]Email</ion-label>
@@ -20,21 +20,21 @@
         </ion-input>
       </ion-item>
       <ion-item color="transparent">
-        <ion-label position="floating">[T]Password</ion-label>
+        <ion-label position="floating">[T]Contrasena</ion-label>
         <ion-input minLength="6" maxlength="50" type="password" formControlName="password" inputmode="password"
           required>
         </ion-input>
       </ion-item>
       <div class="sub-text-4">
-        <div class="forgot">[T]Forgot Password ?</div>
+        <div class="forgot">[T]Se te olvido la contrasena?</div>
       </div>
       <div class="button">
         <ion-button fill="outline" color="light" type="submit" size="large" [disabled]="!loginForm.valid" expand="block"
-          class="login-button">Login</ion-button>
+          class="login-button">Entrar</ion-button>
       </div>
       <div class="sub-text-4">
         <ion-button color="light" fill="outline" routerLink="/registration" routerDirection="forward">
-          [T]Signup here
+          [T]Crear cuenta
         </ion-button>
       </div>
     </div>
