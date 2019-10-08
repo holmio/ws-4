@@ -3,7 +3,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild
-  } from '@angular/core';
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import {
@@ -11,7 +11,7 @@ import {
   ofActionDispatched,
   Select,
   Store
-  } from '@ngxs/store';
+} from '@ngxs/store';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
@@ -26,8 +26,9 @@ import {
   Message,
   SendMessageAction,
   SetChannelAction,
-  UpdateChannelAction
-  } from 'src/app/store/chat';
+  UpdateChannelAction,
+  DistroyChatAction
+} from 'src/app/store/chat';
 import { ChatService } from 'src/app/store/chat/chat.service';
 
 @Component({
@@ -96,7 +97,7 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    this.store.dispatch(new DistroyChatAction());
   }
 
   sendMsg() {

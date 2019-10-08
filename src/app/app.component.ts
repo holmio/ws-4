@@ -16,10 +16,11 @@ import {
   ofActionSuccessful,
   Select,
   Store
-  } from '@ngxs/store';
+} from '@ngxs/store';
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
 import { Observable } from 'rxjs';
+import { ChatState, Channel } from './store/chat';
 
 
 @Component({
@@ -30,6 +31,7 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   @Select(UserState.geUser) user$: Observable<User>;
   @Select(NetworkState.geNetworkStatus) networkStatus$: Observable<boolean>;
+  @Select(ChatState.getChannel) channel$: Observable<Channel>;
 
   constructor(
     private platform: Platform,
@@ -63,7 +65,7 @@ export class AppComponent implements OnInit {
           console.log('Message ', data);
           this.zone.run(() => {
             this.router.navigate([ROUTE.chat, data.gcm.tag],
-            {queryParams: {fromProduct: 'false', id: data.gcm.tag}});
+              { queryParams: { fromProduct: 'false', id: data.gcm.tag } });
           });
         });
       }

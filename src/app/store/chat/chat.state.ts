@@ -9,7 +9,7 @@ import {
     State,
     StateContext,
     Store
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
@@ -30,6 +30,7 @@ import {
     UpdateChannelAction,
     UpdateChannelSuccessAction,
     UpdateChannelFailedAction,
+    DistroyChatAction,
 } from './chat.actions';
 
 @State<ChatStateModel>({
@@ -237,6 +238,15 @@ export class ChatState {
     }
 
     // RESET CHAT
+
+    @Action([DistroyChatAction])
+    resetChannelStatus(sc: StateContext<ChatStateModel>) {
+        const state = sc.getState();
+        sc.setState({
+            ...state,
+            channel: null,
+        });
+    }
 
     @Action([LogoutSuccessAction, LoginFailedAction])
     resetChatStatus(sc: StateContext<ChatStateModel>) {

@@ -67,3 +67,7 @@ export class UpdateChannelFailedAction {
   static type = '[Chat] UpdateChannelFailed';
   constructor(public error: any) { }
 }
+
+export class DistroyChatAction {
+  static type = '[Chat] DistroyChat';
+}
