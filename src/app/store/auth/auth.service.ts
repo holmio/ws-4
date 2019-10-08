@@ -39,6 +39,22 @@ export class AuthService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
+  resetPassword(email: string): Promise<any> {
+    const actionCodeSettings: firebase.auth.ActionCodeSettings = {
+      url: 'https://www.example.com/?email=user@example.com',
+      android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '19',
+      }
+    };
+    return this.afAuth.auth.sendPasswordResetEmail(email, actionCodeSettings);
+  }
+
+  confirmPassword(code: string, newPassword: string): Promise<any> {
+    return this.afAuth.auth.confirmPasswordReset(code, newPassword);
+  }
+
   signOut(): Promise<void> {
     return this.afAuth.auth.signOut();
   }
