@@ -31,6 +31,10 @@
             </ion-select>
           </ion-item>
           <div class="ion-padding-horizontal ion-padding-vertical">
+            <ion-button fill="clear" size="large" (click)="resetPassword()" [disabled]="!myGroup.valid" expand="block">
+              [T]Cambiar
+              contraseña
+            </ion-button>
             <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid" expand="block">[T]Guardar
             </ion-button>
           </div>

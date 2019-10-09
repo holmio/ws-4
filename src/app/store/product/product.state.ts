@@ -19,7 +19,7 @@ import {
     UpdateProductAction,
     UpdateProductFailedAction,
     UpdateProductSuccessAction
-    } from './product.actions';
+} from './product.actions';
 import { ProductStateModel } from './product.interface';
 import { ProductService } from './product.service';
 import {
@@ -27,7 +27,7 @@ import {
     AuthStateModel,
     LoginSuccessAction,
     LogoutSuccessAction
-    } from '../auth';
+} from '../auth';
 import { UserState } from '../user';
 import { UserService } from '../user/user.service';
 import {
@@ -39,7 +39,7 @@ import {
     State,
     StateContext,
     Store
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -115,7 +115,7 @@ export class ProductState {
                 }, 10);
             }, error => {
                 setTimeout(() => {
-                    this.toast.show('[T]Algo salio mal al obtener la informacion', 'danger');
+                    this.toast.show({ message: '[T]Algo salio mal al obtener la informacion', color: 'danger' });
                     sc.dispatch(new GetProductFailedAction(error));
                 }, 10);
             });
@@ -165,7 +165,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al actualizar el producto', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al actualizar el producto', color: 'danger' });
                 sc.dispatch(new UpdateProductFailedAction(error));
             }, 10);
         });
@@ -186,7 +186,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al eliminar el producto', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al eliminar el producto', color: 'danger' });
                 sc.dispatch(new DeleteProductFailedAction(error));
             }, 10);
         });
@@ -217,7 +217,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al anadir el producto a favoritos', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al anadir el producto a favoritos', color: 'danger' });
                 sc.dispatch(new AddFavoriteFailedAction(error));
             }, 10);
         });
@@ -267,7 +267,7 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al crear el producto', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al crear el producto', color: 'danger' });
                 sc.dispatch(new SetProductFailedAction(error));
             }, 10);
         });

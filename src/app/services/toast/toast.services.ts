@@ -1,8 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { ToastButton } from '@ionic/core';
 
 type Color = 'danger' | 'success' | 'warning';
-
+export interface MyToastOption {
+  message: string;
+  color?: Color;
+  cssClass?: string;
+  duration?: number;
+  closeButtonText?: string;
+  showCloseButton?: boolean;
+  position?: 'top' | 'bottom' | 'middle';
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -13,14 +22,14 @@ export class ToastService {
 
   }
 
-  async show(message: string, color?: Color, cssClass?: string, duration: number = 3000) {
-    const toast = await this.toastController.create({
-      message,
-      duration,
-      color,
-      position: 'top',
-      cssClass,
-    });
+  async show(toastOption: MyToastOption) {
+    if (!toastOption.duration) {
+      toastOption.duration = 3000;
+    }
+    if (!toastOption.position) {
+      toastOption.position = 'top';
+    }
+    const toast = await this.toastController.create(toastOption);
     toast.present();
   }
 }

@@ -7,7 +7,7 @@ import {
     Selector,
     State,
     StateContext
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import {
@@ -76,7 +76,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al obtener tus datos', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al obtener tus datos', color: 'danger' });
                 sc.dispatch(new GetUserFailedAction(error));
             }, 10);
         });
@@ -104,7 +104,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al cambiar tu foto', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al cambiar tu foto', color: 'danger' });
                 sc.dispatch(new UpdateAvatarUserFailedAction(error));
             }, 10);
         });
@@ -131,7 +131,7 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al actualizar tus datos', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al actualizar tus datos', color: 'danger' });
                 sc.dispatch(new UpdateUserFailedAction(error));
             }, 10);
         });
@@ -187,7 +187,7 @@ export class UserState {
             mergeMap((myProducts) =>
                 favorites$.pipe(
                     map(
-                        (favorites) => Object.assign({}, {favorites, myProducts})
+                        (favorites) => Object.assign({}, { favorites, myProducts })
                     )
                 )
             ),
@@ -218,7 +218,7 @@ export class UserState {
                                 (products) => {
                                     sc.setState({
                                         ...state,
-                                        visitedUser: {user, products, favorites},
+                                        visitedUser: { user, products, favorites },
                                         loaded: true,
                                     });
                                 })

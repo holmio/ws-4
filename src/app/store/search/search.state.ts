@@ -8,7 +8,7 @@ import {
     State,
     StateContext,
     Store
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 
@@ -44,14 +44,14 @@ export class SearchState {
     getProducts(sc: StateContext<SearchStateModel>, action: GetSearchAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        sc.setState({...state, loading: true});
+        sc.setState({ ...state, loading: true });
         return this.searchService.getProducts(user && user.uid, action.filter).subscribe((products) => {
             setTimeout(() => {
                 sc.dispatch(new GetSearchSuccessAction(products));
             }, 100);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal al buscar', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal al buscar', color: 'danger' });
                 sc.dispatch(new GetSearchFailedAction(error));
             }, 10);
         });

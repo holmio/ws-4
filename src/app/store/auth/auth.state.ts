@@ -9,7 +9,7 @@ import {
     RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-    } from './auth.actions';
+} from './auth.actions';
 import { AuthService } from './auth.service';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
 import { User } from '../user/user.interface';
@@ -20,7 +20,7 @@ import {
     Selector,
     State,
     StateContext
-    } from '@ngxs/store';
+} from '@ngxs/store';
 import { UserInfo } from 'firebase';
 import { take, tap } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
@@ -88,7 +88,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Email o Password son incorrectos', 'danger');
+                this.toast.show({ message: '[T]Email o Password son incorrectos', color: 'danger' });
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -150,7 +150,7 @@ export class AuthState implements NgxsOnInit {
             }
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]El usuario de facebook esta fallando', 'danger');
+                this.toast.show({ message: '[T]El usuario de facebook esta fallando', color: 'danger' });
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -175,7 +175,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]No puedes registrarte con estos datos', 'danger');
+                this.toast.show({ message: '[T]No puedes registrarte con estos datos', color: 'danger' });
                 sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });

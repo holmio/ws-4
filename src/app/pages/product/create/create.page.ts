@@ -36,7 +36,7 @@ export class CreatePage implements OnInit, OnDestroy {
     private toastService: ToastService,
     private actions: Actions,
     private navController: NavController,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
@@ -44,7 +44,7 @@ export class CreatePage implements OnInit, OnDestroy {
       price: ['', Validators.required],
       description: ['', Validators.required],
       willaya: ['', Validators.required],
-      daira: [{value: '', disabled: true}, Validators.required],
+      daira: [{ value: '', disabled: true }, Validators.required],
       currency: ['DZD', Validators.required],
       category: ['', Validators.required],
     });
@@ -68,7 +68,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      return this.toastService.show('[T]Necesitas subir minimo una foto del producto', 'warning');
+      return this.toastService.show({ message: '[T]Necesitas subir minimo una foto del producto', color: 'warning' });
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],
@@ -88,7 +88,7 @@ export class CreatePage implements OnInit, OnDestroy {
       return;
     }
     this.dairas = [];
-    this.dairas = [..._.find(this.willayas, {value: willaya}).dairas];
+    this.dairas = [..._.find(this.willayas, { value: willaya }).dairas];
   }
 
 

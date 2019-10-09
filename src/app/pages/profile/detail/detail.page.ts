@@ -29,7 +29,7 @@ export class DetailPage implements OnInit, OnDestroy {
     private toastService: ToastService,
     private translate: TranslateService,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.store.dispatch(new GetMyProductsAndFavoritesAction());
@@ -56,7 +56,7 @@ export class DetailPage implements OnInit, OnDestroy {
         const base64Image = 'data:image/jpeg;base64,' + data;
         this.store.dispatch(new UpdateAvatarUserAction(base64Image));
       }, (error) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
+        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
       });
     }
   }

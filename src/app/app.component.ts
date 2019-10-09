@@ -21,6 +21,7 @@ import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
 import { Observable } from 'rxjs';
 import { ChatState, Channel } from './store/chat';
+import { ToastService, MyToastOption } from './services/toast/toast.services';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit {
     private fMessaging: FirebaseMessaging,
     private actions: Actions,
     private userService: UserService,
+    private toast: ToastService,
     private zone: NgZone,
   ) {
     this.initializeApp();
@@ -62,7 +64,18 @@ export class AppComponent implements OnInit {
       if (this.platform.is('cordova')) {
         this.fMessaging.getToken().then((data) => console.log('Token ', data));
         this.fMessaging.onMessage().subscribe((data) => {
-          console.log('Message ', data);
+          console.log('onMessage ', data);
+          const confToast: MyToastOption = {
+            message: data.gcm.body,
+            color: 'success',
+            closeButtonText: '[T]Cerrar',
+            showCloseButton: true,
+          };
+          this.toast.show(confToast);
+        });
+
+        this.fMessaging.onBackgroundMessage().subscribe((data) => {
+          console.log('onBackgroundMessage ', data);
           this.zone.run(() => {
             this.router.navigate([ROUTE.chat, data.gcm.tag],
               { queryParams: { fromProduct: 'false', id: data.gcm.tag } });
@@ -99,6 +112,10 @@ export class AppComponent implements OnInit {
         await this.userService.updateTokenDevice(action.uid, token);
       });
     }
+  }
+
+  private goToChat() {
+    this.router.navigateByUrl(ROUTE.channel);
   }
 
   goToPage(url: string) {

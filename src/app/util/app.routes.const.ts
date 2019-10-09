@@ -4,6 +4,7 @@ export const ROUTE = {
     search: 'search',
     chat: 'chat',
     home: 'home',
+    channel: 'profile/messages',
     product: {
         detail: 'product/detail/:id',
         edit: 'product/edit/:id'

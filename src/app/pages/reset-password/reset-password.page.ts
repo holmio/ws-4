@@ -32,14 +32,14 @@ export class ResetPasswordPage implements OnInit {
     this.resetPasswordForm = this.formBuilder.group({
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
-    }, {validator: this.checkPasswords});
+    }, { validator: this.checkPasswords });
   }
 
   private checkPasswords(group: FormGroup) { // here we have the 'passwords' group
     const pass = group.get('password').value;
     const confirmPass = group.get('confirmPassword').value;
     const isDirtyConfirmPass = group.get('confirmPassword').dirty;
-    return pass === confirmPass || !isDirtyConfirmPass ? null : {notSame: true};
+    return pass === confirmPass || !isDirtyConfirmPass ? null : { notSame: true };
   }
 
   // convenience getter for easy access to form fields
@@ -50,10 +50,10 @@ export class ResetPasswordPage implements OnInit {
   onSubmit() {
     this.authService.confirmPassword(this.code, this.formValue.password.value)
       .then(() => {
-        this.toast.show('[T]Contrasena cambiada', 'success');
-        this.router.navigateByUrl('/', {replaceUrl: true});
+        this.toast.show({ message: '[T]Contrasena cambiada', color: 'success' });
+        this.router.navigateByUrl('/', { replaceUrl: true });
       }).catch((error) => {
-        this.toast.show(error, 'danger');
+        this.toast.show({ message: error, color: 'danger' });
       });
   }
 }

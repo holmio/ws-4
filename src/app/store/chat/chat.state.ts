@@ -82,7 +82,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]No se puede enviar el mensaje, intentalo otra vez', 'danger');
+                this.toast.show({ message: '[T]No se puede enviar el mensaje, intentalo otra vez', color: 'danger' });
                 sc.dispatch(new SendMessageFailedAction(error));
             }, 10);
         });
@@ -107,7 +107,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal creando el chat', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal creando el chat', color: 'danger' });
                 sc.dispatch(new SetChannelFailedAction(error));
             }, 10);
         });
@@ -131,7 +131,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal con los chats', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal con los chats', color: 'danger' });
                 sc.dispatch(new GetChannelsFailedAction(error));
             }, 10);
         });
@@ -201,7 +201,7 @@ export class ChatState {
             }
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal con este chat', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal con este chat', color: 'danger' });
                 sc.dispatch(new GetChannelFailedAction(error));
             }, 10);
         });
@@ -231,7 +231,7 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show('[T]Algo salio mal actualizando el chat', 'danger');
+                this.toast.show({ message: '[T]Algo salio mal actualizando el chat', color: 'danger' });
                 sc.dispatch(new UpdateChannelFailedAction(error));
             }, 10);
         });

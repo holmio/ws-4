@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
   Output
-  } from '@angular/core';
+} from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { ActionSheetController, Platform } from '@ionic/angular';
@@ -32,9 +32,9 @@ export class GalleryManagerComponent implements OnInit {
     private toastService: ToastService,
     private translate: TranslateService,
     private imagePicker: ImagePicker,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   deletePicture(index: number) {
     // If the picture deleted is the avatar then we generate a new avatar of the second picture of the gallery
@@ -94,7 +94,7 @@ export class GalleryManagerComponent implements OnInit {
         }
         this.changeGallery.next(this.gallery);
       }, (err) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
+        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
       });
     }
   }
@@ -116,7 +116,7 @@ export class GalleryManagerComponent implements OnInit {
         this.gallery.push(base64Image);
         this.changeGallery.next(this.gallery);
       }, (error) => {
-        this.toastService.show(this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), 'danger');
+        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
       });
     }
   }

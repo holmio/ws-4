@@ -109,7 +109,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = {followers: firestore.FieldValue.arrayUnion(uidUser)};
+    const addFollower = { followers: firestore.FieldValue.arrayUnion(uidUser) };
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();
@@ -118,7 +118,7 @@ export class ProductService {
     const batch = this.afStore.firestore.batch();
     const productColl = this.afStore.firestore.doc(`${APP_CONST.db.products}/${uidProduct}`);
     const favoriteProductsColl = this.afStore.firestore.doc(`${APP_CONST.db.favoriteProducts}/${uidProduct}`);
-    const addFollower = {followers: firestore.FieldValue.arrayRemove(uidUser)};
+    const addFollower = { followers: firestore.FieldValue.arrayRemove(uidUser) };
     batch.update(productColl, addFollower);
     batch.update(favoriteProductsColl, addFollower);
     return batch.commit();
@@ -147,7 +147,7 @@ export class ProductService {
           const file = await this.storageService.uploadContent(value, filePath, fileRef);
           galleryUploaded.push(file);
         } catch (error) {
-          this.toast.show(`No se ha podido subir la imagen ${error}`, 'warning', '', 5000);
+          this.toast.show({ message: `No se ha podido subir la imagen ${error}`, color: 'warning', duration: 5000 });
         }
       } else {
         galleryUploaded.push(value);
@@ -163,7 +163,7 @@ export class ProductService {
       try {
         await fileRef.delete();
       } catch (error) {
-        this.toast.show(`Algo fue mal eliminando la imagen ${error}`, 'warning', '', 5000);
+        this.toast.show({ message: `Algo fue mal eliminando la imagen ${error}`, color: 'warning', duration: 5000 });
       }
     }
   }
