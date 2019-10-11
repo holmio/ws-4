@@ -18,25 +18,27 @@ exports.sendNotification = functions.firestore.document('/channels/{channelUid}/
         console.log(channelInfo);
         const payload: admin.messaging.MessagingPayload = {
             notification: {
-                tag: channelInfo.uid,
+                tag:'marsa',
                 title: channelInfo.product.name,
                 body: original.message,
+            },
+            data: {
+                title: channelInfo.product.name,
+                body: original.message,
+                channelId: channelInfo.uid,
             }
         };
         const options: admin.messaging.MessagingOptions = {
-            priority: 'high',
-            collapseKey: '',
+            collapseKey: channelInfo.uid,
         }
         let token: string;
         if (original.uid === channelInfo.visitor.uid) {
             const userPromise = await db.collection('userShortInfo').doc(channelInfo.owner.uid).get();
             const userInfo: any = userPromise.data();
-            options.collapseKey = channelInfo.product.uid + channelInfo.owner.uid;
             token = userInfo.tokenDevice;
         } else {
             const userPromise = await db.collection('userShortInfo').doc(channelInfo.visitor.uid).get();
             const userInfo: any = userPromise.data();
-            options.collapseKey = channelInfo.product.uid + channelInfo.visitor.uid;
             token = userInfo.tokenDevice;
         }
         if (token) {

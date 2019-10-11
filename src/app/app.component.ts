@@ -1,4 +1,6 @@
+import { MyToastOption, ToastService } from './services/toast/toast.services';
 import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
+import { Channel, ChatState } from './store/chat';
 import { NetworkState } from './store/network/network.state';
 import { User, UserState } from './store/user';
 import { UserService } from './store/user/user.service';
@@ -16,12 +18,10 @@ import {
   ofActionSuccessful,
   Select,
   Store
-} from '@ngxs/store';
+  } from '@ngxs/store';
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
 import { Observable } from 'rxjs';
-import { ChatState, Channel } from './store/chat';
-import { ToastService, MyToastOption } from './services/toast/toast.services';
 
 
 @Component({
@@ -63,10 +63,10 @@ export class AppComponent implements OnInit {
       this.splashScreen.hide();
       if (this.platform.is('cordova')) {
         this.fMessaging.getToken().then((data) => console.log('Token ', data));
-        this.fMessaging.onMessage().subscribe((data) => {
-          console.log('onMessage ', data);
+        this.fMessaging.onMessage().subscribe((message) => {
+          console.log('onMessage ', message);
           const confToast: MyToastOption = {
-            message: data.gcm.body,
+            message: message.body,
             color: 'success',
             closeButtonText: '[T]Cerrar',
             showCloseButton: true,
@@ -74,11 +74,11 @@ export class AppComponent implements OnInit {
           this.toast.show(confToast);
         });
 
-        this.fMessaging.onBackgroundMessage().subscribe((data) => {
-          console.log('onBackgroundMessage ', data);
+        this.fMessaging.onBackgroundMessage().subscribe((message) => {
+          console.log('onBackgroundMessage ', message);
           this.zone.run(() => {
-            this.router.navigate([ROUTE.chat, data.gcm.tag],
-              { queryParams: { fromProduct: 'false', id: data.gcm.tag } });
+            this.router.navigate([ROUTE.chat, message.channelId],
+              { queryParams: { fromProduct: 'false', id: message.channelId } });
           });
         });
       }
