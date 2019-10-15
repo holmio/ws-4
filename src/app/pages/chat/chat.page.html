@@ -2,7 +2,7 @@
     (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
     (channelInfo$ | async)?.owner.name :
     (channelInfo$ | async)?.visitor.name">
-    <ion-avatar header-right-action slot="end" [routerLink]="'/user-detail/'+
+    <!-- <ion-avatar slot="end" [routerLink]="'/user-detail/'+
         (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
         (channelInfo$ | async)?.owner.uid :
         (channelInfo$ | async)?.visitor.uid" routerDirection="forward">
@@ -10,13 +10,10 @@
         (uid$ | async) == (channelInfo$ | async)?.visitor.uid ?
         (channelInfo$ | async)?.owner.avatar :
         (channelInfo$ | async)?.visitor.avatar" />
-    </ion-avatar>
-</app-header>
-
-<ion-content #IonContent>
-    <div center text-center>
+    </ion-avatar> -->
+    <ion-toolbar>
         <ion-item [routerLink]="'/product/detail/'+(channelInfo$ | async)?.product.uid" routerDirection="forward">
-            <ion-avatar slot="start">
+            <ion-avatar slot="start" style="height: 34px;">
                 <img [lazyLoad]="(channelInfo$ | async)?.product.avatar" />
             </ion-avatar>
             <ion-label>
@@ -24,8 +21,11 @@
             </ion-label>
             <ion-icon slot="end" name="arrow-forward" mode="ios"></ion-icon>
         </ion-item>
-    </div>
-    <div center text-center class="ion-padding-vertical">
+    </ion-toolbar>
+</app-header>
+
+<ion-content #IonContent>
+    <div class="ion-padding-vertical ion-text-center">
         <ion-chip>
             <ion-label color="primary">[T]Conectado {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
             </ion-label>
@@ -33,7 +33,7 @@
     </div>
     <ion-list>
         <div *ngFor="let message of (messages$ | async); let i = index; ">
-            <div center text-center *ngIf="diffDates(i)">
+            <div class="ion-text-center" *ngIf="diffDates(i)">
                 <ion-chip>
                     <ion-label color="secondary">{{message.timestamp | amCalendar}}</ion-label>
                 </ion-chip>
@@ -55,7 +55,7 @@
                 </ion-col>
             </ion-row>
 
-            <ion-row *ngIf="message.uid == (uid$ | async)" align-item-center>
+            <ion-row *ngIf="message.uid == (uid$ | async)" class="ion-align-item-center">
                 <ion-col class="left" size="12">
                     <div class="imageAvatarLeft">
                         <ion-label color="light">

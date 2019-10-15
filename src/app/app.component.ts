@@ -7,7 +7,7 @@ import { UserService } from './store/user/user.service';
 import { APP_CONST } from './util/app.constants';
 import { ROUTE } from './util/app.routes.const';
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   @Select(UserState.geUser) user$: Observable<User>;
   @Select(NetworkState.geNetworkStatus) networkStatus$: Observable<boolean>;
   @Select(ChatState.getChannel) channel$: Observable<Channel>;
-
+  private currentChannelId: string;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -46,6 +46,7 @@ export class AppComponent implements OnInit {
     private actions: Actions,
     private userService: UserService,
     private toast: ToastService,
+    private activeRoute: ActivatedRoute,
     private zone: NgZone,
   ) {
     this.initializeApp();
@@ -71,16 +72,23 @@ export class AppComponent implements OnInit {
             closeButtonText: '[T]Cerrar',
             showCloseButton: true,
           };
-          this.toast.show(confToast);
+          if (message.channelId !== this.currentChannelId) {
+            this.toast.show(confToast);
+          }
         });
 
         this.fMessaging.onBackgroundMessage().subscribe((message) => {
           console.log('onBackgroundMessage ', message);
           this.zone.run(() => {
             this.router.navigate([ROUTE.chat, message.channelId],
-              { queryParams: { fromProduct: 'false', id: message.channelId } });
+              {queryParams: {fromProduct: 'false', id: message.channelId}});
           });
         });
+
+        this.activeRoute.queryParams
+          .subscribe(params => {
+            this.currentChannelId = params && params.id || null;
+          });
       }
     });
   }
