@@ -1,18 +1,13 @@
 <app-header color="transparent"></app-header>
 
-<ion-content fullscreen no-padding class="gradientBackground">
+<ion-content fullscreen class="gradientBackground ion-padding">
   <form [formGroup]="loginForm" (ngSubmit)="loginWithEmailAndPassword()">
     <div class="main">
-      <div class="sub-text-1">
-        [T]Entra con
-      </div>
-      <div class="social">
+      <div class="social ion-padding-vertical">
         <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
-          <ion-icon mode="ios" color="light" size="large" name="logo-facebook"></ion-icon>
+          <ion-icon slot="start" mode="ios" color="light" size="large" name="logo-facebook"></ion-icon>
+          <ion-label color="light">facebook</ion-label>
         </ion-button>
-      </div>
-      <div class="sub-text-2">
-        [T]O
       </div>
       <ion-item color="transparent">
         <ion-label position="floating">[T]Email</ion-label>
@@ -25,12 +20,12 @@
           required>
         </ion-input>
       </ion-item>
-      <div class="sub-text-4">
+      <div class="sub-text-4 ion-padding-vertical">
         <div class="forgot">[T]Se te olvido la contrasena?</div>
       </div>
       <div class="button">
         <ion-button fill="outline" color="light" type="submit" size="large" [disabled]="!loginForm.valid" expand="block"
-          class="login-button">Entrar</ion-button>
+          class="login-button">[T]Entrar</ion-button>
       </div>
       <div class="sub-text-4">
         <ion-button color="light" fill="outline" routerLink="/registration" routerDirection="forward">

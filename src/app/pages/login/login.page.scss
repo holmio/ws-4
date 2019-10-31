@@ -1,22 +1,6 @@
 ion-content {
   --background: linear-gradient(0deg, rgba(226, 145, 71, 1) 0%, rgba(219, 58, 52, 1) 100%);
-}
-form {
-  .main {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 90vh;
-    font-family: sans-serif;
-
-    .logo {
-      text-align: center;
-      font-size: 48px;
-      font-weight: 100;
-      padding: 30px;
-    }
-
+  form {
     ion-item {
       --highlight-color-invalid: var(--ion-color-dark);
       --color: var(--ion-color-light);
@@ -28,59 +12,7 @@ form {
         font-size: 22px !important;
       }
     }
-
-    .radio {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-    }
-    .social {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      ion-button {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        ion-icon {
-          height: 50px;
-          width: 50px;
-        }
-      }
-    }
-
-    .sub-text-1 {
-      color: #fff;
-      text-align: center;
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-    .sub-text-2 {
-      color: #fff;
-      padding-top: 20px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .sub-text-3 {
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      padding: 20px 0;
-      .check {
-        display: flex;
-        align-items: center;
-      }
-      ion-checkbox {
-        margin-right: 5px;
-        width: 20px;
-        height: 20px;
-      }
-    }
+  
     .sub-text-4 {
       color: #fff;
       text-align: center;
