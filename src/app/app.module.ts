@@ -19,6 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -79,6 +80,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Network,
     ImagePicker,
     FirebaseMessaging,
+    FirebaseDynamicLinks,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],
   bootstrap: [AppComponent]

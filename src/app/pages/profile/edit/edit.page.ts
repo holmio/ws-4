@@ -7,15 +7,15 @@ import {
   ofActionSuccessful,
   Select,
   Store
-} from '@ngxs/store';
+  } from '@ngxs/store';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
+import { AuthService } from 'src/app/store/auth/auth.service';
 import { UpdateUserAction, UpdateUserSuccessAction, UserState } from 'src/app/store/user';
 import { User } from 'src/app/store/user/user.interface';
 import { APP_CONST } from 'src/app/util/app.constants';
-import { AuthService } from 'src/app/store/auth/auth.service';
-import { ToastService } from 'src/app/services/toast/toast.services';
 
 @Component({
   selector: 'app-edit',
@@ -78,7 +78,8 @@ export class EditPage implements OnInit, OnDestroy {
   resetPassword() {
     this.authService.resetPassword(this.email).then(() => {
       this.toast.show({ message: '[T]Te hemos enviado el email para cambiar la contraseña' });
-    }).catch(() => {
+    }).catch((error) => {
+      console.log(error)
       this.toast.show({ message: '[T]No ha sido posible enviarte el email, intentalo más tarde', color: 'danger' });
     });
   }

@@ -24,6 +24,7 @@
     "@ionic-native/camera": "^5.15.0",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/facebook": "^5.15.0",
+    "@ionic-native/firebase-dynamic-links": "^5.16.0",
     "@ionic-native/firebase-messaging": "^5.15.0",
     "@ionic-native/image-picker": "^5.15.0",
     "@ionic-native/network": "^5.15.0",
@@ -33,12 +34,13 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@ngxs/store": "^3.5.1",
-    "cordova-android": "^8.1.0",
+    "cordova-android": "8.1.0",
     "cordova-browser": "6.0.0",
     "cordova-plugin-androidx": "^1.0.2",
     "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-facebook4": "^5.0.0",
+    "cordova-plugin-firebase-dynamiclinks": "3.0.0",
     "cordova-plugin-firebase-messaging": "^3.0.0",
     "cordova-plugin-ionic-webview": "^4.1.2",
     "cordova-plugin-network-information": "^2.0.2",
@@ -115,7 +117,13 @@
       "cordova-support-google-services": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-firebase-dynamiclinks": {
+        "APP_DOMAIN": "marsa.page.link",
+        "PAGE_LINK_DOMAIN": "marsa.page.link",
+        "FIREBASE_CORE_VERSION": "17.0.+",
+        "FIREBASE_DYNAMIC_LINKS_VERSION": "18.0.+"
+      }
     },
     "platforms": [
       "browser",

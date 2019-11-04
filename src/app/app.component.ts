@@ -8,6 +8,7 @@ import { APP_CONST } from './util/app.constants';
 import { ROUTE } from './util/app.routes.const';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -22,7 +23,6 @@ import {
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
 import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-root',
@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private toast: ToastService,
     private activeRoute: ActivatedRoute,
+    private firebaseDynamicLinks: FirebaseDynamicLinks,
     private zone: NgZone,
   ) {
     this.initializeApp();
@@ -89,6 +90,17 @@ export class AppComponent implements OnInit {
           .subscribe(params => {
             this.currentChannelId = params && params.id || null;
           });
+        // Handle the logic here after opening the app with the Dynamic link
+        this.firebaseDynamicLinks.onDynamicLink()
+          .subscribe((res: any) => {
+            console.log(res);
+            const url = new URL(res.deepLink);
+            console.log(url);
+            this.zone.run(() => {
+              this.router.navigateByUrl(url.pathname);
+            });
+          }, (error: any) => console.log(error));
+
       }
     });
   }
