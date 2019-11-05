@@ -95,9 +95,14 @@ export class AppComponent implements OnInit {
           .subscribe((res: any) => {
             console.log(res);
             const url = new URL(res.deepLink);
-            console.log(url);
+            let page = url.searchParams.get('page');
+            const actionCode = url.searchParams.get('oobCode');
+            const mode = url.searchParams.get('mode');
+            if (mode === 'resetPassword') { page = '/reset-password'; }
+
+            console.log({actionCode, page, mode});
             this.zone.run(() => {
-              this.router.navigateByUrl(url.pathname);
+              this.router.navigate([page], {queryParams: {actionCode, mode}});
             });
           }, (error: any) => console.log(error));
 

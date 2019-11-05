@@ -41,13 +41,14 @@ export class AuthService {
 
   resetPassword(email: string): Promise<any> {
     const actionCodeSettings: firebase.auth.ActionCodeSettings = {
-      url: 'https://marsa.page.link/reset-password?email=' + email,
+      url: 'https://marsa.page.link?page=reset-password?email=' + email,
       android: {
         packageName: 'com.saila.marsa',
         installApp: true,
         minimumVersion: '19',
       },
-      dynamicLinkDomain: 'marsa.page.link'
+      dynamicLinkDomain: 'marsa.page.link',
+      handleCodeInApp: true,
     };
     return this.afAuth.auth.sendPasswordResetEmail(email, actionCodeSettings);
   }

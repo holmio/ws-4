@@ -24,7 +24,8 @@ export class ResetPasswordPage implements OnInit {
   ) {
     this.activRoute.queryParams
       .subscribe(params => {
-        this.code = params.code;
+        this.code = params.actionCode;
+        console.log(params);
       });
   }
 
