@@ -7,10 +7,8 @@
 
 <ion-content>
   <div class="categories ion-margin-vertical ion-margin-start">
-    <ion-chip *ngFor="let category of categories; let i=index" (click)="getCategory(category.value)">
-      <ion-avatar>
-        <img [lazyLoad]="'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y'">
-      </ion-avatar>
+    <ion-chip *ngFor="let category of categories; let i=index" color="primary" mode="ios" outline="true" (click)="getCategory(category.value)">
+      <ion-icon [name]="category.icon"></ion-icon>
       <ion-label>{{category.nameEs}}</ion-label>
     </ion-chip>
   </div>
