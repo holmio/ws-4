@@ -29,6 +29,7 @@ const routes: Routes = [
   {path: 'user-detail/:id', loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule'},
   {path: 'reset-password', loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'},
   {path: 'reset-password/:code', loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'},
+  { path: 'forgot-password', loadChildren: './pages/forgot-password/forgot-password.module#ForgotPasswordPageModule' },
 ];
 
 @NgModule({

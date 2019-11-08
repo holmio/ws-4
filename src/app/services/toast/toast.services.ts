@@ -29,6 +29,9 @@ export class ToastService {
     if (!toastOption.position) {
       toastOption.position = 'top';
     }
+    if (!toastOption.color) {
+      toastOption.color = 'success';
+    }
     const toast = await this.toastController.create(toastOption);
     toast.present();
   }

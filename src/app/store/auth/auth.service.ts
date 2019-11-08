@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { auth } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.services';
 
 import AuthProvider = firebase.auth.AuthProvider;
 
@@ -20,6 +21,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore,
     private fb: Facebook,
+    private toast: ToastService,
     private platform: Platform,
   ) {
     this.user$ = this.afAuth.authState.pipe(
@@ -40,6 +42,23 @@ export class AuthService {
   }
 
   resetPassword(email: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.resetPasswordFirebase(email).then(() => {
+        resolve();
+        this.toast.show({ message: '[T]Te hemos enviado el email para cambiar la contraseña' });
+      }).catch((error) => {
+        console.log(error);
+        reject();
+        if (error.code === 'auth/user-not-found') {
+          this.toast.show({ message: '[T]Este email no existe', color: 'danger' });
+        } else {
+          this.toast.show({ message: '[T]No ha sido posible enviarte el email, intentalo mas tarde', color: 'danger' });
+        }
+      });
+    });
+  }
+
+  private resetPasswordFirebase(email: string): Promise<any> {
     const actionCodeSettings: firebase.auth.ActionCodeSettings = {
       url: 'https://marsa.page.link?page=reset-password?email=' + email,
       android: {

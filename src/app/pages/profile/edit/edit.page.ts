@@ -75,13 +75,8 @@ export class EditPage implements OnInit, OnDestroy {
     this.store.dispatch(new UpdateUserAction(this.myGroup.value));
   }
 
-  resetPassword() {
-    this.authService.resetPassword(this.email).then(() => {
-      this.toast.show({ message: '[T]Te hemos enviado el email para cambiar la contraseña' });
-    }).catch((error) => {
-      console.log(error)
-      this.toast.show({ message: '[T]No ha sido posible enviarte el email, intentalo más tarde', color: 'danger' });
-    });
+  changePassword() {
+    this.authService.resetPassword(this.email);
   }
 
   onChangeWillaya(event) {
