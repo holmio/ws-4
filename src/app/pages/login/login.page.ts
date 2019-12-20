@@ -31,7 +31,7 @@ export class LoginPage implements OnInit, OnDestroy {
       ofActionSuccessful(LoginSuccessAction),
       take(1)
     ).subscribe(() => {
-      this.navController.back();
+      this.navController.navigateRoot('/');
     });
   }
 
