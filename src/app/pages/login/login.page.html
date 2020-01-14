@@ -6,30 +6,30 @@
       <div class="social ion-padding-vertical">
         <ion-button (click)="loginWithFacebook()" expand="block" fill="clear">
           <ion-icon slot="start" mode="ios" color="light" size="large" name="logo-facebook"></ion-icon>
-          <ion-label color="light">facebook</ion-label>
+          <ion-label color="light" translate>general.facebook</ion-label>
         </ion-button>
       </div>
       <ion-item color="transparent">
-        <ion-label position="floating">[T]Email</ion-label>
+        <ion-label position="floating" translate>general.email</ion-label>
         <ion-input maxlength="50" type="email" inputmode="email" formControlName="email" required>
         </ion-input>
       </ion-item>
       <ion-item color="transparent">
-        <ion-label position="floating">[T]Contrasena</ion-label>
+        <ion-label position="floating" translate>general.password</ion-label>
         <ion-input minLength="6" maxlength="50" type="password" formControlName="password" inputmode="password"
           required>
         </ion-input>
       </ion-item>
       <div class="sub-text-4 ion-padding-vertical">
-        <ion-button fill="clear" color="light" routerLink="/forgot-password" routerDirection="forward" class="forgot">[T]Se te olvido la contrasena?</ion-button>
+        <ion-button fill="clear" color="light" routerLink="/forgot-password" routerDirection="forward" class="forgot" translate>login.text.forgot-password</ion-button>
       </div>
       <div class="button">
         <ion-button fill="outline" color="light" type="submit" size="large" [disabled]="!loginForm.valid" expand="block"
-          class="login-button">[T]Entrar</ion-button>
+          class="login-button" translate>general.login</ion-button>
       </div>
       <div class="sub-text-4">
-        <ion-button color="light" fill="outline" routerLink="/registration" routerDirection="forward">
-          [T]Crear cuenta
+        <ion-button color="light" fill="outline" routerLink="/registration" routerDirection="forward" translate>
+          general.create-account
         </ion-button>
       </div>
     </div>

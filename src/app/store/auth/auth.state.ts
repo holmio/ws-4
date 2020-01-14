@@ -9,18 +9,13 @@ import {
     RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-} from './auth.actions';
+    } from './auth.actions';
 import { AuthService } from './auth.service';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
 import { User } from '../user/user.interface';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {
-    Action,
-    NgxsOnInit,
-    Selector,
-    State,
-    StateContext
-} from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { UserInfo } from 'firebase';
 import { take, tap } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
@@ -47,6 +42,7 @@ export class AuthState implements NgxsOnInit {
     }
 
     constructor(
+        private translate: TranslateService,
         private auth: AuthService,
         private toast: ToastService,
         private afAuth: AngularFireAuth,
@@ -88,7 +84,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Email o Password son incorrectos', color: 'danger' });
+                this.toast.show({message: this.translate.instant('auth.state.login.error-auth'), color: 'danger'}); // Email o Password son incorrectos
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -150,7 +146,7 @@ export class AuthState implements NgxsOnInit {
             }
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]El usuario de facebook esta fallando', color: 'danger' });
+                this.toast.show({message: this.translate.instant('auth.state.error.facebook-auth'), color: 'danger'}); // El usuario de facebook esta fallando
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -175,7 +171,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]No puedes registrarte con estos datos', color: 'danger' });
+                this.toast.show({message: this.translate.instant('auth.state.register.not-allowd-register'), color: 'danger' }); //No puedes registrarte con estos datos
                 sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });

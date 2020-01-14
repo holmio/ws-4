@@ -3,13 +3,8 @@ import { ChatService } from './chat.service';
 import { LoginFailedAction, LogoutSuccessAction } from '../auth';
 import { ProductState } from '../product';
 import { UserState } from '../user';
-import {
-    Action,
-    Selector,
-    State,
-    StateContext,
-    Store
-} from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
@@ -45,6 +40,7 @@ import {
 export class ChatState {
 
     constructor(
+        private translate: TranslateService,
         private store: Store,
         private toast: ToastService,
         private chatService: ChatService,
@@ -82,7 +78,8 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]No se puede enviar el mensaje, intentalo otra vez', color: 'danger' });
+                // No se puede enviar el mensaje, intentalo otra vez
+                this.toast.show({message: this.translate.instant('chat.toast.send-message.error'), color: 'danger'});
                 sc.dispatch(new SendMessageFailedAction(error));
             }, 10);
         });
@@ -107,7 +104,8 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal creando el chat', color: 'danger' });
+                // Algo salio mal creando el chat
+                this.toast.show({message: this.translate.instant('chat.toast.create-channel.error'), color: 'danger'});
                 sc.dispatch(new SetChannelFailedAction(error));
             }, 10);
         });
@@ -131,7 +129,8 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal con los chats', color: 'danger' });
+                // Algo salio mal con los chats
+                this.toast.show({message: this.translate.instant('chat.toast.get-channels.error'), color: 'danger'});
                 sc.dispatch(new GetChannelsFailedAction(error));
             }, 10);
         });
@@ -201,7 +200,8 @@ export class ChatState {
             }
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal con este chat', color: 'danger' });
+                // Algo salio mal con este chat
+                this.toast.show({message: this.translate.instant('chat.toast.get-channel.error'), color: 'danger'});
                 sc.dispatch(new GetChannelFailedAction(error));
             }, 10);
         });
@@ -231,7 +231,8 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal actualizando el chat', color: 'danger' });
+                // Algo salio mal actualizando el chat
+                this.toast.show({message: this.translate.instant('chat.toast.update-channel.error'), color: 'danger' });
                 sc.dispatch(new UpdateChannelFailedAction(error));
             }, 10);
         });

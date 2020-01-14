@@ -27,7 +27,7 @@
 <ion-content #IonContent>
     <div class="ion-padding-vertical ion-text-center">
         <ion-chip>
-            <ion-label color="primary">[T]Conectado {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
+            <ion-label color="primary">{{'chat.connected' | translate}} {{(channelInfo$ | async)?.owner.lastConnection | amTimeAgo}}
             </ion-label>
         </ion-chip>
     </div>
@@ -78,8 +78,9 @@
 </ion-content>
 <ion-footer>
     <ion-item class="footerItem">
+        <!-- [T]Type your message here... -->
         <ion-input max="500" (ionFocus)="focusFunction($event)" [(ngModel)]="messageInput" type="text"
-            placeholder="[T]Type your message here..." max=""></ion-input>
+            [placeholder]="'chat.input.write-message' | translate" max=""></ion-input>
         <ion-icon name="send" expand="icon-only" color="medium" mode="ios" slot="end" (click)=" sendMsg()"
             (mousedown)="something($event)">
         </ion-icon>

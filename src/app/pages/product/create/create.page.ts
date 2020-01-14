@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -24,14 +25,15 @@ export class CreatePage implements OnInit, OnDestroy {
   imagesSelected = [];
 
   customActionSheetOptions: any = {
-    header: '[T]Categorias',
-    subHeader: '[T]Selecciona la categoria de tu producto',
-    cssClass: '[T]category-sheet'
+    header: this.translate.instant('general.categories'),
+    subHeader: this.translate.instant('product.create.action-sheet.subheader'), // Selecciona la categoria de tu producto
+    cssClass: 'category-sheet'
   };
   private destroy$ = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
+    private translate: TranslateService,
     private store: Store,
     private toastService: ToastService,
     private actions: Actions,
@@ -68,7 +70,9 @@ export class CreatePage implements OnInit, OnDestroy {
 
   create() {
     if (this.imagesSelected.length === 0) {
-      return this.toastService.show({ message: '[T]Necesitas subir minimo una foto del producto', color: 'warning' });
+      return this.toastService.show(
+        // Necesitas subir minimo una foto del producto'
+        { message: this.translate.instant('product.create.toast.warning.no-image'), color: 'warning' });
     }
     const productInfo: Product = {
       gallery: [...this.imagesSelected],

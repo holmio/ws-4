@@ -2,12 +2,8 @@ import { UserService } from './user.service';
 import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
 import { ProductService } from '../product/product.service';
 import { User, UserStateModel } from '../user/user.interface';
-import {
-    Action,
-    Selector,
-    State,
-    StateContext
-} from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import {
@@ -41,6 +37,7 @@ export class UserState {
 
     constructor(
         private productService: ProductService,
+        private translate: TranslateService,
         private toast: ToastService,
         private userService: UserService,
     ) {
@@ -76,7 +73,8 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal al obtener tus datos', color: 'danger' });
+                // Algo salio mal al obtener tus datos
+                this.toast.show({message: this.translate.instant('user.toast.get-user-data.error'), color: 'danger' });
                 sc.dispatch(new GetUserFailedAction(error));
             }, 10);
         });
@@ -104,7 +102,8 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal al cambiar tu foto', color: 'danger' });
+                // Algo salio mal al cambiar tu foto
+                this.toast.show({message: this.translate.instant('user.toast.update-avatar.error'), color: 'danger' });
                 sc.dispatch(new UpdateAvatarUserFailedAction(error));
             }, 10);
         });
@@ -131,7 +130,8 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal al actualizar tus datos', color: 'danger' });
+                // Algo salio mal al actualizar tus datos
+                this.toast.show({message: this.translate.instant('user.toast.update-user.error'), color: 'danger' });
                 sc.dispatch(new UpdateUserFailedAction(error));
             }, 10);
         });
@@ -187,7 +187,7 @@ export class UserState {
             mergeMap((myProducts) =>
                 favorites$.pipe(
                     map(
-                        (favorites) => Object.assign({}, { favorites, myProducts })
+                        (favorites) => Object.assign({}, {favorites, myProducts})
                     )
                 )
             ),
@@ -218,7 +218,7 @@ export class UserState {
                                 (products) => {
                                     sc.setState({
                                         ...state,
-                                        visitedUser: { user, products, favorites },
+                                        visitedUser: {user, products, favorites},
                                         loaded: true,
                                     });
                                 })

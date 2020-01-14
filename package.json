@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "translate.export": "ngx-translate-extract --input ./src --output ./src/assets/i18n/es.json ./src/assets/i18n/ar.json"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "7.2.15",
     "@angular/platform-browser-dynamic": "7.2.15",
     "@angular/router": "7.2.15",
+    "@biesbjerg/ngx-translate-extract": "^4.2.0",
     "@ionic-native/camera": "^5.15.0",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/facebook": "^5.15.0",

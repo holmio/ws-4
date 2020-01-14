@@ -19,11 +19,11 @@
     <ion-segment [(ngModel)]="selectSegment">
       <ion-segment-button value="products" class="segmentButton" color="light">
         <ion-badge color="primary" mode="md">{{(products$ | async)?.length}}</ion-badge>
-        <ion-label>[T]Productos</ion-label>
+        <ion-label translate>general.products</ion-label>
       </ion-segment-button>
       <ion-segment-button value="favorites" color="light">
         <ion-badge color="primary" mode="md">{{(favorites$ | async)?.length}}</ion-badge>
-        <ion-label>[T]Favoritos</ion-label>
+        <ion-label translate>general.favourites</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>

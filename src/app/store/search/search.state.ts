@@ -2,13 +2,8 @@ import { GetSearchAction, GetSearchFailedAction, GetSearchSuccessAction } from '
 import { SearchStateModel } from './search.interface';
 import { SearchService } from './search.service';
 import { UserState } from '../user';
-import {
-    Action,
-    Selector,
-    State,
-    StateContext,
-    Store
-} from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import { ToastService } from 'src/app/services/toast/toast.services';
 
@@ -25,6 +20,7 @@ export class SearchState {
     constructor(
         private toast: ToastService,
         private searchService: SearchService,
+        private translate: TranslateService,
         private store: Store,
     ) {
 
@@ -44,14 +40,15 @@ export class SearchState {
     getProducts(sc: StateContext<SearchStateModel>, action: GetSearchAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-        sc.setState({ ...state, loading: true });
+        sc.setState({...state, loading: true});
         return this.searchService.getProducts(user && user.uid, action.filter).subscribe((products) => {
             setTimeout(() => {
                 sc.dispatch(new GetSearchSuccessAction(products));
             }, 100);
         }, error => {
             setTimeout(() => {
-                this.toast.show({ message: '[T]Algo salio mal al buscar', color: 'danger' });
+                // Algo salio mal al buscar
+                this.toast.show({message: this.translate.instant('search.toast.get-products.error'), color: 'danger'});
                 sc.dispatch(new GetSearchFailedAction(error));
             }, 10);
         });

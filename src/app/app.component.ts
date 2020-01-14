@@ -14,12 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  Actions,
-  ofActionSuccessful,
-  Select,
-  Store
-  } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import * as locales from 'moment/min/locales';
 import { Observable } from 'rxjs';
@@ -70,7 +65,7 @@ export class AppComponent implements OnInit {
           const confToast: MyToastOption = {
             message: message.body,
             color: 'success',
-            closeButtonText: '[T]Cerrar',
+            closeButtonText: this.translate.instant('general.close'),
             showCloseButton: true,
           };
           if (message.channelId !== this.currentChannelId) {

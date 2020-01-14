@@ -1,21 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import {
-  Actions,
-  ofActionSuccessful,
-  Select,
-  Store
-  } from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import {
-  Product,
-  ProductState,
-  UpdateProductAction,
-  UpdateProductSuccessAction
-  } from 'src/app/store/product';
+import { Product, ProductState, UpdateProductAction, UpdateProductSuccessAction } from 'src/app/store/product';
 import { APP_CONST } from 'src/app/util/app.constants';
 
 @Component({
@@ -33,9 +24,9 @@ export class EditPage implements OnInit, OnDestroy {
   willayas = _.cloneDeep(APP_CONST.willayas);
   dairas = [];
   customActionSheetOptions: any = {
-    header: '[T]Categorias',
-    subHeader: '[T]Selecciona la categoria de tu producto',
-    cssClass: '[T]category-sheet'
+    header: this.translate.instant('general.categories'),
+    subHeader: this.translate.instant('product.edit.action-sheet.subheader'), // Selecciona la categoria de tu producto
+    cssClass: 'category-sheet'
   };
   gallery: string[] = [];
   imagesToDelete: string[] = [];
@@ -43,6 +34,7 @@ export class EditPage implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
+    private translate: TranslateService,
     private store: Store,
     private navController: NavController,
     private actions: Actions

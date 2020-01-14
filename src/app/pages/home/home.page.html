@@ -1,7 +1,7 @@
 <app-header [showBackButton]="false">
     <ion-toolbar color="primary">
-        <ion-searchbar slot="start" routerLink="/search" routerDirection="forward" placeholder="[T]Busca un product"
-            mode="ios"></ion-searchbar>
+        <ion-searchbar slot="start" routerLink="/search" routerDirection="forward"
+            [placeholder]="'search.input.placeholder' | translate" mode="ios"></ion-searchbar>
         <ion-menu-toggle slot="end" class="ion-padding-horizontal">
             <ion-icon size="large" name="menu"></ion-icon>
         </ion-menu-toggle>

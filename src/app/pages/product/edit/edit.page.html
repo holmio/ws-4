@@ -1,4 +1,4 @@
-<app-header title="[T]Edit Product"></app-header>
+<app-header [title]="'product.edit.title' | translate"></app-header>
 
 <ion-content *ngIf="(loading$ | async)">
     <app-gallery-manager [gallery]="gallery" (changeGallery)="handleGallery($event)"
@@ -9,7 +9,7 @@
             <ion-row color="primary" justify-content-center>
                 <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
                     <ion-item>
-                        <ion-label position="floating">[T]Categoria</ion-label>
+                        <ion-label position="floating" translate>general.category</ion-label>
                         <ion-select formControlName="category" [interfaceOptions]="customActionSheetOptions"
                             interface="action-sheet">
                             <ion-select-option *ngFor="let category of categories" [value]="category.value">
@@ -18,21 +18,21 @@
                         </ion-select>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">[T]Nombre</ion-label>
+                        <ion-label position="floating" translate>general.name</ion-label>
                         <ion-input maxlength="50" formControlName="name" type="text" required></ion-input>
                     </ion-item>
                     <ion-row color="primary" justify-content-center>
                         <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
                             <ion-item>
-                                <ion-label position="floating">[T]Precio</ion-label>
+                                <ion-label position="floating" translate>general.price</ion-label>
                                 <ion-input maxlength="50" formControlName="price" type="number" inputmode="number"
                                     required></ion-input>
                             </ion-item>
                         </ion-col>
                         <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
                             <ion-item>
-                                <ion-label position="floating">[T]Moneda</ion-label>
-                                <ion-select formControlName="currency" okText="Okay" cancelText="Ocultar"
+                                <ion-label position="floating" translate>general.currency</ion-label>
+                                <ion-select formControlName="currency" [okText]="'general.ok' | translate" [cancelText]="'general.hide' | translate"
                                     interface="action-sheet" required>
                                     <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                         {{currency.nameEs}}</ion-select-option>
@@ -41,35 +41,35 @@
                         </ion-col>
                     </ion-row>
                     <ion-item>
-                        <ion-label position="floating">[T]Descripción</ion-label>
+                        <ion-label position="floating" translate>general.description</ion-label>
                         <ion-textarea maxlength="1000" formControlName="description" required></ion-textarea>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">[T]Lugar donde lo vendes</ion-label>
-                        <ion-select formControlName="willaya" cancelText="Ocultar" interface="action-sheet"
+                        <ion-label position="floating" translate>product.edit.form.location-sale</ion-label>
+                        <ion-select formControlName="willaya" [cancelText]="'general.hide' | translate" interface="action-sheet"
                             (ionChange)="onChangeWillaya($event)">
                             <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
                                 {{willaya.nameEs}}</ion-select-option>
                         </ion-select>
                     </ion-item>
                     <ion-item>
-                        <ion-label position="floating">[T]Elige Daira</ion-label>
-                        <ion-select formControlName="daira" cancelText="Ocultar" interface="action-sheet">
+                        <ion-label position="floating" translate>product.edit.form.select-daira</ion-label>
+                        <ion-select formControlName="daira" [cancelText]="'general.hide' | translate" interface="action-sheet">
                             <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
                                 {{daira.nameEs}}</ion-select-option>
                         </ion-select>
                     </ion-item>
                     <ion-item>
-                        <ion-label>[T]Activado</ion-label>
+                        <ion-label translate>product.create.form.activated</ion-label>
                         <ion-toggle formControlName="isEnabled"></ion-toggle>
                     </ion-item>
                     <ion-item>
-                        <ion-label>[T]Vendido</ion-label>
+                        <ion-label translate>product.create.form.saled</ion-label>
                         <ion-toggle formControlName="isSold"></ion-toggle>
                     </ion-item>
                     <div class="ion-padding-horizontal ion-padding-vertical">
                         <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid"
-                            expand="block">[T]Guardar
+                            expand="block" translate>general.save
                         </ion-button>
                     </div>
                 </ion-col>

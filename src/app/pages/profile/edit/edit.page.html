@@ -1,22 +1,23 @@
-<app-header title="[T]Editar Perfil"></app-header>
+<app-header [title]="'profile.edit.title' | translate"></app-header>
 <ion-content>
   <form *ngIf="user$ | async" [formGroup]="myGroup" (ngSubmit)="update()">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
           <div text-center>
-            <h3>[T]Actualiza tus datos</h3>
+            <!-- Actualiza tus datos -->
+            <h3 translate>profile.edit.big.title</h3>
           </div>
           <ion-item lines="full">
-            <ion-label position="floating">[T]Nombre Completo</ion-label>
+            <ion-label position="floating" translate>general.full-name</ion-label>
             <ion-input maxlength="30" formControlName="name" type="text" required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">[T]Móvil</ion-label>
+            <ion-label position="floating" translate>general.phone</ion-label>
             <ion-input type="tel" inputmode="tel" formControlName="phone" type="phone" required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">[T]Lugar donde vives</ion-label>
+            <ion-label position="floating" translate>profile.edit.form.location</ion-label>
             <ion-select formControlName="willaya" cancelText="Ocultar" interface="action-sheet"
               (ionChange)="onChangeWillaya($event)">
               <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
@@ -24,18 +25,17 @@
             </ion-select>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">[T]Elige Daira</ion-label>
-            <ion-select formControlName="daira" cancelText="Ocultar" interface="action-sheet">
+            <ion-label position="floating" translate>product.edit.form.select-daira</ion-label>
+            <ion-select formControlName="daira" [cancelText]="'general.hide' | translate" interface="action-sheet">
               <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
                 {{daira.nameEs}}</ion-select-option>
             </ion-select>
           </ion-item>
           <div class="ion-padding-horizontal ion-padding-vertical">
-            <ion-button fill="clear" size="large" (click)="resetPassword()" expand="block">
-              [T]Cambiar
-              contraseña
+            <ion-button fill="clear" size="large" (click)="changePassword()" expand="block" translate>
+              general.change-password
             </ion-button>
-            <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid" expand="block">[T]Guardar
+            <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid" expand="block" translate>general.save
             </ion-button>
           </div>
         </ion-col>
