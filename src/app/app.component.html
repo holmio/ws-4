@@ -50,12 +50,19 @@
                 </div> -->
               </ion-button>
             </div>
+
+            <div class="menu-item">
+              <div class="flag-img" (click)="changeLanguage()">
+                <img *ngIf="this.currentLang === 'ar'" [lazyLoad]="'../assets/images/flag-sahara.svg'" />
+                <img *ngIf="this.currentLang === 'es'" [lazyLoad]="'../assets/images/flag-spain.png'" />
+              </div>
+            </div>
           </div>
         </div>
       </ion-content>
     </ion-menu>
     <app-loading></app-loading>
-    <div class="network" *ngIf="!(networkStatus$ | async)"><span>Sin Internet</span></div>
-    <ion-router-outlet main></ion-router-outlet>
+    <div class="network" *ngIf="!(networkStatus$ | async)"><span translate>general.no-internet-connection</span></div>
+    <ion-router-outlet [dir]="directionLang" main></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

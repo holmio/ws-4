@@ -1,15 +1,10 @@
 
 
 
-export class ConnectNetworkAction {
+export class NetworkConnectedAction {
   static type = '[Network] Network';
 }
-export class DisconnectNetworkAction {
+export class NetworkDisconnectAction {
   static type = '[Network] DisconnectNetwork';
 }
-export class NetworkSuccessAction {
-  static type = '[Network] NetworkSuccess';
-}
-export class NetworkFailedAction {
-  static type = '[Network] NetworkFailed';
-}
+

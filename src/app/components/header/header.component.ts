@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +11,8 @@ export class HeaderComponent implements OnInit {
   @Input() showBackButton = true;
   @Input() color = 'primary';
 
-  constructor() { }
+  constructor(
+  ) {}
 
   ngOnInit() {}
 

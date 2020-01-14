@@ -1,17 +1,6 @@
-import {
-    ConnectNetworkAction,
-    DisconnectNetworkAction,
-    NetworkFailedAction,
-    NetworkSuccessAction
-    } from './network.actions';
+import { NetworkConnectedAction, NetworkDisconnectAction } from './network.actions';
 import { Network } from '@ionic-native/network/ngx';
-import {
-    Action,
-    NgxsOnInit,
-    Selector,
-    State,
-    StateContext
-    } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { ToastService } from 'src/app/services/toast/toast.services';
 
 export interface NetworkStateModel {
@@ -23,7 +12,7 @@ export interface NetworkStateModel {
         connected: true,
     },
 })
-export class NetworkState implements NgxsOnInit {
+export class NetworkState {
 
     constructor(
         private network: Network,
@@ -39,35 +28,7 @@ export class NetworkState implements NgxsOnInit {
         return state.connected;
     }
 
-    ngxsOnInit(sc: StateContext<NetworkStateModel>) {
-        sc.dispatch(new ConnectNetworkAction());
-        sc.dispatch(new DisconnectNetworkAction());
-    }
-
-    @Action(ConnectNetworkAction)
-    getNetwork(sc: StateContext<NetworkStateModel>) {
-        const state = sc.getState();
-        return this.network.onConnect().subscribe(() => {
-            console.log('network connected!');
-            // We just got a connection but we need to wait briefly
-             // before we determine the connection type. Might need to wait.
-            // prior to doing any api requests as well.
-            setTimeout(() => {
-                sc.dispatch(new NetworkSuccessAction());
-            }, 3000);
-          });
-    }
-
-    @Action(DisconnectNetworkAction)
-    getDisconnectNetwork(sc: StateContext<NetworkStateModel>) {
-        const state = sc.getState();
-        return this.network.onDisconnect().subscribe(() => {
-            console.log('network was disconnected :-(');
-            sc.dispatch(new NetworkFailedAction());
-          });
-    }
-
-    @Action(NetworkSuccessAction)
+    @Action(NetworkConnectedAction)
     networkSuccess(sc: StateContext<NetworkStateModel>) {
         const state = sc.getState();
         sc.setState({
@@ -76,7 +37,7 @@ export class NetworkState implements NgxsOnInit {
         });
     }
 
-    @Action(NetworkFailedAction)
+    @Action(NetworkDisconnectAction)
     networkFailed(sc: StateContext<NetworkStateModel>) {
         const state = sc.getState();
         sc.setState({
@@ -84,6 +45,4 @@ export class NetworkState implements NgxsOnInit {
             connected: false,
         });
     }
-
-
 }

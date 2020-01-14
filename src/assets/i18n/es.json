@@ -1,4 +1,5 @@
 {
+	"general.no-internet-connection": "No Internet",
 	"chat.connected": "Conectado",
 	"chat.input.write-message": "Escribe un mensaje",
 	"forgot-password.title": "Contraseña olvidada",

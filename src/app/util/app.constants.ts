@@ -1,5 +1,9 @@
 
 export const APP_CONST = {
+    storeKeys: {
+        isFirstTimeUsageDone: 'isFirstTimeUsageDone',
+        lang: 'lang'
+    },
     db: {
         productsDetail: 'productsDetail',
         users: 'users',

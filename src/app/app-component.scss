@@ -61,6 +61,18 @@
         height: 90px;
         width: 90px;
         margin-bottom: 25px;
+        .flag-img {
+          img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: auto 27px;
+            -o-object-fit: cover;
+            object-fit: cover;
+            -o-object-position: center center;
+            object-position: center center;
+          }
+        }
         .block {
           // background: rgb(85, 122, 144);
           width: 100%;

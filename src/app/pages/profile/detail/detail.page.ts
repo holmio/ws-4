@@ -17,8 +17,8 @@ import { User } from 'src/app/store/user/user.interface';
 export class DetailPage implements OnInit, OnDestroy {
 
   @Select(UserState.geUser) user$: Observable<User | undefined>;
-  @Select(UserState.getMyProducts) products$: Observable<Product | undefined>;
-  @Select(UserState.getFavoriteProducts) favorites$: Observable<Product | undefined>;
+  @Select(UserState.getMyProducts) products$: Observable<Product[] | undefined>;
+  @Select(UserState.getFavoriteProducts) favorites$: Observable<Product[] | undefined>;
   selectSegment = 'products';
   messages$: Observable<any>;
   private sourceType: any;

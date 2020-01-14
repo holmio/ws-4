@@ -81,7 +81,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImagePicker,
     FirebaseMessaging,
     FirebaseDynamicLinks,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    {provide: 'window', useFactory: () => window},
   ],
   bootstrap: [AppComponent]
 })
