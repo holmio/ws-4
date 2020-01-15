@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
     this.translate.setDefaultLang(this.currentLang);
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     this.translate.use(this.currentLang);
-    moment.locale(this.currentLang);
     this.initializeApp();
   }
 
@@ -78,6 +77,16 @@ export class AppComponent implements OnInit {
     moment.locale('es', {
       calendar: {
         sameDay: '[Hoy]',
+        nextDay: '[Mañana]',
+        nextWeek: 'dddd',
+        lastDay: '[Ayer]',
+        lastWeek: 'dddd [Semana pasada]',
+        sameElse: 'L'
+      },
+    });
+    moment.locale('ar', {
+      calendar: {
+        sameDay: '[ARHoy]',
         nextDay: '[Mañana]',
         nextWeek: 'dddd',
         lastDay: '[Ayer]',
@@ -146,6 +155,7 @@ export class AppComponent implements OnInit {
       } else {
         this.directionLang = 'ltr';
       }
+      moment.locale(this.currentLang);
     });
   }
 
