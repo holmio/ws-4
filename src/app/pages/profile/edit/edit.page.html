@@ -2,9 +2,9 @@
 <ion-content>
   <form *ngIf="user$ | async" [formGroup]="myGroup" (ngSubmit)="update()">
     <ion-grid>
-      <ion-row color="primary" justify-content-center>
-        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-          <div text-center>
+      <ion-row color="primary" class="ion-justify-content-center">
+        <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+          <div class="ion-text-center">
             <!-- Actualiza tus datos -->
             <h3 translate>profile.edit.big.title</h3>
           </div>

@@ -6,8 +6,8 @@
 
     <form [formGroup]="myGroup" (ngSubmit)="update()">
         <ion-grid>
-            <ion-row color="primary" justify-content-center>
-                <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+            <ion-row color="primary" class="ion-justify-content-center">
+                <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
                     <ion-item>
                         <ion-label position="floating" translate>general.category</ion-label>
                         <ion-select formControlName="category" [interfaceOptions]="customActionSheetOptions"
@@ -21,15 +21,15 @@
                         <ion-label position="floating" translate>general.name</ion-label>
                         <ion-input maxlength="50" formControlName="name" type="text" required></ion-input>
                     </ion-item>
-                    <ion-row color="primary" justify-content-center>
-                        <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
+                    <ion-row color="primary" class="ion-justify-content-center">
+                        <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
                             <ion-item>
                                 <ion-label position="floating" translate>general.price</ion-label>
                                 <ion-input maxlength="50" formControlName="price" type="number" inputmode="number"
                                     required></ion-input>
                             </ion-item>
                         </ion-col>
-                        <ion-col class="ion-no-padding" align-self-center size-md="6" size-lg="5" size-xs="6">
+                        <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
                             <ion-item>
                                 <ion-label position="floating" translate>general.currency</ion-label>
                                 <ion-select formControlName="currency" [okText]="'general.ok' | translate" [cancelText]="'general.hide' | translate"

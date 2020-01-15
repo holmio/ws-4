@@ -22,7 +22,6 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
-import { Network } from '@ionic-native/network/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -77,7 +76,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SplashScreen,
     Camera,
     Facebook,
-    Network,
     ImagePicker,
     FirebaseMessaging,
     FirebaseDynamicLinks,

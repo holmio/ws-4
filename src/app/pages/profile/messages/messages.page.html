@@ -1,7 +1,7 @@
 <app-header [title]="'messages.header.title' | translate"></app-header>
 
 <ion-content>
-    <ion-list padding-top>
+    <ion-list class="ion-padding-top">
         <ion-item *ngFor="let channel of channels$ | async" lines="none" (click)="goToChannel(channel)">
             <div class="borderBottomLine"></div>
             <div class="listSection">
@@ -10,11 +10,11 @@
                         <img [lazyLoad]="channel.product.avatar">
                     </ion-avatar>
                 </div>
-                <div class="usernameSection" padding-start padding>
+                <div class="usernameSection ion-padding-start ion-padding">
                     <h5>
                         <b>{{channel.product.name}}</b>
                     </h5>
-                    <p class="descText" no-margin no-padding>{{channel.lastMessage}}</p>
+                    <p class="descText ion-no-margin ion-no-padding">{{channel.lastMessage}}</p>
                 </div>
             </div>
             <div slot="end" class="lastSection">

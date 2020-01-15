@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu class="sidemenu" side="end" type="overlay">
+  <ion-split-pane contentId="main-content">
+    <ion-menu class="sidemenu" side="end" type="overlay" contentId="main-content">
       <ion-content class="content">
         <div>
           <div *ngIf="(user$ | async)" class="profile-block" (click)="goToPage('profile/detail')">
@@ -61,8 +61,9 @@
         </div>
       </ion-content>
     </ion-menu>
+
     <app-loading></app-loading>
     <div class="network" *ngIf="!(networkStatus$ | async)"><span translate>general.no-internet-connection</span></div>
-    <ion-router-outlet [dir]="directionLang" main></ion-router-outlet>
+    <ion-router-outlet [dir]="directionLang" id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

@@ -1,5 +1,4 @@
 import { NetworkConnectedAction, NetworkDisconnectAction } from './network.actions';
-import { Network } from '@ionic-native/network/ngx';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { ToastService } from 'src/app/services/toast/toast.services';
 
@@ -15,7 +14,6 @@ export interface NetworkStateModel {
 export class NetworkState {
 
     constructor(
-        private network: Network,
         private toast: ToastService,
     ) {
     }

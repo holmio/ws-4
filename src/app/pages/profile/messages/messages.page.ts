@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { ChatState, Channel, GetChannelsAction, GetChannelSuccessAction } from 'src/app/store/chat';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { AuthState } from 'src/app/store/auth';
+import { Channel, ChatState, GetChannelsAction, GetChannelSuccessAction } from 'src/app/store/chat';
 
 @Component({
   selector: 'app-messages',
@@ -12,7 +12,7 @@ import { AuthState } from 'src/app/store/auth';
 })
 export class MessagesPage implements OnInit {
 
-  @Select(ChatState.getChannels) channels$: Observable<Channel>;
+  @Select(ChatState.getChannels) channels$: Observable<Channel[]>;
   @Select(AuthState.getUid) uid$: Observable<string | undefined>;
 
   constructor(

@@ -1,11 +1,11 @@
-<ion-card color="light" class="card" [routerLink]="'/product/detail/' + product.uid" routerDirection="forward" no-margin>
+<ion-card color="light" class="card ion-no-margin" [routerLink]="'/product/detail/' + product.uid" routerDirection="forward">
   <ion-badge class="badge">{{product.name}}</ion-badge>
   <img [lazyLoad]="product.avatar" [alt]="product.name">
   <ion-card-content>
     <ion-card-title>
       <ion-row>
-        <ion-col no-padding>
-          <ion-text text-left><span class="price"><strong>{{product.price | number}} </strong><small>{{product.currency}}</small></span>
+        <ion-col class="ion-no-padding">
+          <ion-text class="ion-text-left"><span class="price"><strong>{{product.price | number}} </strong><small>{{product.currency}}</small></span>
           </ion-text>
         </ion-col>
       </ion-row>
