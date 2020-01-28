@@ -15,6 +15,7 @@ import { ProductsStateModel } from './products.interface';
     defaults: {
         products: [],
         loaded: false,
+        loading: false,
     },
 })
 
@@ -27,6 +28,11 @@ export class ProductsState {
     }
 
     @Selector()
+    public static loading(state: ProductsStateModel) {
+      return state.loading;
+    }
+
+    @Selector()
     static getAllProducts(state: ProductsStateModel) {
         return state.products || null;
     }
@@ -35,8 +41,8 @@ export class ProductsState {
 
     @Action(GetProductsAction)
     getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
-        const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
+        sc.patchState({loading: true});
         return this.productService.getProducts(user && user.uid).subscribe((data) => {
             setTimeout(() => {
                 sc.dispatch(new GetProductsSuccessAction(data));
@@ -50,11 +56,10 @@ export class ProductsState {
 
     @Action(GetProductsSuccessAction)
     getProductsSuccess(sc: StateContext<ProductsStateModel>, action: GetProductsSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             products: action.products,
             loaded: true,
+            loading: false,
         });
     }
 }

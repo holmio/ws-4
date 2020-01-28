@@ -31,6 +31,7 @@ import {
         myProducts: [],
         favoriteProducts: [],
         loaded: false,
+        loading: true,
     },
 })
 export class UserState {
@@ -46,6 +47,12 @@ export class UserState {
     /**
      * Selectors
      */
+
+    @Selector()
+    public static loading(state: UserStateModel) {
+      return state.loading;
+    }
+
     @Selector()
     static geUser(state: UserStateModel) {
         return state.user;
@@ -65,7 +72,6 @@ export class UserState {
 
     @Action(GetUserAction)
     getUserData(sc: StateContext<UserStateModel>, action: GetUserAction) {
-        const state = sc.getState();
         return this.userService.getUser(action.uid).subscribe((user: User) => {
             setTimeout(async () => {
                 sc.dispatch(new GetUserSuccessAction(user));
@@ -80,10 +86,9 @@ export class UserState {
     }
     @Action(GetUserSuccessAction)
     getUserSuccess(sc: StateContext<UserStateModel>, action: GetUserSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             user: action.user,
+            loading: false,
             loaded: true,
         });
     }
@@ -91,10 +96,6 @@ export class UserState {
     @Action(UpdateAvatarUserAction)
     async updateAvatarUserData(sc: StateContext<UserStateModel>, action: UpdateAvatarUserAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
         await this.userService.updateAvatar(action.file, state.user.uid).then(() => {
             setTimeout(() => {
                 sc.dispatch(new UpdateAvatarUserSuccessAction());
@@ -107,21 +108,15 @@ export class UserState {
         });
     }
     @Action(UpdateAvatarUserSuccessAction)
-    updateAvatarUserSuccess(sc: StateContext<UserStateModel>, action: UpdateAvatarUserSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: true,
+    updateAvatarUserSuccess(sc: StateContext<UserStateModel>) {
+        sc.patchState({
+            loading: false,
         });
     }
 
     @Action(UpdateUserAction)
     async updateUserData(sc: StateContext<UserStateModel>, action: UpdateUserAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
         await this.userService.updateUser(state.user.uid, action.user).then(() => {
             setTimeout(() => {
                 sc.dispatch(new UpdateUserSuccessAction());
@@ -135,21 +130,14 @@ export class UserState {
     }
     @Action(UpdateUserSuccessAction)
     updateUserSuccess(sc: StateContext<UserStateModel>, action: UpdateUserSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: true,
+        sc.patchState({
+            loading: false,
         });
     }
 
     @Action(SetUserAction)
     async setUserData(sc: StateContext<UserStateModel>, action: SetUserAction) {
         const uid = action.user.uid;
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
         console.log(action.user);
         await this.userService.setUser(uid, action.user).then((data) => {
             setTimeout(() => {
@@ -164,11 +152,9 @@ export class UserState {
 
     @Action(SetUserSuccessAction)
     setUserSuccess(sc: StateContext<UserStateModel>, action: SetUserSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             user: action.user,
-            loaded: true,
+            loading: false,
         });
         setTimeout(() => {
             sc.dispatch(new LoginSuccessAction(action.user.uid));
@@ -193,7 +179,6 @@ export class UserState {
                 ...state,
                 myProducts: products.myProducts,
                 favoriteProducts: products.favorites,
-                loaded: true,
             });
         }, error => {
             console.log(error);
@@ -226,6 +211,11 @@ export class UserState {
         );
     }
 
+    @Action([GetUserAction, UpdateAvatarUserAction, UpdateUserAction, SetUserAction, GetMyProductsAndFavoritesAction, GetVisitedUserAction])
+    stateLoading(sc: StateContext<UserStateModel>) {
+        sc.patchState({loading: true});
+    }
+
     @Action([GetUserFailedAction, LogoutSuccessAction])
     resetUserState(sc: StateContext<UserStateModel>) {
         sc.setState({
@@ -233,7 +223,8 @@ export class UserState {
             visitedUser: null,
             myProducts: [],
             favoriteProducts: [],
-            loaded: true
+            loaded: false,
+            loading: false
         });
     }
 }

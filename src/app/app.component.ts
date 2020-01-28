@@ -20,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { LoadingState } from './interfaces/common.interface';
 
 @Component({
   selector: 'app-root',
@@ -70,7 +71,6 @@ export class AppComponent implements OnInit {
       this.statusBar.backgroundColorByHexString('#DB3A34');
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.store.dispatch(new CheckSessionAction());
       this.initCloudMessage();
     });
   }
@@ -136,8 +136,6 @@ export class AppComponent implements OnInit {
       this.localStorage.set(APP_CONST.storeKeys.lang, APP_CONST.lang.es);
       this.translate.use(APP_CONST.lang.es);
     }
-    console.log(this.translate.getLangs());
-    console.log(this.translate.getBrowserLang());
   }
 
   private checkInternet() {
@@ -152,11 +150,12 @@ export class AppComponent implements OnInit {
 
   private onLangChange() {
     this.translate.onLangChange.subscribe(({lang}) => {
-      console.log(lang);
       this.currentLang = lang;
-      if (this.currentLang === 'ar-EH') {
+      if (this.currentLang === APP_CONST.lang.ar) {
+        this.isLangSpanish = false;
         this.directionLang = 'rtl';
       } else {
+        this.isLangSpanish = true;
         this.directionLang = 'ltr';
       }
       moment.locale(this.currentLang);

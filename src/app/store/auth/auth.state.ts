@@ -9,10 +9,10 @@ import {
     RegisterFailedAction,
     RegisterSuccessAction,
     RegisterWithEmailAndPasswordAction
-    } from './auth.actions';
+} from './auth.actions';
 import { AuthService } from './auth.service';
 import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { User } from '../user/user.interface';
+import { User, UserStateModel } from '../user/user.interface';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { TranslateService } from '@ngx-translate/core';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
@@ -20,22 +20,28 @@ import { UserInfo } from 'firebase';
 import { take, tap } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
-export interface AuthStateModel {
+export interface AuthStateModel extends LoadingState {
     uid: string;
-    loaded: boolean;
 }
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
         uid: null,
         loaded: false,
+        loading: false,
     },
 })
 export class AuthState implements NgxsOnInit {
     /**
      * Selectors
      */
+    @Selector()
+    public static loading(state: UserStateModel) {
+      return state.loading;
+    }
+
     @Selector()
     static getUid(state: AuthStateModel) {
         return state.uid || null;
@@ -59,12 +65,10 @@ export class AuthState implements NgxsOnInit {
             take(1),
             tap((user: UserInfo) => {
                 if (user) {
-                    console.log(user);
-                    console.log(`CheckSession: ${user.displayName} is logged in`);
                     setTimeout(() => {
-                        sc.dispatch(new LoginSuccessAction(user.uid));
+                        sc.patchState({uid: user.uid});
+                        sc.dispatch(new GetUserAction(user.uid));
                     }, 10);
-                    return;
                 } else {
                     setTimeout(() => {
                         sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
@@ -78,13 +82,14 @@ export class AuthState implements NgxsOnInit {
      *********************************/
     @Action(LoginWithEmailAndPasswordAction)
     async loginWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: LoginWithEmailAndPasswordAction) {
+        sc.patchState({loading: true});
         await this.auth.signInWithEmail(action.email, action.password).then(data => {
             setTimeout(() => {
                 sc.dispatch(new LoginSuccessAction(data.user.uid));
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({message: this.translate.instant('auth.state.login.error-auth'), color: 'danger'}); // Email o Password son incorrectos
+                this.toast.show({ message: this.translate.instant('auth.state.login.error-auth'), color: 'danger' }); // Email o Password son incorrectos
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -92,6 +97,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(LogoutAction)
     async logout(sc: StateContext<AuthStateModel>) {
+        sc.patchState({loading: true});
         await this.afAuth.auth.signOut().then(() => {
             setTimeout(() => {
                 sc.dispatch(new LogoutSuccessAction());
@@ -101,11 +107,10 @@ export class AuthState implements NgxsOnInit {
 
     @Action(LoginSuccessAction)
     onLoginSuccess(sc: StateContext<AuthStateModel>, action: LoginSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             uid: action.uid,
             loaded: true,
+            loading: false,
         });
         setTimeout(() => {
             sc.dispatch(new GetUserAction(action.uid));
@@ -118,7 +123,7 @@ export class AuthState implements NgxsOnInit {
     @Action(LoginWithFacebookAction)
     async loginWithFacebook(sc: StateContext<AuthStateModel>) {
         const state = sc.getState();
-
+        sc.patchState({loading: true});
         await this.auth.signInWithFacebook().then(data => {
             console.log(data);
             // If the user is new, we create a new account
@@ -135,18 +140,13 @@ export class AuthState implements NgxsOnInit {
                 }, 10);
             } else {
                 setTimeout(() => {
-                    // TODO: bug when I want to get favorites, look like uid is not stored in LoginSuccessAction
-                    sc.setState({
-                        ...state,
-                        uid: data.user.uid,
-                        loaded: true,
-                    });
+                    sc.patchState({loading: true});
                     sc.dispatch(new LoginSuccessAction(data.user.uid));
                 }, 10);
             }
         }, error => {
             setTimeout(() => {
-                this.toast.show({message: this.translate.instant('auth.state.error.facebook-auth'), color: 'danger'}); // El usuario de facebook esta fallando
+                this.toast.show({ message: this.translate.instant('auth.state.error.facebook-auth'), color: 'danger' }); // El usuario de facebook esta fallando
                 sc.dispatch(new LoginFailedAction(error));
             }, 10);
         });
@@ -157,6 +157,7 @@ export class AuthState implements NgxsOnInit {
      *********************************/
     @Action(RegisterWithEmailAndPasswordAction)
     async registerWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: RegisterWithEmailAndPasswordAction) {
+        sc.patchState({loaded: false, loading: true});
         await this.auth.createUserWithEmailAndPassword(action.email, action.password).then(data => {
             console.log(data);
             const userInformation: User = {
@@ -171,7 +172,7 @@ export class AuthState implements NgxsOnInit {
             }, 10);
         }, error => {
             setTimeout(() => {
-                this.toast.show({message: this.translate.instant('auth.state.register.not-allowd-register'), color: 'danger' }); //No puedes registrarte con estos datos
+                this.toast.show({ message: this.translate.instant('auth.state.register.not-allowd-register'), color: 'danger' }); //No puedes registrarte con estos datos
                 sc.dispatch(new RegisterFailedAction(error));
             }, 10);
         });
@@ -179,13 +180,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(RegisterSuccessAction)
     registerSuccess(sc: StateContext<AuthStateModel>, action: RegisterSuccessAction) {
-        console.log('registerSuccess, navigating to /dashboard ', action.user.uid);
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            uid: action.user.uid,
-            loaded: true,
-        });
+        sc.patchState({uid: action.user.uid, loaded: true, loading: true});
         setTimeout(() => {
             sc.dispatch(new SetUserAction(action.user));
         }, 10);
@@ -194,7 +189,8 @@ export class AuthState implements NgxsOnInit {
     resetAuthState(sc: StateContext<AuthStateModel>) {
         sc.setState({
             uid: null,
-            loaded: true
+            loaded: false,
+            loading: false
         });
     }
 

@@ -34,6 +34,7 @@ import {
         channel: null,
         channels: [],
         loaded: false,
+        loading: false,
     },
 })
 
@@ -51,6 +52,10 @@ export class ChatState {
     /**
      * Selectors
      */
+    @Selector()
+    public static loading(state: ChatStateModel) {
+      return state.loading;
+    }
     @Selector()
     static getChannels(state: ChatStateModel) {
         return state.channels || null;
@@ -71,6 +76,7 @@ export class ChatState {
             timestamp: timestamp(),
             uid: user.uid,
         };
+        sc.patchState({loading: true});
 
         await this.chatService.sendMessage(state.channel.uid, finalMessage).then(data => {
             setTimeout(() => {
@@ -90,7 +96,7 @@ export class ChatState {
     async setChannel(sc: StateContext<ChatStateModel>, action: SetChannelAction) {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
-
+        sc.patchState({loading: true});
         const message: Message = {
             message: action.message,
             timestamp: timestamp(),
@@ -111,7 +117,7 @@ export class ChatState {
 
     @Action(SetChannelSuccessAction)
     setChannelSuccess(sc: StateContext<ChatStateModel>, action: SetChannelSuccessAction) {
-        const state = sc.getState();
+        sc.patchState({loading: false});
         sc.dispatch(new GetChannelAction(action.channel.uid));
     }
 
@@ -119,7 +125,7 @@ export class ChatState {
 
     @Action(GetChannelsAction)
     getChannels(sc: StateContext<ChatStateModel>) {
-        const state = sc.getState();
+        sc.patchState({loading: true});
         const user = this.store.selectSnapshot(UserState.geUser);
         return this.chatService.getChannels(user.uid).subscribe(data => {
             setTimeout(() => {
@@ -135,11 +141,10 @@ export class ChatState {
 
     @Action(GetChannelsSuccessAction)
     getChannelsSuccess(sc: StateContext<ChatStateModel>, action: GetChannelsSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             channels: action.channels,
             loaded: true,
+            loading: false,
         });
     }
 
@@ -147,10 +152,10 @@ export class ChatState {
 
     @Action(GetChannelAction)
     getChannel(sc: StateContext<ChatStateModel>, action: GetChannelAction) {
-        const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         const product = this.store.selectSnapshot(ProductState.getProduct);
         const userProduct = this.store.selectSnapshot(ProductState.getUserOfProduct);
+        sc.patchState({loading: true});
 
         return this.chatService.getChannel(action.uid).subscribe(channel => {
             if (channel) {
@@ -186,10 +191,10 @@ export class ChatState {
                         uid: userProduct.uid,
                     }
                 };
-                sc.setState({
-                    ...state,
+                sc.patchState({
                     channel: newChannel,
                     loaded: true,
+                    loading: false
                 });
                 setTimeout(() => {
                     sc.dispatch(new GetChannelFailedAction(false));
@@ -205,11 +210,10 @@ export class ChatState {
 
     @Action(GetChannelSuccessAction)
     getChannelSuccess(sc: StateContext<ChatStateModel>, action: GetChannelSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             channel: action.channel,
             loaded: true,
+            loading: false,
         });
     }
 
@@ -219,6 +223,7 @@ export class ChatState {
     @Action(UpdateChannelAction)
     UpdateChannel(sc: StateContext<ChatStateModel>) {
         const state = sc.getState();
+        sc.patchState({loading: true});
         const user = this.store.selectSnapshot(UserState.geUser);
         const isVisitor = user.uid === state.channel.visitor.uid;
         return this.chatService.updateChannel(state.channel, isVisitor).subscribe(data => {
@@ -235,11 +240,14 @@ export class ChatState {
 
     // RESET CHAT
 
+    @Action([UpdateChannelSuccessAction, UpdateChannelFailedAction])
+    updateChannelSuccessStatus(sc: StateContext<ChatStateModel>) {
+        sc.patchState({loading: false});
+    }
+
     @Action([DistroyChatAction])
     resetChannelStatus(sc: StateContext<ChatStateModel>) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             channel: null,
         });
     }
@@ -252,6 +260,7 @@ export class ChatState {
             channel: null,
             channels: [],
             loaded: false,
+            loading: false,
         });
     }
 }

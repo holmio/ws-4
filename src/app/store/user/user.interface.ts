@@ -1,12 +1,12 @@
 import { Product } from '../product';
 import { UserInfo } from 'firebase';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
-export interface UserStateModel {
+export interface UserStateModel extends LoadingState {
   user: User;
   myProducts: Product[];
   favoriteProducts: Product[];
   visitedUser: VisitedUser;
-  loaded: boolean;
 }
 export interface VisitedUser {
   user: User;

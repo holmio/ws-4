@@ -52,6 +52,7 @@ import { timestamp } from 'src/app/util/common';
         userInfo: null,
         product: null,
         loaded: false,
+        loading: false,
     },
 })
 export class ProductState {
@@ -70,6 +71,11 @@ export class ProductState {
     /**
      * Selectors
      */
+    @Selector()
+    public static loading(state: ProductStateModel) {
+      return state.loading;
+    }
+
     @Selector()
     static getProduct(state: ProductStateModel) {
         return state.product || null;
@@ -90,20 +96,11 @@ export class ProductState {
         return productState.product.userUid === authState.uid;
     }
 
-    @Selector()
-    static loading(state: ProductStateModel) {
-        return state.loaded;
-    }
-
     // GET PRODUCT
 
     @Action(GetProductAction)
     getProduct(sc: StateContext<ProductStateModel>, action: GetProductAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
+        sc.patchState({loading: true});
         return this.productService.getProduct(action.uid)
             .pipe(takeUntil(this.actions$.pipe(ofAction(DistroyProductAction))))
             .subscribe(data => {
@@ -120,11 +117,10 @@ export class ProductState {
 
     @Action(GetProductSuccessAction)
     getProductSuccess(sc: StateContext<ProductStateModel>, action: GetProductSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             product: action.product,
             loaded: true,
+            loading: false,
         });
     }
 
@@ -133,13 +129,11 @@ export class ProductState {
     @Action(GetUserProductAction)
     getUserInfo(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
+        sc.patchState({loading: true});
         return this.userService.getShortUserInfo(state.product.userUid).subscribe(data => {
-            sc.setState({
-                ...state,
-                userInfo: data,
-            });
+            sc.patchState({userInfo: data, loading: false});
         }, error => {
-            console.log(error);
+            sc.patchState({loading: false});
         });
     }
 
@@ -148,10 +142,7 @@ export class ProductState {
     @Action(UpdateProductAction)
     async updateProduct(sc: StateContext<ProductStateModel>, action: UpdateProductAction) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
+        sc.patchState({loading: true});
         action.product.timestamp = timestamp();
         // Necessary to get permission to edit table products
         action.product.userUid = state.product.userUid;
@@ -173,10 +164,7 @@ export class ProductState {
     @Action(DeleteProductAction)
     async deleteProduct(sc: StateContext<ProductStateModel>) {
         const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
+        sc.patchState({loading: true});
         await this.productService.deleteProduct(state.product).then(() => {
             setTimeout(() => {
                 sc.dispatch(new DeleteProductSuccessAction());
@@ -189,13 +177,9 @@ export class ProductState {
         });
     }
 
-    @Action([UpdateProductSuccessAction, DeleteProductSuccessAction, DeleteProductFailedAction])
+    @Action([UpdateProductSuccessAction, DeleteProductSuccessAction, DeleteProductFailedAction, SetProductSuccessAction])
     resetProductSuccess(sc: StateContext<ProductStateModel>) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: true,
-        });
+        sc.patchState({loading: false});
     }
 
     // ADD FAVORITE
@@ -205,10 +189,7 @@ export class ProductState {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         await this.productService.addFavorite(user.uid, state.product.uid).then(() => {
-            sc.setState({
-                ...state,
-                isFavorite: true,
-            });
+            sc.patchState({isFavorite: true});
             setTimeout(() => {
                 sc.dispatch(new AddFavoriteSuccessAction());
             }, 10);
@@ -227,10 +208,7 @@ export class ProductState {
         const state = sc.getState();
         const user = this.store.selectSnapshot(UserState.geUser);
         await this.productService.removeFavorite(user.uid, state.product.uid).then(() => {
-            sc.setState({
-                ...state,
-                isFavorite: false,
-            });
+            sc.patchState({isFavorite: false});
             setTimeout(() => {
                 sc.dispatch(new RemoveFavoriteSuccessAction());
             }, 10);
@@ -245,11 +223,7 @@ export class ProductState {
 
     @Action(SetProductAction)
     async setProduct(sc: StateContext<ProductStateModel>, action: SetProductAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: false,
-        });
+        sc.patchState({loading: true});
         // select the snapshot state from users
         const user = this.store.selectSnapshot(UserState.geUser);
         action.product.timestamp = timestamp();
@@ -270,33 +244,22 @@ export class ProductState {
         });
     }
 
-    @Action(SetProductSuccessAction)
-    setProductSuccess(sc: StateContext<ProductStateModel>, action: SetProductSuccessAction) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
-            loaded: true,
-        });
-    }
-
     @Action([LoginSuccessAction, GetProductSuccessAction])
     checkFavoriteProductState(sc: StateContext<ProductStateModel>) {
         const userUid = this.store.selectSnapshot(AuthState.getUid);
         const state = sc.getState();
-        sc.setState({
+        sc.patchState({
             ...state,
             isFavorite: userUid && (state.product && !!_.includes(state.product.followers, userUid)) || false,
-            loaded: true
+            loading: false,
         });
     }
 
     @Action([LogoutSuccessAction])
     resetFavoriteProductState(sc: StateContext<ProductStateModel>) {
-        const state = sc.getState();
-        sc.setState({
-            ...state,
+        sc.patchState({
             isFavorite: null,
-            loaded: true
+            loading: false,
         });
     }
 
@@ -307,7 +270,8 @@ export class ProductState {
             isFavorite: false,
             product: null,
             userInfo: null,
-            loaded: false
+            loaded: false,
+            loading: false,
         });
     }
 }

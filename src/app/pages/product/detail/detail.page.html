@@ -23,7 +23,7 @@
     </ion-buttons>
 </app-header>
 
-<ion-content fullscreen *ngIf="(loading$ | async)" class="ion-padding-bottom">
+<ion-content fullscreen class="ion-padding-bottom">
     <div class="shadow"></div>
     <ion-slides mode="md" pager="md" [options]="slideOpts" *ngIf="(product$ | async)?.gallery">
         <ion-slide *ngFor="let image of (product$ | async)?.gallery" (click)="presentModal()">

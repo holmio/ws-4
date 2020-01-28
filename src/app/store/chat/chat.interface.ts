@@ -1,6 +1,6 @@
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
-export interface ChatStateModel {
-  loaded: boolean;
+export interface ChatStateModel extends LoadingState {
   channel: Channel;
   channels: Channel[];
 }

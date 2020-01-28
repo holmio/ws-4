@@ -1,11 +1,11 @@
 import { UserShortInfo } from '../user';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
-export interface ProductStateModel {
+export interface ProductStateModel extends LoadingState{
   isUserProduct: boolean;
   isFavorite: boolean;
   product: Product;
   userInfo: UserShortInfo;
-  loaded: boolean;
 }
 
 export interface ProductsStateModel {

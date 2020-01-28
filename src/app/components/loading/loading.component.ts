@@ -1,21 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { Actions, ofActionCompleted, ofActionDispatched } from '@ngxs/store';
-import { LoginWithEmailAndPasswordAction, LoginWithFacebookAction, RegisterWithEmailAndPasswordAction } from 'src/app/store/auth';
-import { GetChannelAction } from 'src/app/store/chat';
-import { GetProductsAction } from 'src/app/store/products';
-import {
-  GetProductAction,
-  SetProductAction,
-  DeleteProductAction,
-  UpdateProductAction,
-} from 'src/app/store/product';
-import {
-  GetUserAction,
-  SetUserAction,
-  UpdateAvatarUserAction,
-  UpdateUserAction,
-} from 'src/app/store/user';
+import { Actions, Select } from '@ngxs/store';
+import { combineLatest, Observable } from 'rxjs';
+import { LoadingState } from 'src/app/interfaces/common.interface';
+import { AuthState } from 'src/app/store/auth';
+import { ProductState } from 'src/app/store/product';
+import { ProductsState } from 'src/app/store/products';
+import { UserState } from 'src/app/store/user';
 
 @Component({
   selector: 'app-loading',
@@ -23,68 +14,32 @@ import {
 })
 export class LoadingComponent implements OnInit {
 
-  private count = 0;
   private spinner: any;
+  @Select(UserState.loading) loadingUser$: Observable<LoadingState>;
+  @Select(AuthState.loading) loadingAuth$: Observable<LoadingState>;
+  @Select(ProductsState.loading) loadingProducts$: Observable<LoadingState>;
+  @Select(ProductState.loading) loadingProduct$: Observable<LoadingState>;
 
   constructor(
     private loadingController: LoadingController,
-    private actions: Actions,
 
   ) {}
 
   ngOnInit(): void {
-    this.actions.pipe(
-      ofActionDispatched(
-        SetUserAction,
-        SetProductAction,
-        GetUserAction,
-        GetProductAction,
-        GetProductsAction,
-        LoginWithEmailAndPasswordAction,
-        LoginWithFacebookAction,
-        RegisterWithEmailAndPasswordAction,
-        DeleteProductAction,
-        UpdateAvatarUserAction,
-        UpdateProductAction,
-        UpdateUserAction,
-        GetChannelAction,
-      ),
-    ).subscribe(async () => {
-      this.count++;
-      console.log('I: ' + this.count);
-      this.toggleLoading(this.count);
+    combineLatest(
+      this.loadingUser$,
+      this.loadingAuth$,
+      this.loadingProducts$,
+      this.loadingProduct$,
+    ).subscribe((status: any) => {
+      if (!status.includes(true)) {
+        console.log(status);
+        // this.hideLoading();
+      } else {
+        console.log(status);
+        // this.showLoading();
+      }
     });
-
-    this.actions.pipe(
-      ofActionCompleted(
-        SetUserAction,
-        SetProductAction,
-        GetUserAction,
-        GetProductAction,
-        GetProductsAction,
-        LoginWithEmailAndPasswordAction,
-        LoginWithFacebookAction,
-        RegisterWithEmailAndPasswordAction,
-        DeleteProductAction,
-        UpdateAvatarUserAction,
-        UpdateProductAction,
-        UpdateUserAction,
-        GetChannelAction,
-      ),
-    ).subscribe((actions) => {
-      this.count--;
-      console.log('D: ' + this.count);
-      console.log(actions);
-      this.toggleLoading(this.count);
-    });
-  }
-
-  private toggleLoading(loadingCount: number) {
-    if (loadingCount > 0) {
-      this.showLoading();
-    } else {
-      this.hideLoading();
-    }
   }
 
   private showLoading() {
@@ -108,7 +63,6 @@ export class LoadingComponent implements OnInit {
       return;
     }
 
-    this.count = 0;
     this.spinner.then(spinner => spinner.dismiss());
     this.spinner = undefined;
   }
