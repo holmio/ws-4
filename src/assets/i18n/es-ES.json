@@ -1,0 +1,99 @@
+{
+    "general": {
+        "no-internet-connection": "No Internet",
+        "facebook": "Facebook",
+        "email": "Email",
+        "password": "Contraseña",
+        "login": "Entrar",
+        "create-account": "Crear cuenta",
+        "ok": "Ok",
+        "hide": "Ocultar",
+        "category": "Categoria",
+        "create": "Crear",
+        "name": "Nombre",
+        "price": "Precio",
+        "currency": "Moneda",
+        "description": "Descripción",
+        "save": "Guardar",
+        "products": "Productos",
+        "favourites": "Favoritos",
+        "full-name": "Nombre Completo",
+        "phone": "Teléfono",
+        "change-password": "Cambiar contraseña",
+        "register": "Registrar",
+        "repeat-password": "Repetir contraseña"
+    },
+    "chat": {
+        "connected": "Conectado",
+        "input": {
+            "write-message": "Escribe un mensaje"
+        }
+    },
+    "forgot-password": {
+        "title": "Contraseña olvidada",
+        "button": {
+            "change-password": "Cambiar contraseña"
+        }
+    },
+    "search": {
+        "input": {
+            "placeholder": "Buscar algo"
+        }
+    },
+    "login": {
+        "text": {
+            "forgot-password": "Se te olvidó la contraseña?"
+        }
+    },
+    "product": {
+        "create": {
+            "title": "Crear producto",
+            "form": {
+                "location-sale": "Willaya",
+                "select-daira": "Daira",
+                "activated": "Activo",
+                "saled": "Vendido"
+            }
+        },
+        "name": "Nombre",
+        "price": "Precio",
+        "currency": "Moneda",
+        "description": "Descripción",
+        "detail": {
+            "description": "Descripcion"
+        },
+        "edit": {
+            "title": "Editar Producto",
+            "form": {
+                "location-sale": "Willaya",
+                "select-daira": "Daira"
+            }
+        }
+    },
+    "profile": {
+        "edit": {
+            "title": "Perfil",
+            "big": {
+                "title": "Editar Perfil"
+            },
+            "form": {
+                "location": "Lugar donde vives"
+            }
+        }
+    },
+    "messages": {
+        "header": {
+            "title": "Mensajes"
+        }
+    },
+    "change-password": {
+        "header": {
+            "title": "Cambiar contraseña"
+        },
+        "form": {
+            "error": {
+                "not-same-password": "La contraseña no coincide"
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { NetworkService } from './services/network.service';
 import { LocalStorageService } from './services/storage.service';
 import { MyToastOption, ToastService } from './services/toast/toast.services';
-import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
+import { CheckSessionAction, LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
 import { Channel, ChatState } from './store/chat';
 import { NetworkConnectedAction, NetworkDisconnectAction } from './store/network';
 import { NetworkState } from './store/network/network.state';
@@ -29,6 +29,7 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   currentLang;
   directionLang = 'ltr';
+  isLangSpanish = true;
   @Select(UserState.geUser) user$: Observable<User>;
   @Select(NetworkState.geNetworkStatus) networkStatus$: Observable<boolean>;
   @Select(ChatState.getChannel) channel$: Observable<Channel>;
@@ -55,7 +56,7 @@ export class AppComponent implements OnInit {
     if (this.currentLang) {
       this.localStorage.set(APP_CONST.storeKeys.lang, this.currentLang);
     } else {
-      this.localStorage.set(APP_CONST.storeKeys.lang, 'es');
+      this.localStorage.set(APP_CONST.storeKeys.lang, APP_CONST.lang.es);
     }
     // this language will be used as a fallback when a translation isn't found in the current language
     this.translate.setDefaultLang(this.currentLang);
@@ -69,6 +70,7 @@ export class AppComponent implements OnInit {
       this.statusBar.backgroundColorByHexString('#DB3A34');
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.store.dispatch(new CheckSessionAction());
       this.initCloudMessage();
     });
   }
@@ -125,12 +127,14 @@ export class AppComponent implements OnInit {
   }
 
   changeLanguage() {
-    if (this.currentLang === 'es') {
-      this.localStorage.set(APP_CONST.storeKeys.lang, 'ar');
-      this.translate.use('ar');
+    if (this.currentLang === APP_CONST.lang.es) {
+      this.isLangSpanish = true;
+      this.localStorage.set(APP_CONST.storeKeys.lang, APP_CONST.lang.ar);
+      this.translate.use(APP_CONST.lang.ar);
     } else {
-      this.localStorage.set(APP_CONST.storeKeys.lang, 'es');
-      this.translate.use('es');
+      this.isLangSpanish = false;
+      this.localStorage.set(APP_CONST.storeKeys.lang, APP_CONST.lang.es);
+      this.translate.use(APP_CONST.lang.es);
     }
     console.log(this.translate.getLangs());
     console.log(this.translate.getBrowserLang());
@@ -150,7 +154,7 @@ export class AppComponent implements OnInit {
     this.translate.onLangChange.subscribe(({lang}) => {
       console.log(lang);
       this.currentLang = lang;
-      if (this.currentLang === 'ar') {
+      if (this.currentLang === 'ar-EH') {
         this.directionLang = 'rtl';
       } else {
         this.directionLang = 'ltr';

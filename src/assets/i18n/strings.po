@@ -1,0 +1,146 @@
+msgid ""
+msgstr ""
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "general.no-internet-connection"
+msgstr ""
+
+msgid "chat.connected"
+msgstr ""
+
+msgid "chat.input.write-message"
+msgstr ""
+
+msgid "forgot-password.title"
+msgstr ""
+
+msgid "forgot-password.button.change-password"
+msgstr ""
+
+msgid "search.input.placeholder"
+msgstr ""
+
+msgid "general.facebook"
+msgstr ""
+
+msgid "general.email"
+msgstr ""
+
+msgid "general.password"
+msgstr ""
+
+msgid "login.text.forgot-password"
+msgstr ""
+
+msgid "general.login"
+msgstr ""
+
+msgid "general.create-account"
+msgstr ""
+
+msgid "product.create.title"
+msgstr ""
+
+msgid "general.ok"
+msgstr ""
+
+msgid "general.hide"
+msgstr ""
+
+msgid "general.category"
+msgstr ""
+
+msgid "product.name"
+msgstr ""
+
+msgid "product.price"
+msgstr ""
+
+msgid "product.currency"
+msgstr ""
+
+msgid "product.description"
+msgstr ""
+
+msgid "product.create.form.location-sale"
+msgstr ""
+
+msgid "product.create.form.select-daira"
+msgstr ""
+
+msgid "general.create"
+msgstr ""
+
+msgid "product.detail.description"
+msgstr ""
+
+msgid "product.edit.title"
+msgstr ""
+
+msgid "general.name"
+msgstr ""
+
+msgid "general.price"
+msgstr ""
+
+msgid "general.currency"
+msgstr ""
+
+msgid "general.description"
+msgstr ""
+
+msgid "product.edit.form.location-sale"
+msgstr ""
+
+msgid "product.edit.form.select-daira"
+msgstr ""
+
+msgid "product.create.form.activated"
+msgstr ""
+
+msgid "product.create.form.saled"
+msgstr ""
+
+msgid "general.save"
+msgstr ""
+
+msgid "general.products"
+msgstr ""
+
+msgid "general.favourites"
+msgstr ""
+
+msgid "profile.edit.title"
+msgstr ""
+
+msgid "profile.edit.big.title"
+msgstr ""
+
+msgid "general.full-name"
+msgstr ""
+
+msgid "general.phone"
+msgstr ""
+
+msgid "profile.edit.form.location"
+msgstr ""
+
+msgid "general.change-password"
+msgstr ""
+
+msgid "messages.header.title"
+msgstr ""
+
+msgid "general.register"
+msgstr ""
+
+msgid "change-password.header.title"
+msgstr ""
+
+msgid "general.repeat-password"
+msgstr ""
+
+msgid "change-password.form.error.not-same-password"
+msgstr ""

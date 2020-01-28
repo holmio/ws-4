@@ -4,6 +4,10 @@ export const APP_CONST = {
         isFirstTimeUsageDone: 'isFirstTimeUsageDone',
         lang: 'lang'
     },
+    lang: {
+        ar: 'ar-EH',
+        es: 'es-ES',
+    },
     db: {
         productsDetail: 'productsDetail',
         users: 'users',

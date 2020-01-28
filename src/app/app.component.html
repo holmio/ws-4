@@ -53,8 +53,8 @@
 
             <div class="menu-item">
               <div class="flag-img" (click)="changeLanguage()">
-                <img *ngIf="this.currentLang === 'ar'" [lazyLoad]="'../assets/images/flag-sahara.svg'" />
-                <img *ngIf="this.currentLang === 'es'" [lazyLoad]="'../assets/images/flag-spain.png'" />
+                <img *ngIf="isLangSpanish" [lazyLoad]="'../assets/images/flag-sahara.svg'" />
+                <img *ngIf="!isLangSpanish" [lazyLoad]="'../assets/images/flag-spain.png'" />
               </div>
             </div>
           </div>

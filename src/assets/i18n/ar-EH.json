@@ -1,0 +1,99 @@
+{
+    "general": {
+        "no-internet-connection": "[AR]No Internet",
+        "facebook": "Facebook",
+        "email": "[AR]Email",
+        "password": "[AR] Contraseña",
+        "login": "[AR]Entrar",
+        "create-account": "[AR]Crear cuenta",
+        "ok": "[AR]Ok",
+        "hide": "[AR]Ocultar",
+        "category": "[AR]Categoria",
+        "create": "[AR]Crear",
+        "name": "[AR]Nombre",
+        "price": "[AR]Precio",
+        "currency": "[AR]Moneda",
+        "description": "[AR]Descripción",
+        "save": "[AR]Guardar",
+        "products": "[AR]Productos",
+        "favourites": "[AR]Favoritos",
+        "full-name": "[AR]Nombre Completo",
+        "phone": "[AR]Teléfono",
+        "change-password": "[AR]Cambiar contraseña",
+        "register": "[AR]Registrar",
+        "repeat-password": "[AR]Repetir contraseña"
+    },
+    "chat": {
+        "connected": "[AR]Conectado",
+        "input": {
+            "write-message": "[AR]Escribe un mensaje"
+        }
+    },
+    "forgot-password": {
+        "title": "[AR]Contraseña olvidada",
+        "button": {
+            "change-password": "[AR]Cambiar contraseña"
+        }
+    },
+    "search": {
+        "input": {
+            "placeholder": "[AR] Buscar algo"
+        }
+    },
+    "login": {
+        "text": {
+            "forgot-password": "[AR]Se te olvidó la contraseña?"
+        }
+    },
+    "product": {
+        "create": {
+            "title": "[AR]Crear producto",
+            "form": {
+                "location-sale": "[AR]Willaya",
+                "select-daira": "[AR]Daira",
+                "activated": "[AR]Activo",
+                "saled": "[AR]Vendido"
+            }
+        },
+        "name": "[AR]Nombre",
+        "price": "[AR]Precio",
+        "currency": "[AR]Moneda",
+        "description": "[AR]Descripción",
+        "detail": {
+            "description": "[AR]Descripcion"
+        },
+        "edit": {
+            "title": "[AR]Editar Producto",
+            "form": {
+                "location-sale": "[AR]Willaya",
+                "select-daira": "[AR]Daira"
+            }
+        }
+    },
+    "profile": {
+        "edit": {
+            "title": "[AR]Perfil",
+            "big": {
+                "title": "[AR]Editar Perfil"
+            },
+            "form": {
+                "location": "[AR]Lugar donde vives"
+            }
+        }
+    },
+    "messages": {
+        "header": {
+            "title": "[AR]Mensajes"
+        }
+    },
+    "change-password": {
+        "header": {
+            "title": "[AR]Cambiar contraseña"
+        },
+        "form": {
+            "error": {
+                "not-same-password": "[AR]La contraseña no coincide"
+            }
+        }
+    }
+}
