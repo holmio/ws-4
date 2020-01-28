@@ -112,7 +112,6 @@ export class ProductState {
                 }, 10);
             }, error => {
                 setTimeout(() => {
-                    // Algo salio mal al obtener la informacion
                     this.toast.show({message: this.translate.instant('product.toast.get-product.error'), color: 'danger' });
                     sc.dispatch(new GetProductFailedAction(error));
                 }, 10);
@@ -163,7 +162,6 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al actualizar el producto'
                 this.toast.show({message: this.translate.instant('product.toast.update-product.error'), color: 'danger' });
                 sc.dispatch(new UpdateProductFailedAction(error));
             }, 10);
@@ -185,7 +183,6 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al eliminar el producto
                 this.toast.show({message: this.translate.instant('product.toast.delete-product.error'), color: 'danger' });
                 sc.dispatch(new DeleteProductFailedAction(error));
             }, 10);
@@ -217,7 +214,6 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al anadir el producto a favoritos
                 this.toast.show({message: this.translate.instant('product.toast.add-favorite.error'), color: 'danger' });
                 sc.dispatch(new AddFavoriteFailedAction(error));
             }, 10);
@@ -268,7 +264,6 @@ export class ProductState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al crear el producto
                 this.toast.show({message: this.translate.instant('product.toast.set-product.error'), color: 'danger' });
                 sc.dispatch(new SetProductFailedAction(error));
             }, 10);

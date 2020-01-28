@@ -21,7 +21,8 @@
         "phone": "[AR]Teléfono",
         "change-password": "[AR]Cambiar contraseña",
         "register": "[AR]Registrar",
-        "repeat-password": "[AR]Repetir contraseña"
+        "repeat-password": "[AR]Repetir contraseña",
+        "close": "Cerrar[AR]"
     },
     "chat": {
         "connected": "[AR]Conectado",
@@ -38,6 +39,11 @@
     "search": {
         "input": {
             "placeholder": "[AR] Buscar algo"
+        },
+        "toast": {
+            "get-products": {
+                "error": "[AR]Algo salio mal al buscar"
+            }
         }
     },
     "login": {
@@ -93,6 +99,19 @@
         "form": {
             "error": {
                 "not-same-password": "[AR]La contraseña no coincide"
+            }
+        }
+    },
+    "user": {
+        "toast": {
+            "get-user-data": {
+                "error": "[AR]Algo salio mal al obtener tus datos"
+            },
+            "update-avatar": {
+                "error": "Algo salio mal al cambiar tu foto[AR]"
+            },
+            "update-user": {
+                "error": "Algo salio mal al actualizar tus datos[AR]"
             }
         }
     }

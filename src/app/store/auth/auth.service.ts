@@ -47,14 +47,14 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.resetPasswordFirebase(email).then(() => {
         resolve();
-        this.toast.show({ message: this.translate.instant('auth.toast.reset-password.success') }); // Te hemos enviado el email para cambiar la contraseña
+        this.toast.show({ message: this.translate.instant('auth.toast.reset-password.success') });
       }).catch((error) => {
         console.log(error);
         reject();
         if (error.code === 'auth/user-not-found') {
-          this.toast.show({ message: this.translate.instant('auth.toast.reset-password.user-not-found'), color: 'danger' }); // Este email no existe
+          this.toast.show({ message: this.translate.instant('auth.toast.reset-password.user-not-found'), color: 'danger' });
         } else {
-          this.toast.show({ message: this.translate.instant('auth.toast.reset-password.email-not-sended'), color: 'danger' }); // No ha sido posible enviarte el email, intentalo mas tarde
+          this.toast.show({ message: this.translate.instant('auth.toast.reset-password.email-not-sended'), color: 'danger' });
         }
       });
     });

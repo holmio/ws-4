@@ -21,12 +21,32 @@
         "phone": "Teléfono",
         "change-password": "Cambiar contraseña",
         "register": "Registrar",
-        "repeat-password": "Repetir contraseña"
+        "repeat-password": "Repetir contraseña",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "categories": "Categorias"
     },
     "chat": {
         "connected": "Conectado",
         "input": {
             "write-message": "Escribe un mensaje"
+        },
+        "toast": {
+            "send-message": {
+                "error": "No se puede enviar el mensaje, intentalo otra vez"
+            },
+            "create-channel": {
+                "error": "Algo salio mal creando el chat"
+            },
+            "get-channels": {
+                "error": "Algo salio mal con los chats"
+            },
+            "get-channel": {
+                "error": "Algo salio mal con este chat"
+            },
+            "update-channel": {
+                "error": "Algo salio mal actualizando el chat"
+            }
         }
     },
     "forgot-password": {
@@ -38,6 +58,11 @@
     "search": {
         "input": {
             "placeholder": "Buscar algo"
+        },
+        "toast": {
+            "get-products": {
+                "error": "Algo salio mal al buscar"
+            }
         }
     },
     "login": {
@@ -53,6 +78,14 @@
                 "select-daira": "Daira",
                 "activated": "Activo",
                 "saled": "Vendido"
+            },
+            "action-sheet": {
+                "subheader": "Selecciona la categoria de tu producto"
+            },
+            "toast": {
+                "warning": {
+                    "no-image": "No hay hay seleccionada ninguna imagen"
+                }
             }
         },
         "name": "Nombre",
@@ -67,6 +100,26 @@
             "form": {
                 "location-sale": "Willaya",
                 "select-daira": "Daira"
+            },
+            "action-sheet": {
+                "subheader": "Selecciona la categoria de tu producto"
+            }
+        },
+        "toast": {
+            "get-product": {
+                "error": "Algo salio mal al obtener la informacion"
+            },
+            "update-product": {
+                "error": "Algo salio mal al actualizar el producto"
+            },
+            "delete-product": {
+                "error": "Algo salio mal al eliminar el producto"
+            },
+            "add-favorite": {
+                "error": "Algo salio mal al anadir el producto a favoritos"
+            },
+            "set-product": {
+                "error": "Algo salio mal al crear el producto"
             }
         }
     },
@@ -93,6 +146,63 @@
         "form": {
             "error": {
                 "not-same-password": "La contraseña no coincide"
+            }
+        }
+    },
+    "gallery": {
+        "sheet": {
+            "title": "Selecciona la manera de escoger las fotos",
+            "button": {
+                "library": "Galleria",
+                "camera": "Camara"
+            }
+        },
+        "toast": {
+            "get-picture": {
+                "error": "Algo salio mal obtener la foto"
+            },
+            "take-picture": {
+                "error": "Algo salio mal al sacar la foto"
+            }
+        }
+    },
+    "reset-password": {
+        "toast": {
+            "change-password": {
+                "success": "La contraseña ha sido cambiada con éxito"
+            }
+        }
+    },
+    "auth": {
+        "toast": {
+            "reset-password": {
+                "success": "Te hemos enviado el email para cambiar la contraseña",
+                "user-not-found": "Este email no existe",
+                "email-not-sended": "No ha sido posible enviarte el email, intentalo mas tarde"
+            }
+        },
+        "state": {
+            "login": {
+                "error-auth": "Email o Password son incorrectos"
+            },
+            "error": {
+                "facebook-auth": "El usuario de facebook esta fallando"
+            },
+            "register": {
+                "not-allowd-register": "No puedes registrarte con estos datos"
+            }
+        }
+    },
+    "user": {
+        "toast": {
+            "get-user-data": {
+                "error": "Algo salio mal al obtener tus datos"
+            },
+            "update-avatar": {
+                "error": "Algo salio mal al cambiar tu foto"
+            },
+            "update-user": {
+                "error": "Algo salio mal al actualizar tus datos"
             }
         }
     }

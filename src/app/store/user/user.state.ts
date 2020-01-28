@@ -73,7 +73,6 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al obtener tus datos
                 this.toast.show({message: this.translate.instant('user.toast.get-user-data.error'), color: 'danger' });
                 sc.dispatch(new GetUserFailedAction(error));
             }, 10);
@@ -102,7 +101,6 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al cambiar tu foto
                 this.toast.show({message: this.translate.instant('user.toast.update-avatar.error'), color: 'danger' });
                 sc.dispatch(new UpdateAvatarUserFailedAction(error));
             }, 10);
@@ -130,7 +128,6 @@ export class UserState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al actualizar tus datos
                 this.toast.show({message: this.translate.instant('user.toast.update-user.error'), color: 'danger' });
                 sc.dispatch(new UpdateUserFailedAction(error));
             }, 10);

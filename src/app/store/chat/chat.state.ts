@@ -78,7 +78,6 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // No se puede enviar el mensaje, intentalo otra vez
                 this.toast.show({message: this.translate.instant('chat.toast.send-message.error'), color: 'danger'});
                 sc.dispatch(new SendMessageFailedAction(error));
             }, 10);
@@ -104,7 +103,6 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal creando el chat
                 this.toast.show({message: this.translate.instant('chat.toast.create-channel.error'), color: 'danger'});
                 sc.dispatch(new SetChannelFailedAction(error));
             }, 10);
@@ -129,7 +127,6 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal con los chats
                 this.toast.show({message: this.translate.instant('chat.toast.get-channels.error'), color: 'danger'});
                 sc.dispatch(new GetChannelsFailedAction(error));
             }, 10);
@@ -200,7 +197,6 @@ export class ChatState {
             }
         }, error => {
             setTimeout(() => {
-                // Algo salio mal con este chat
                 this.toast.show({message: this.translate.instant('chat.toast.get-channel.error'), color: 'danger'});
                 sc.dispatch(new GetChannelFailedAction(error));
             }, 10);
@@ -231,7 +227,6 @@ export class ChatState {
             }, 10);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal actualizando el chat
                 this.toast.show({message: this.translate.instant('chat.toast.update-channel.error'), color: 'danger' });
                 sc.dispatch(new UpdateChannelFailedAction(error));
             }, 10);

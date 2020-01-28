@@ -47,7 +47,6 @@ export class SearchState {
             }, 100);
         }, error => {
             setTimeout(() => {
-                // Algo salio mal al buscar
                 this.toast.show({message: this.translate.instant('search.toast.get-products.error'), color: 'danger'});
                 sc.dispatch(new GetSearchFailedAction(error));
             }, 10);

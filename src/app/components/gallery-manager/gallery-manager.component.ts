@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { ActionSheetController, Platform } from '@ionic/angular';
@@ -49,10 +43,10 @@ export class GalleryManagerComponent implements OnInit {
    */
   async presentSheet() {
     const actionSheet = await this.actionSheetCtrl.create({
-      header: this.translate.instant('TAKE_PICTURE_SELECT_METHOD_OF_IMAGE_TITEL'),
+      header: this.translate.instant('gallery.sheet.title'),
       buttons: [
         {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_IMAGE'),
+          text: this.translate.instant('gallery.sheet.button.library'),
           icon: 'image',
           handler: () => {
             this.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
@@ -60,7 +54,7 @@ export class GalleryManagerComponent implements OnInit {
           }
         },
         {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_CAMERA'),
+          text: this.translate.instant('gallery.sheet.button.camera'),
           icon: 'camera',
           handler: () => {
             this.sourceType = this.camera.PictureSourceType.CAMERA;
@@ -68,7 +62,7 @@ export class GalleryManagerComponent implements OnInit {
           }
         },
         {
-          text: this.translate.instant('COMMON_BUTTON_CANCEL'),
+          text: this.translate.instant('general.cancel'),
           role: 'cancel',
           icon: 'close-circle',
         }
@@ -94,7 +88,7 @@ export class GalleryManagerComponent implements OnInit {
         }
         this.changeGallery.next(this.gallery);
       }, (err) => {
-        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
+        this.toastService.show({ message: this.translate.instant('gallery.toast.get-picture.error'), color: 'danger' });
       });
     }
   }
@@ -116,7 +110,7 @@ export class GalleryManagerComponent implements OnInit {
         this.gallery.push(base64Image);
         this.changeGallery.next(this.gallery);
       }, (error) => {
-        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
+        this.toastService.show({ message: this.translate.instant('gallery.toast.take-picture.error'), color: 'danger' });
       });
     }
   }

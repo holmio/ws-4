@@ -25,7 +25,7 @@ export class EditPage implements OnInit, OnDestroy {
   dairas = [];
   customActionSheetOptions: any = {
     header: this.translate.instant('general.categories'),
-    subHeader: this.translate.instant('product.edit.action-sheet.subheader'), // Selecciona la categoria de tu producto
+    subHeader: this.translate.instant('product.edit.action-sheet.subheader'),
     cssClass: 'category-sheet'
   };
   gallery: string[] = [];

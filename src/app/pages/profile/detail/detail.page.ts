@@ -56,7 +56,7 @@ export class DetailPage implements OnInit, OnDestroy {
         const base64Image = 'data:image/jpeg;base64,' + data;
         this.store.dispatch(new UpdateAvatarUserAction(base64Image));
       }, (error) => {
-        this.toastService.show({ message: this.translate.instant('TAKE_PICTURE_ERROR_CAMERA'), color: 'danger' });
+        this.toastService.show({ message: this.translate.instant('gallery.toast.take-picture.error'), color: 'danger' });
       });
     }
   }
@@ -66,10 +66,10 @@ export class DetailPage implements OnInit, OnDestroy {
    */
   async presentSheet() {
     const actionSheet = await this.actionSheetCtrl.create({
-      header: this.translate.instant('TAKE_PICTURE_SELECT_METHOD_OF_IMAGE_TITEL'),
+      header: this.translate.instant('gallery.sheet.title'),
       buttons: [
         {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_IMAGE'),
+          text: this.translate.instant('gallery.sheet.button.library'),
           icon: 'image',
           handler: () => {
             this.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
@@ -77,7 +77,7 @@ export class DetailPage implements OnInit, OnDestroy {
           }
         },
         {
-          text: this.translate.instant('TAKE_PICTURE_BUTTON_CAMERA'),
+          text: this.translate.instant('gallery.sheet.button.camera'),
           icon: 'camera',
           handler: () => {
             this.sourceType = this.camera.PictureSourceType.CAMERA;
@@ -85,7 +85,7 @@ export class DetailPage implements OnInit, OnDestroy {
           }
         },
         {
-          text: this.translate.instant('COMMON_BUTTON_CANCEL'),
+          text: this.translate.instant('general.cancel'),
           role: 'cancel',
           icon: 'close-circle',
         }
