@@ -31,8 +31,8 @@
                         <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
                             <ion-item>
                                 <ion-label position="floating" translate>product.currency</ion-label>
-                                <ion-select formControlName="currency" [okText]="'general.ok' | translate" [cancelText]="'general.hide' | translate"
-                                    interface="action-sheet" required>
+                                <ion-select formControlName="currency" [okText]="'general.ok' | translate"
+                                    [cancelText]="'general.hide' | translate" interface="action-sheet" required>
                                     <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
                                         {{currency.nameEs}}</ion-select-option>
                                 </ion-select>
@@ -46,22 +46,25 @@
                     <ion-item>
                         <!-- Lugar donde lo vendes -->
                         <ion-label position="floating" translate>product.create.form.location-sale</ion-label>
-                        <ion-select formControlName="willaya" cancelText="'general.hide' | translate" interface="action-sheet"
-                            (ionChange)="onChangeWillaya($event.target.value)">
+                        <ion-select formControlName="willaya" cancelText="'general.hide' | translate"
+                            interface="action-sheet" (ionChange)="onChangeWillaya($event.target.value)">
                             <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
                                 {{willaya.nameEs}}</ion-select-option>
                         </ion-select>
                     </ion-item>
                     <ion-item>
                         <ion-label position="floating" translate>product.create.form.select-daira</ion-label>
-                        <ion-select formControlName="daira" cancelText="'general.hide' | translate" interface="action-sheet">
+                        <ion-select formControlName="daira" cancelText="'general.hide' | translate"
+                            interface="action-sheet">
                             <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
                                 {{daira.nameEs}}</ion-select-option>
                         </ion-select>
                     </ion-item>
                     <div class="ion-padding-horizontal ion-padding-vertical">
-                        <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid"
-                            expand="block" translate>general.create
+                        <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid || (loading$ | async)"
+                            expand="block">
+                            <span *ngIf="!(loading$ | async)" translate>general.create</span>
+                            <ion-spinner *ngIf="(loading$ | async)" name="circular"></ion-spinner>
                         </ion-button>
                     </div>
                 </ion-col>

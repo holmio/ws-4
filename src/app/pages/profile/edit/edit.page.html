@@ -35,7 +35,9 @@
             <ion-button fill="clear" size="large" (click)="changePassword()" expand="block" translate>
               general.change-password
             </ion-button>
-            <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid" expand="block" translate>general.save
+            <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid" expand="block" [disabled]="(loading$ | async)">
+              <span *ngIf="!(loading$ | async)" translate>general.save</span>
+              <ion-spinner *ngIf="(loading$ | async)" name="circular"></ion-spinner>
             </ion-button>
           </div>
         </ion-col>

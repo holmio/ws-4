@@ -7,9 +7,11 @@ import {
 } from './products.actions';
 import * as _ from 'lodash';
 import { ProductService } from '../product/product.service';
-import { UserState } from '../user';
+import { UserState, GetUserSuccessAction, GetUserFailedAction } from '../user';
 import { ProductsStateModel } from './products.interface';
 import { LoadingState } from 'src/app/interfaces/common.interface';
+import { Product } from '../product';
+import { AuthState, InitAppAction, LogoutSuccessAction, LoginFailedAction } from '../auth';
 
 @State<ProductsStateModel>({
     name: 'products',
@@ -42,17 +44,24 @@ export class ProductsState {
 
     @Action(GetProductsAction)
     getProducts(sc: StateContext<ProductsStateModel>, action: GetProductsAction) {
-        const user = this.store.selectSnapshot(UserState.geUser);
+        const userUid = this.store.selectSnapshot(AuthState.getUid);
         sc.patchState({loading: true});
-        return this.productService.getProducts(user && user.uid).subscribe((data) => {
+        return this.productService.getProducts(userUid).subscribe((products: Product[]) => {
             setTimeout(() => {
-                sc.dispatch(new GetProductsSuccessAction(data));
+                sc.dispatch(new GetProductsSuccessAction(
+                    _.remove(products, (product) => product.userUid !== userUid)
+                ));
             }, 10);
         }, error => {
             setTimeout(() => {
                 sc.dispatch(new GetProductsFailedAction(error));
             }, 10);
         });
+    }
+
+    @Action([GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction])
+    updateProducts() {
+        this.store.dispatch(new GetProductsAction());
     }
 
     @Action(GetProductsSuccessAction)

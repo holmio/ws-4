@@ -31,7 +31,9 @@ export class LoginFailedAction {
   static type = '[Auth] LoginFailed';
   constructor(public error: any) {}
 }
-
+export class InitAppAction {
+  static type = '[Auth] AppInit';
+}
 // REGISTER
 
 export class RegisterWithEmailAndPasswordAction {

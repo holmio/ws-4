@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionDispatched, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, Store, Select } from '@ngxs/store';
 import * as _ from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
-import { Product, SetProductAction, SetProductSuccessAction } from 'src/app/store/product';
+import { Product, SetProductAction, SetProductSuccessAction, ProductState } from 'src/app/store/product';
 import { APP_CONST } from 'src/app/util/app.constants';
 
 @Component({
@@ -23,6 +23,8 @@ export class CreatePage implements OnInit, OnDestroy {
   willayas = _.cloneDeep(APP_CONST.willayas);
   dairas = [];
   imagesSelected = [];
+
+  @Select(ProductState.loading) loading$: Observable<boolean>;
 
   customActionSheetOptions: any = {
     header: this.translate.instant('general.categories'),

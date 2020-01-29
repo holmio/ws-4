@@ -24,12 +24,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.actions.pipe(
-      ofActionSuccessful(GetUserSuccessAction, GetUserFailedAction, LogoutSuccessAction, LoginFailedAction),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.store.dispatch(new GetProductsAction());
-    });
   }
 
   ngOnDestroy(): void {

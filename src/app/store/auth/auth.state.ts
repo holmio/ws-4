@@ -1,26 +1,15 @@
-import {
-    CheckSessionAction,
-    LoginFailedAction,
-    LoginSuccessAction,
-    LoginWithEmailAndPasswordAction,
-    LoginWithFacebookAction,
-    LogoutAction,
-    LogoutSuccessAction,
-    RegisterFailedAction,
-    RegisterSuccessAction,
-    RegisterWithEmailAndPasswordAction
-} from './auth.actions';
-import { AuthService } from './auth.service';
-import { GetUserAction, SetUserAction } from '../user/user.actions';
-import { User, UserStateModel } from '../user/user.interface';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { TranslateService } from '@ngx-translate/core';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { UserInfo } from 'firebase';
 import { take, tap } from 'rxjs/operators';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { timestamp } from 'src/app/util/common';
-import { LoadingState } from 'src/app/interfaces/common.interface';
+import { SetUserAction, GetUserAction } from '../user/user.actions';
+import { User, UserStateModel } from '../user/user.interface';
+import { CheckSessionAction, InitAppAction, LoginFailedAction, LoginSuccessAction, LoginWithEmailAndPasswordAction, LoginWithFacebookAction, LogoutAction, LogoutSuccessAction, RegisterFailedAction, RegisterSuccessAction, RegisterWithEmailAndPasswordAction } from './auth.actions';
+import { AuthService } from './auth.service';
 
 export interface AuthStateModel extends LoadingState {
     uid: string;
@@ -39,7 +28,7 @@ export class AuthState implements NgxsOnInit {
      */
     @Selector()
     public static loading(state: UserStateModel) {
-      return state.loading;
+        return state.loading;
     }
 
     @Selector()
@@ -65,15 +54,11 @@ export class AuthState implements NgxsOnInit {
             take(1),
             tap((user: UserInfo) => {
                 if (user) {
-                    setTimeout(() => {
-                        sc.patchState({uid: user.uid});
-                        sc.dispatch(new GetUserAction(user.uid));
-                    }, 10);
+                    sc.patchState({ uid: user.uid });
                 } else {
-                    setTimeout(() => {
-                        sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
-                    }, 10);
+                    sc.dispatch(new LoginFailedAction('CheckSession: no user found'));
                 }
+                sc.dispatch(new InitAppAction());
             }));
     }
 
@@ -82,7 +67,7 @@ export class AuthState implements NgxsOnInit {
      *********************************/
     @Action(LoginWithEmailAndPasswordAction)
     async loginWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: LoginWithEmailAndPasswordAction) {
-        sc.patchState({loading: true});
+        sc.patchState({ loading: true });
         await this.auth.signInWithEmail(action.email, action.password).then(data => {
             setTimeout(() => {
                 sc.dispatch(new LoginSuccessAction(data.user.uid));
@@ -97,7 +82,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(LogoutAction)
     async logout(sc: StateContext<AuthStateModel>) {
-        sc.patchState({loading: true});
+        sc.patchState({ loading: true });
         await this.afAuth.auth.signOut().then(() => {
             setTimeout(() => {
                 sc.dispatch(new LogoutSuccessAction());
@@ -112,9 +97,7 @@ export class AuthState implements NgxsOnInit {
             loaded: true,
             loading: false,
         });
-        setTimeout(() => {
-            sc.dispatch(new GetUserAction(action.uid));
-        }, 10);
+        sc.dispatch(new GetUserAction());
     }
 
     /**********************************
@@ -123,7 +106,7 @@ export class AuthState implements NgxsOnInit {
     @Action(LoginWithFacebookAction)
     async loginWithFacebook(sc: StateContext<AuthStateModel>) {
         const state = sc.getState();
-        sc.patchState({loading: true});
+        sc.patchState({ loading: true });
         await this.auth.signInWithFacebook().then(data => {
             console.log(data);
             // If the user is new, we create a new account
@@ -140,7 +123,7 @@ export class AuthState implements NgxsOnInit {
                 }, 10);
             } else {
                 setTimeout(() => {
-                    sc.patchState({loading: true});
+                    sc.patchState({ loading: true });
                     sc.dispatch(new LoginSuccessAction(data.user.uid));
                 }, 10);
             }
@@ -157,7 +140,7 @@ export class AuthState implements NgxsOnInit {
      *********************************/
     @Action(RegisterWithEmailAndPasswordAction)
     async registerWithEmailAndPassword(sc: StateContext<AuthStateModel>, action: RegisterWithEmailAndPasswordAction) {
-        sc.patchState({loaded: false, loading: true});
+        sc.patchState({ loaded: false, loading: true });
         await this.auth.createUserWithEmailAndPassword(action.email, action.password).then(data => {
             console.log(data);
             const userInformation: User = {
@@ -180,7 +163,7 @@ export class AuthState implements NgxsOnInit {
 
     @Action(RegisterSuccessAction)
     registerSuccess(sc: StateContext<AuthStateModel>, action: RegisterSuccessAction) {
-        sc.patchState({uid: action.user.uid, loaded: true, loading: true});
+        sc.patchState({ uid: action.user.uid, loaded: true, loading: true });
         setTimeout(() => {
             sc.dispatch(new SetUserAction(action.user));
         }, 10);

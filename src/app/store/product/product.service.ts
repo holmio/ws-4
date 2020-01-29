@@ -1,16 +1,15 @@
-import { Product } from './product.interface';
-import { UserShortInfo } from '../user/user.interface';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { firestore } from 'firebase/app';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/firestore/filestorage.service';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import { APP_CONST } from 'src/app/util/app.constants';
 import { isUrl } from 'src/app/util/common';
+import { UserShortInfo } from '../user/user.interface';
+import { Product } from './product.interface';
 
 
 @Injectable({
@@ -36,9 +35,7 @@ export class ProductService {
   }
 
   getProducts(uidUser = ''): Observable<any> {
-    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.orderBy('timestamp', 'desc')).valueChanges().pipe(
-      map(actions => actions.filter((data: Product) => data.userUid !== uidUser))
-    );
+    return this.afStore.collection(APP_CONST.db.productsDetail, ref => ref.orderBy('timestamp', 'desc')).valueChanges()
   }
 
   getMyProducts(uidUser: string): Observable<any> {

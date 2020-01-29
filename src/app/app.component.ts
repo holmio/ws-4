@@ -1,14 +1,3 @@
-import { NetworkService } from './services/network.service';
-import { LocalStorageService } from './services/storage.service';
-import { MyToastOption, ToastService } from './services/toast/toast.services';
-import { CheckSessionAction, LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
-import { Channel, ChatState } from './store/chat';
-import { NetworkConnectedAction, NetworkDisconnectAction } from './store/network';
-import { NetworkState } from './store/network/network.state';
-import { User, UserState } from './store/user';
-import { UserService } from './store/user/user.service';
-import { APP_CONST } from './util/app.constants';
-import { ROUTE } from './util/app.routes.const';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
@@ -20,7 +9,17 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { LoadingState } from './interfaces/common.interface';
+import { NetworkService } from './services/network.service';
+import { LocalStorageService } from './services/storage.service';
+import { MyToastOption, ToastService } from './services/toast/toast.services';
+import { LoginSuccessAction, LogoutAction, LogoutSuccessAction } from './store/auth';
+import { Channel, ChatState } from './store/chat';
+import { NetworkConnectedAction, NetworkDisconnectAction } from './store/network';
+import { NetworkState } from './store/network/network.state';
+import { User, UserState } from './store/user';
+import { UserService } from './store/user/user.service';
+import { APP_CONST } from './util/app.constants';
+import { ROUTE } from './util/app.routes.const';
 
 @Component({
   selector: 'app-root',
@@ -112,7 +111,6 @@ export class AppComponent implements OnInit {
         await this.userService.updateTokenDevice(action.uid, token);
       });
     }
-
     this.onLangChange();
     this.checkInternet();
   }

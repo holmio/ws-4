@@ -1,9 +1,9 @@
 import { UserService } from './user.service';
-import { LoginSuccessAction, LogoutSuccessAction } from '../auth';
+import { LoginSuccessAction, LogoutSuccessAction, AuthState, InitAppAction } from '../auth';
 import { ProductService } from '../product/product.service';
 import { User, UserStateModel } from '../user/user.interface';
 import { TranslateService } from '@ngx-translate/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.services';
 import {
@@ -32,7 +32,7 @@ import { LoadingState } from 'src/app/interfaces/common.interface';
         myProducts: [],
         favoriteProducts: [],
         loaded: false,
-        loading: true,
+        loading: false,
     },
 })
 export class UserState {
@@ -41,6 +41,7 @@ export class UserState {
         private productService: ProductService,
         private translate: TranslateService,
         private toast: ToastService,
+        private store: Store,
         private userService: UserService,
     ) {
     }
@@ -73,7 +74,8 @@ export class UserState {
 
     @Action(GetUserAction)
     getUserData(sc: StateContext<UserStateModel>, action: GetUserAction) {
-        return this.userService.getUser(action.uid).subscribe((user: User) => {
+        const userUid = this.store.selectSnapshot(AuthState.getUid);
+        return this.userService.getUser(userUid).subscribe((user: User) => {
             setTimeout(async () => {
                 sc.dispatch(new GetUserSuccessAction(user));
                 await this.userService.updateLastConnectionUser(user.uid);
@@ -85,6 +87,15 @@ export class UserState {
             }, 10);
         });
     }
+
+    @Action(InitAppAction)
+    initInfoUser() {
+        const userUid = this.store.selectSnapshot(AuthState.getUid);
+        if (userUid) {
+            this.store.dispatch(new GetUserAction());
+        }
+    }
+
     @Action(GetUserSuccessAction)
     getUserSuccess(sc: StateContext<UserStateModel>, action: GetUserSuccessAction) {
         sc.patchState({

@@ -1,89 +1,82 @@
 <app-header [title]="'product.edit.title' | translate"></app-header>
 
 <ion-content>
-    <ng-container *ngIf="!(loading$ | async)">
-        <app-gallery-manager [gallery]="gallery" (changeGallery)="handleGallery($event)"
-            (changeImagesDeleted)="handleImagesDeleted($event)"></app-gallery-manager>
-    
-        <form [formGroup]="myGroup" (ngSubmit)="update()">
-            <ion-grid>
-                <ion-row color="primary" class="ion-justify-content-center">
-                    <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
-                        <ion-item>
-                            <ion-label position="floating" translate>general.category</ion-label>
-                            <ion-select formControlName="category" [interfaceOptions]="customActionSheetOptions"
-                                interface="action-sheet">
-                                <ion-select-option *ngFor="let category of categories" [value]="category.value">
-                                    <ion-icon slot="start" name="add"></ion-icon> {{category.nameEs}}
-                                </ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" translate>general.name</ion-label>
-                            <ion-input maxlength="50" formControlName="name" type="text" required></ion-input>
-                        </ion-item>
-                        <ion-row color="primary" class="ion-justify-content-center">
-                            <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
-                                <ion-item>
-                                    <ion-label position="floating" translate>general.price</ion-label>
-                                    <ion-input maxlength="50" formControlName="price" type="number" inputmode="number"
-                                        required></ion-input>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
-                                <ion-item>
-                                    <ion-label position="floating" translate>general.currency</ion-label>
-                                    <ion-select formControlName="currency" [okText]="'general.ok' | translate" [cancelText]="'general.hide' | translate"
-                                        interface="action-sheet" required>
-                                        <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
-                                            {{currency.nameEs}}</ion-select-option>
-                                    </ion-select>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                        <ion-item>
-                            <ion-label position="floating" translate>general.description</ion-label>
-                            <ion-textarea maxlength="1000" formControlName="description" required></ion-textarea>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" translate>product.edit.form.location-sale</ion-label>
-                            <ion-select formControlName="willaya" [cancelText]="'general.hide' | translate" interface="action-sheet"
-                                (ionChange)="onChangeWillaya($event)">
-                                <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
-                                    {{willaya.nameEs}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" translate>product.edit.form.select-daira</ion-label>
-                            <ion-select formControlName="daira" [cancelText]="'general.hide' | translate" interface="action-sheet">
-                                <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
-                                    {{daira.nameEs}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label translate>product.create.form.activated</ion-label>
-                            <ion-toggle formControlName="isEnabled"></ion-toggle>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label translate>product.create.form.saled</ion-label>
-                            <ion-toggle formControlName="isSold"></ion-toggle>
-                        </ion-item>
-                        <div class="ion-padding-horizontal ion-padding-vertical">
-                            <ion-button fill="outline" size="large" type="submit" [disabled]="!myGroup.valid"
-                                expand="block" translate>general.save
-                            </ion-button>
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </form>
-    </ng-container>
+    <app-gallery-manager [gallery]="gallery" (changeGallery)="handleGallery($event)"
+        (changeImagesDeleted)="handleImagesDeleted($event)"></app-gallery-manager>
 
-    <ng-container *ngIf="(loading$ | async)">
-        <div class="center-spinner">
-            <ion-spinner name="circular"></ion-spinner>
-        </div>
-    </ng-container>
-
-    
+    <form [formGroup]="myGroup" (ngSubmit)="update()">
+        <ion-grid>
+            <ion-row color="primary" class="ion-justify-content-center">
+                <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+                    <ion-item>
+                        <ion-label position="floating" translate>general.category</ion-label>
+                        <ion-select formControlName="category" [interfaceOptions]="customActionSheetOptions"
+                            interface="action-sheet">
+                            <ion-select-option *ngFor="let category of categories" [value]="category.value">
+                                <ion-icon slot="start" name="add"></ion-icon> {{category.nameEs}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating" translate>general.name</ion-label>
+                        <ion-input maxlength="50" formControlName="name" type="text" required></ion-input>
+                    </ion-item>
+                    <ion-row color="primary" class="ion-justify-content-center">
+                        <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
+                            <ion-item>
+                                <ion-label position="floating" translate>general.price</ion-label>
+                                <ion-input maxlength="50" formControlName="price" type="number" inputmode="number"
+                                    required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col class="ion-no-padding ion-align-self-center" size-md="6" size-lg="5" size-xs="6">
+                            <ion-item>
+                                <ion-label position="floating" translate>general.currency</ion-label>
+                                <ion-select formControlName="currency" [okText]="'general.ok' | translate"
+                                    [cancelText]="'general.hide' | translate" interface="action-sheet" required>
+                                    <ion-select-option *ngFor="let currency of currencies" [value]="currency.value">
+                                        {{currency.nameEs}}</ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-item>
+                        <ion-label position="floating" translate>general.description</ion-label>
+                        <ion-textarea maxlength="1000" formControlName="description" required></ion-textarea>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating" translate>product.edit.form.location-sale</ion-label>
+                        <ion-select formControlName="willaya" [cancelText]="'general.hide' | translate"
+                            interface="action-sheet" (ionChange)="onChangeWillaya($event)">
+                            <ion-select-option *ngFor="let willaya of willayas" [value]="willaya.value">
+                                {{willaya.nameEs}}</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating" translate>product.edit.form.select-daira</ion-label>
+                        <ion-select formControlName="daira" [cancelText]="'general.hide' | translate"
+                            interface="action-sheet">
+                            <ion-select-option *ngFor="let daira of dairas" [value]="daira.value">
+                                {{daira.nameEs}}</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label translate>product.create.form.activated</ion-label>
+                        <ion-toggle formControlName="isEnabled"></ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label translate>product.create.form.saled</ion-label>
+                        <ion-toggle formControlName="isSold"></ion-toggle>
+                    </ion-item>
+                    <div class="ion-padding-horizontal ion-padding-vertical">
+                        <ion-button fill="outline" size="large" type="submit"
+                            [disabled]="!myGroup.valid || (loading$ | async)" expand="block">
+                            <span *ngIf="!(loading$ | async)" translate>general.save</span>
+                            <ion-spinner *ngIf="(loading$ | async)" name="circular"></ion-spinner>
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
 </ion-content>
