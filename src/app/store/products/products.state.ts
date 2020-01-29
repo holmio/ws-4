@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { ProductService } from '../product/product.service';
 import { UserState } from '../user';
 import { ProductsStateModel } from './products.interface';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
 @State<ProductsStateModel>({
     name: 'products',
@@ -28,7 +29,7 @@ export class ProductsState {
     }
 
     @Selector()
-    public static loading(state: ProductsStateModel) {
+    public static loading(state: LoadingState) {
       return state.loading;
     }
 

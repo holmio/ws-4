@@ -36,7 +36,7 @@ import {
 })
 export class DetailPage implements OnInit, OnDestroy {
 
-  // @Select(ProductState.loading) loading$: Observable<boolean>;
+  @Select(ProductState.loading) loading$: Observable<boolean>;
   @Select(ProductState.getIsFavorite) isFavorite$: Observable<boolean>;
   @Select(ProductState.getUserOfProduct) ownerOfProduct$: Observable<UserShortInfo>;
   @Select(ProductState.getProduct) product$: Observable<Product>;

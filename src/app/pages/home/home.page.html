@@ -9,13 +9,21 @@
 </app-header>
 
 <ion-content>
-    <ion-grid>
-        <ion-row>
-            <ion-col size="6" *ngFor="let product of products$ | async">
-                <app-product-card [product]="product"></app-product-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ng-container *ngIf="!(loading$ | async)">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let product of products$ | async">
+                    <app-product-card [product]="product"></app-product-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ng-container>
+    
+    <ng-container *ngIf="(loading$ | async)">
+        <div class="center-spinner">
+            <ion-spinner name="circular"></ion-spinner>
+        </div>
+    </ng-container>
 </ion-content>
 <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button routerLink="/product/create" routerDirection="forward">

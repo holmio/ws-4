@@ -14,6 +14,7 @@ import { GetUserFailedAction, GetUserSuccessAction } from 'src/app/store/user';
 })
 export class HomePage implements OnInit, OnDestroy {
 
+  @Select(ProductsState.loading) loading$: Observable<boolean>;
   @Select(ProductsState.getAllProducts) products$: Observable<Product[]>;
   private destroy$ = new Subject<boolean>();
   constructor(
@@ -32,7 +33,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(true);
+    this.destroy$.next();
     this.destroy$.unsubscribe();
   }
 }

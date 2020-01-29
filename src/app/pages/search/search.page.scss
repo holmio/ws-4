@@ -1,8 +1,9 @@
 .spinner-loading {
-  margin: 10vh 50vw 0;
-  transform: translateX(-50%);
-  width: 65px;
-  height: 65px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
 }
 
 .not-found {
@@ -17,7 +18,8 @@
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
-  height: 76px;
+  height: 56px;
+  margin-top: 16px;
   ion-chip {
     font-size: 22px;
     height: 36px;

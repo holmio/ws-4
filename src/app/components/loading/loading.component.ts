@@ -7,6 +7,7 @@ import { AuthState } from 'src/app/store/auth';
 import { ProductState } from 'src/app/store/product';
 import { ProductsState } from 'src/app/store/products';
 import { UserState } from 'src/app/store/user';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-loading',
@@ -15,10 +16,8 @@ import { UserState } from 'src/app/store/user';
 export class LoadingComponent implements OnInit {
 
   private spinner: any;
-  @Select(UserState.loading) loadingUser$: Observable<LoadingState>;
-  @Select(AuthState.loading) loadingAuth$: Observable<LoadingState>;
-  @Select(ProductsState.loading) loadingProducts$: Observable<LoadingState>;
-  @Select(ProductState.loading) loadingProduct$: Observable<LoadingState>;
+  @Select(UserState.loading) loadingUser$: Observable<boolean>;
+  @Select(AuthState.loading) loadingAuth$: Observable<boolean>;
 
   constructor(
     private loadingController: LoadingController,
@@ -29,15 +28,11 @@ export class LoadingComponent implements OnInit {
     combineLatest(
       this.loadingUser$,
       this.loadingAuth$,
-      this.loadingProducts$,
-      this.loadingProduct$,
     ).subscribe((status: any) => {
       if (!status.includes(true)) {
-        console.log(status);
-        // this.hideLoading();
+        this.hideLoading();
       } else {
-        console.log(status);
-        // this.showLoading();
+        this.showLoading();
       }
     });
   }
@@ -49,7 +44,7 @@ export class LoadingComponent implements OnInit {
 
     this.spinner = new Promise((resolve) => {
       this.loadingController.create({
-        spinner: 'bubbles'
+        spinner: 'circular'
       }).then((spinner) => {
         spinner.present().then(() => {
           resolve(spinner);

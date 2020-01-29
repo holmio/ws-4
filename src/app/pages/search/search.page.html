@@ -1,30 +1,35 @@
 <app-header>
   <ion-searchbar header-right-action #ionSearch (ionChange)="handleChange($event.detail.value)"
-    (ionClear)="handleClear()" debounce="500" [placeholder]="'search.input.placeholder' | translate" clearIcon="close" mode="ios" animated>
+    (ionClear)="handleClear()" debounce="500" [placeholder]="'search.input.placeholder' | translate" clearIcon="close" mode="ios">
   </ion-searchbar>
 </app-header>
 
 <ion-content>
-  <div class="categories ion-margin-vertical ion-margin-start">
+  <div class="categories">
     <ion-chip *ngFor="let category of categories; let i=index" color="primary" mode="ios" outline="true" (click)="getCategory(category.value)">
       <ion-icon [name]="category.icon"></ion-icon>
       <ion-label>{{category.nameEs}}</ion-label>
     </ion-chip>
   </div>
-  <ion-grid>
-    <ion-row *ngIf="!(loading$ | async)">
-      <ion-col size="6" *ngFor="let product of products$ | async">
-        <app-product-card [product]="product"></app-product-card>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="firstSearchDone && (products$ | async)?.length === 0 && !(loading$ | async)">
-      <div class="not-found ion-text-center">
-        <ion-icon name="sad" color="medium"></ion-icon>
-        <ion-text color="medium">
-          <h1>Not Found</h1>
-        </ion-text>
-      </div>
-    </ion-row>
-  </ion-grid>
-  <ion-spinner class="spinner-loading" *ngIf="(loading$ | async)" name="crescent"></ion-spinner>
+  <ng-container *ngIf="!(loading$ | async)">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" *ngFor="let product of products$ | async">
+          <app-product-card [product]="product"></app-product-card>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="firstSearchDone && (products$ | async)?.length === 0 && !(loading$ | async)">
+        <div class="not-found ion-text-center">
+          <ion-icon name="sad" color="medium"></ion-icon>
+          <ion-text color="medium">
+            <h1 translate>search.product-not-found</h1>
+          </ion-text>
+        </div>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+  
+  <div class="spinner-loading" *ngIf="(loading$ | async)">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
 </ion-content>

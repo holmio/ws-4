@@ -22,6 +22,7 @@ import {
     GetMyProductsAndFavoritesAction,
     GetVisitedUserAction,
 } from './user.actions';
+import { LoadingState } from 'src/app/interfaces/common.interface';
 
 @State<UserStateModel>({
     name: 'user',
@@ -49,7 +50,7 @@ export class UserState {
      */
 
     @Selector()
-    public static loading(state: UserStateModel) {
+    public static loading(state: LoadingState) {
       return state.loading;
     }
 
