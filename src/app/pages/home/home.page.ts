@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { LoginFailedAction, LogoutSuccessAction } from 'src/app/store/auth';
 import { Product } from 'src/app/store/product/product.interface';
-import { GetProductsAction, ProductsState } from 'src/app/store/products';
-import { GetUserFailedAction, GetUserSuccessAction } from 'src/app/store/user';
+import { ProductsState, GetMoreProductsAction } from 'src/app/store/products';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +14,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   @Select(ProductsState.loading) loading$: Observable<boolean>;
   @Select(ProductsState.getAllProducts) products$: Observable<Product[]>;
+  appInitilized = false;
   private destroy$ = new Subject<boolean>();
   constructor(
     private store: Store,
@@ -24,6 +23,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.appInitilized = true;
+  }
+
+
+  onClick() {
+    this.store.dispatch(new GetMoreProductsAction(2));
   }
 
   ngOnDestroy(): void {

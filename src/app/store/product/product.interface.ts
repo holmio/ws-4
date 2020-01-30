@@ -29,6 +29,7 @@ export interface Product {
   uid?: string;
   willaya?: string;
   daira?: string;
+  doc?: any;
 }
 
 export interface ShortProduct {

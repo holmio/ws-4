@@ -9,7 +9,7 @@
 </app-header>
 
 <ion-content>
-    <ng-container *ngIf="!(loading$ | async)">
+    <ng-container>
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let product of products$ | async">
@@ -19,11 +19,14 @@
         </ion-grid>
     </ng-container>
     
-    <ng-container *ngIf="(loading$ | async)">
+    <ng-container *ngIf="(loading$ | async) || !appInitilized">
         <div class="center-spinner">
             <ion-spinner name="circular"></ion-spinner>
         </div>
     </ng-container>
+    <ion-button (click)="onClick()">
+        Click me
+    </ion-button>
 </ion-content>
 <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button routerLink="/product/create" routerDirection="forward">
